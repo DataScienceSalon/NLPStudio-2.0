@@ -1,0 +1,14 @@
+ERROR [2018-03-02 19:10:45] Error in class 'Meta', method 'initialize. Cannot create Meta object. Object name, must be a character string with no spaces.  See ?Meta for further assistance
+ERROR [2018-03-02 19:11:01] Error in class 'Meta', method 'initialize. Cannot create Meta object. Object name, must be a character string with no spaces.  See ?Meta for further assistance
+ERROR [2018-03-02 19:11:08] Error in class 'Meta', method 'initialize. Cannot create Meta object. Object name, must be a character string with no spaces.  See ?Meta for further assistance
+ERROR [2018-03-02 19:11:17] Error in class 'Meta', method 'initialize. Cannot create Meta object. Object name, must be a character string with no spaces.  See ?Meta for further assistance
+ERROR [2018-03-03 10:02:31] Error in class 'Text', method 'initialize. Cannot create numeric object. Object is not of a valid class. Valid class(s) is(are) character,. See ?numeric for further assistance
+ERROR [2018-03-03 10:11:45] Error in class 'Text', method 'initialize. Invalid class. Cannot create Text object. Parameter is not of a valid class. See ?Text for further assistance
+ERROR [2018-03-03 10:40:30] Error in class 'Meta', method 'initialize. Cannot create Meta object. Object name, must be a character string with no spaces.  See ?Meta for further assistance
+ERROR [2018-03-03 10:40:36] Error in class 'Meta', method 'initialize. Cannot create Meta object. Object name, must be a character string with no spaces.  See ?Meta for further assistance
+ERROR [2018-03-03 11:19:48] Error in class 'Text', method 'initialize. Invalid class. Cannot create Text object. Parameter is not of a valid class. See ?Text for further assistance
+ERROR [2018-03-03 11:58:49] Error in class 'Text', method 'initialize. Unable to change meta data. No key provided for value.
+ERROR [2018-03-03 12:00:14] Error in class 'Text', method 'initialize. Non-null key/value pairs must be of equal length
+ERROR [2018-03-03 12:13:21] Error in class 'Text', method 'initialize. Text must be of the 'character' class.
+ERROR [2018-03-04 06:01:19] Error in class 'Document', method 'initialize. Unable to change meta data. No key provided for value.
+ERROR [2018-03-04 06:01:33] Error in class 'Document', method 'initialize. Non-null key/value pairs must be of equal length
