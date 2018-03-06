@@ -47,3 +47,36 @@ INFO [2018-03-04 06:45:49] Info in class 'Document', method 'initialize. Documen
 INFO [2018-03-04 06:45:49] Info in class 'Document', method 'attach. Attached lunch object to lunch.
 INFO [2018-03-04 06:46:44] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
 INFO [2018-03-04 06:46:45] Info in class 'Document', method 'attach. Attached lunch object to lunch.
+INFO [2018-03-04 07:19:10] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 07:28:14] Info in class 'Corpus', method 'initialize. Corpus object, lunch, instantiated.
+INFO [2018-03-04 07:28:14] Info in class 'Corpus', method 'initialize. Corpus object, lunch, instantiated.
+INFO [2018-03-04 07:28:14] Info in class 'Corpus', method 'attach. Attached lunch object to lunch.
+INFO [2018-03-04 12:28:01] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:28:02] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:29:58] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:29:58] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:30:52] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:30:52] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:34:32] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:34:37] Info in class 'Document', method 'attach. Attached lunch object to lunch.
+INFO [2018-03-04 12:35:24] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:35:25] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:35:39] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:35:39] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:36:21] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:36:21] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:38:13] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:38:13] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:38:52] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:38:52] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:40:06] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:40:06] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:45:29] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:45:29] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:47:56] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.
+INFO [2018-03-04 12:47:56] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 12:47:56] Info in class 'Document', method 'attach. Attached lunch object to lunch.
+INFO [2018-03-04 22:17:54] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 22:18:11] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-04 22:18:27] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-05 01:23:36] Info in class 'Document', method 'initialize. Document object, lunch, instantiated.

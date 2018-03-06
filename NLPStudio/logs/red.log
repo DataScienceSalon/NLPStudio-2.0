@@ -12,3 +12,13 @@ ERROR [2018-03-03 12:00:14] Error in class 'Text', method 'initialize. Non-null 
 ERROR [2018-03-03 12:13:21] Error in class 'Text', method 'initialize. Text must be of the 'character' class.
 ERROR [2018-03-04 06:01:19] Error in class 'Document', method 'initialize. Unable to change meta data. No key provided for value.
 ERROR [2018-03-04 06:01:33] Error in class 'Document', method 'initialize. Non-null key/value pairs must be of equal length
+ERROR [2018-03-04 12:28:02] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
+ERROR [2018-03-04 12:29:58] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
+ERROR [2018-03-04 12:30:52] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
+ERROR [2018-03-04 12:35:25] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
+ERROR [2018-03-04 12:35:39] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
+ERROR [2018-03-04 12:36:21] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
+ERROR [2018-03-04 12:38:13] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
+ERROR [2018-03-04 12:38:52] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
+ERROR [2018-03-04 12:40:06] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
+ERROR [2018-03-04 12:45:29] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.

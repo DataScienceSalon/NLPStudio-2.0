@@ -38,30 +38,27 @@ VVDetach <- R6::R6Class(
 
   private = list(
 
-    ..name = "VVDetach",
+    ..composites = c("NLPStudio", "Pipeline", "Corpus", "Document"),
 
     validate = function(object, classes) {
       status <- list()
       status[['code']] <- TRUE
 
+      if (!(class(object)[1] %in% private$..composites)) {
+        status[['code']] <- FALSE
+        status[['msg']] <- paste0("This method is not implemented for this ",
+                                  "class.")
+        return(status)
+      }
+
       p <- object$getParams()
 
-      if (class(p$x)[1] == "character") {
-        if (is.null(p$cls)) {
-          status$code <- FALSE
-          status$msg <- paste0("Unable to detach ", x, ". The class of the object ",
-                               "must be provided in conjunction with its name when ",
-                               "the object is not given as the parameter. ",
-                               "See ?", class(object)[1], " for further assistance.")
-        } else if (sum(class(p$cls) %in% classes) == 0) {
-          status$code <- FALSE
-          status$msg <- paste0("Unable to detach ", x, ". Invalid object class.",
-                               "See ?", class(object)[1], " for further assistance.")
-        }
-      } else if (sum(class(p$x) %in% classes) == 0) {
+      if ((length(p$key) > 1) & (length(p$key) != length(p$value))) {
         status$code <- FALSE
-        status$msg <- paste0("Unable to detach ", x, ". Invalid object class.",
+        status$msg <- paste0("The key parameter must be of length equal to 1 ",
+                             "or equal in length to the value vector, ",
                              "See ?", class(object)[1], " for further assistance.")
+        return(status)
       }
       return(status)
     }
@@ -86,7 +83,7 @@ VVDetach <- R6::R6Class(
     },
 
     document = function(object) {
-      classes <- c("Text")
+      classes <- c("Text", "Data", "Analysis")
       return(private$validate(object = object, classes = classes))
     }
   )

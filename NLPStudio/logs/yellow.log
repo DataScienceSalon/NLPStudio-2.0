@@ -29,3 +29,16 @@ WARN [2018-03-04 06:45:49] Warn in class 'Document', method 'initialize. Non exi
 WARN [2018-03-04 06:45:49] Warn in class 'Document', method 'attach. Non existent metadata variable
 WARN [2018-03-04 06:46:44] Warn in class 'Document', method 'initialize. Non existent metadata variable
 WARN [2018-03-04 06:46:45] Warn in class 'Document', method 'attach. Non existent metadata variable
+WARN [2018-03-04 07:28:14] Warn in class 'Corpus', method 'initialize. Non existent metadata variable
+WARN [2018-03-04 07:28:14] Warn in class 'Corpus', method 'attach. Non existent metadata variable
+WARN [2018-03-04 12:28:02] Warn in class 'Document', method 'initialize. Non existent metadata variable
+WARN [2018-03-04 12:29:58] Warn in class 'Document', method 'initialize. Non existent metadata variable
+WARN [2018-03-04 12:30:52] Warn in class 'Document', method 'initialize. Non existent metadata variable
+WARN [2018-03-04 12:35:25] Warn in class 'Document', method 'initialize. Non existent metadata variable
+WARN [2018-03-04 12:35:39] Warn in class 'Document', method 'initialize. Non existent metadata variable
+WARN [2018-03-04 12:36:21] Warn in class 'Document', method 'initialize. Non existent metadata variable
+WARN [2018-03-04 12:38:13] Warn in class 'Document', method 'initialize. Non existent metadata variable
+WARN [2018-03-04 12:47:56] Warn in class 'Document', method 'attach. Non existent metadata variable
+WARN [2018-03-04 22:17:54] Warn in class 'Text', method 'initialize. Non existent metadata variable
+WARN [2018-03-04 22:18:11] Warn in class 'Text', method 'initialize. Non existent metadata variable
+WARN [2018-03-04 22:18:27] Warn in class 'Text', method 'initialize. Non existent metadata variable

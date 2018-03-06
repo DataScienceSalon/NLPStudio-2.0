@@ -67,7 +67,8 @@ VVInit <- R6::R6Class(
       return(status[['code']] <- TRUE)
     },
     corpus = function(object) {
-      return(private$validateName(object))
+      p <- object$getParams()
+      return(private$validateName(object, p$name))
     },
     document = function(object) {
       p <- object$getParams()

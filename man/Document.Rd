@@ -9,8 +9,6 @@
 myDocument <- Document$new(name = "machineLearning", content = mlAdvances)
 }
 \arguments{
-\item{object}{Text, Data, or Analysis object.}
-
 \item{x}{A Text, Data or Analyis object, or the name thereto. Used in the detach method.}
 
 \item{cls}{Class of the object to be detached. Required for detaching objects when the
@@ -102,7 +100,8 @@ rawText <- c("Capsule networks (CapsNets) are a hot new neural net
 
 }
 \seealso{
-Other Core Classes: \code{\link{Text}}
+Other Core Classes: \code{\link{Corpus}},
+  \code{\link{Text}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

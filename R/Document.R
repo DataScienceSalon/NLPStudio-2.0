@@ -23,7 +23,6 @@
 #'  }
 #' @template entityMethods
 #'
-#' @param object Text, Data, or Analysis object.
 #' @param x A Text, Data or Analyis object, or the name thereto. Used in the detach method.
 #' @param cls Class of the object to be detached. Required for detaching objects when the
 #' x parameter contains the name of the object.
@@ -56,10 +55,12 @@ Document <- R6::R6Class(
   classname = "Document",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Entity,
+  inherit = Composite,
 
   private = list(
-    ..attachments = list()
+    ..attachments = list(),
+    ..associates = c("Text", "Data", "Analysis")
+
   ),
 
   public = list(
@@ -73,80 +74,47 @@ Document <- R6::R6Class(
       private$..className <- 'Document'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
-      private$created()
 
       # Obtain and validate parameters
       private$..params$name <- name
       if (private$validateParams()$code == FALSE) stop()
 
       # Complete Instantiation
-      private$..meta$object$name <- name
-      private$..id <- private$createId()
-
-      # Create log entry
-      private$..state <- paste0("Document object, ", name, ", instantiated.")
-      self$logIt()
+      private$init(name)
 
       invisible(self)
     },
 
-    #-------------------------------------------------------------------------#
-    #                   Aggregation / Assocation Classes                      #
-    #-------------------------------------------------------------------------#
-    attach = function(object) {
+    get = function(x = NULL, value = NULL) {
 
-      private$..methodName <- "attach"
+      private$..methodName <- "get"
 
       # Obtain and validate parameters
-      private$..params$object <- object
-      if (private$validateParams(what = private$..methodName)$code == FALSE) stop()
-
-      # Attach
-      a <- list()
-      a$name <- object$getName()
-      a$class <- class(object)[1]
-      a[[a$name]] <- object
-      private$..attachments[[a$name]] <- a
-
-      # Log
-      private$..state <- paste0("Attached ", a$name, " object to ", self$getName(), ".")
-      self$logIt()
-
-      invisible(self)
-
-    },
-
-    detach = function(x, cls = NULL) {
-
-      private$..methodName <- "detach"
-
+      private$..params <- list()
       private$..params$x <- x
-      private$..params$cls <- cls
-      if (private$validateParams(what = private$..methodName)$code == FALSE) stop()
+      private$..params$value <- value
+      if (private$validateParams(private$..methodName)$code == FALSE) stop()
 
-      if (class(x)[1] == "character") {
-        name <- x
-      } else {
-        name <- x$getName()
-        cls <- class(x)
-      }
-
-      list.condition <- sapply(private$..attachments, function(x) (x$name == name & x$class == cls))
+      # Obtain list condition and return results
+      listConditions <- private$search()
 
       if (exists(private$..attachments[list.condition])) {
         object <- private$..attachments[list.condition]
-        private$..attachments[list.condition] <- NULL
-        private$..state <- paste0("Dettached ", name, " from ",
+        private$..state <- paste0("Retrieved ", object$getName, " from ",
                                   self$getName, ".")
         self$logIt()
-        return(object)
       } else {
-        private$..state <- paste0("Object ", name, " is not attached to ",
-                                    self$getName(), ". Returning NULL")
+        object <- NULL
+        private$..state <- paste0("Object is not attached to ",
+                                  self$getName(), ". Returning NULL")
         self$logIt("Warn")
-        return(NULL)
       }
+
+      private$accessed()
+
+      return(object)
     },
+
     #-------------------------------------------------------------------------#
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#
