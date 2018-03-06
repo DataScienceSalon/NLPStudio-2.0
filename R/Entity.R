@@ -29,7 +29,7 @@ Entity <- R6::R6Class(
   private = list(
     ..meta = list(
       object = list(),
-      app = list(),
+      stats = list(),
       system = list()
     ),
     ..params = list(),
@@ -54,15 +54,20 @@ Entity <- R6::R6Class(
 
     init = function(name) {
 
-      # Set datetime stamps
+      # Clear parameters variables and set datetime stamps
       private$created()
 
       # Creates unique identifier and update metadata as appropriate
       settings <- hashids::hashid_settings(salt = 'this is my salt', min_length = 8)
-      hashid <- hashids::encode(as.integer(private$..meta$system$created) * 1000, settings)
+      hashid <- hashids::encode(as.integer(Sys.time()) * 1000, settings)
       private$..meta$object$name <- name
-      private$..meta$app$id <- toupper(hashid)
-      private$..meta$app$class <- class(self)[1]
+      private$..meta$object$id <- toupper(hashid)
+      private$..meta$object$class <- class(self)[1]
+      private$..meta$object$description <- paste0(private$..meta$object$class,
+                                                  " object, '", name,
+                                                  "', created on ",
+                                                  format(Sys.Date(), "%a %b %d %Y"),
+                                                  " by ", Sys.info()[['user']], ".")
 
       # Log the entry
       private$..state <- paste0(private$..className, " object, ", name, ", instantiated.")
@@ -157,6 +162,45 @@ Entity <- R6::R6Class(
         }
       }
       return(status)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                           Summary Methods                               #
+    #-------------------------------------------------------------------------#
+    summaryObjMeta = function(quiet = FALSE) {
+
+      meta <- as.data.frame(private$..meta$object, stringsAsFactors = FALSE,
+                            row.names = NULL)
+
+      if (quiet == FALSE)  {
+        cat(paste0("\nObject Id    : ", private$..meta$object$id))
+        cat(paste0("\nObject Class : ", private$..meta$object$class))
+        cat(paste0("\nObject Name  : ", private$..meta$object$name))
+        cat(paste0("\nDescription  : ", private$..meta$object$description))
+
+        otherMeta <- meta %>% select(-id, -class, -name, -description)
+        if (ncol(otherMeta) > 0) {
+          cat("\nObject Metadata:\n")
+
+          colnames(otherMeta) <- sapply(colnames(otherMeta), proper)
+          print(otherMeta, row.names = FALSE)
+        }
+      }
+      return(meta)
+    },
+
+    summarySysMeta = function(quiet = FALSE) {
+
+      sys <- as.data.frame(private$..meta$system, stringsAsFactors = FALSE,
+                           row.names = NULL)
+      if (quiet == FALSE) {
+        if (ncol(sys) > 0) {
+          cat("\nSystem Metadata: \n")
+          colnames(sys) <- sapply(colnames(sys), proper)
+          print(sys, row.names = FALSE)
+        }
+      }
+      return(sys)
     }
   ),
 
@@ -166,7 +210,7 @@ Entity <- R6::R6Class(
     #                           Basic Get  Methods                            #
     #-------------------------------------------------------------------------#
     getName = function() private$..meta$object$name,
-    getId = function() private$..meta$app$id,
+    getId = function() private$..meta$object$id,
     getParams = function() private$..params,
 
     #-------------------------------------------------------------------------#

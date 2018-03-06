@@ -96,64 +96,46 @@ Text <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function(name, content) {
 
-      # Initiate logging variables and system meta data
+      # Initiate logging
       private$..className <- 'Text'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
 
-      # Obtain and validate parameters
-      private$..params$name <- name
-      private$..params$content <- content
+      # Obtain, validate, then clear parameter list
+      private$..params <- as.list(match.call())
       if (private$validateParams()$code == FALSE) stop()
+      private$..params <- list()
 
-      # Obtain descriptive statistics, create description variable, and compress
+      # Obtain descriptive statistics, compress content, and wrap up instantiation
       private$stats(content)
-      private$..meta$object$description <- paste0(private$..meta$app$class, " object, ",
-                                                  "created on ",
-                                                  format(Sys.Date(), "%a %b %d %Y"),
-                                                  " by ", Sys.info()[['user']], ".")
-      private$..params$content <- memCompress(content, "g")
-
-      # Complete Instantiation
+      private$..content <- memCompress(content, "g")
       private$init(name)
 
       invisible(self)
     },
 
-    summary = function() {
-
-      private$..methodName <- "summary"
-
-      # Obtain meta data and descriptive statistics
-      df <- data.frame(Id = private$..meta$app$id,
-                       Class = private$..meta$app$class,
-                       Name = private$..meta$object$name,
-                       stringsAsFactors = FALSE)
-      stats <- as.data.frame(private$..meta$stats)
-      created <- data.frame(Created = private$..meta$system$created,
-                               stringsAsFactors = FALSE)
-      md <- as.data.frame(private$..meta$object, stringsAsFactors = FALSE) %>%
-        select(-name)
-      df <- cbind(df, stats, created, md)
-      return(df)
-
+    #-------------------------------------------------------------------------#
+    #                           Summary Methods                               #
+    #-------------------------------------------------------------------------#
+    summaryStats = function(quiet = FALSE) {
+      stats <- as.data.frame(private$..meta$stats, stringsAsFactors = FALSE,
+                             row.names = NULL)
+      if (quiet == FALSE) {
+        if (ncol(stats) > 0) {
+          cat("\n\nDescriptive Statistics:\n")
+          colnames(stats) <- sapply(colnames(stats), proper)
+          print(stats, row.names = FALSE)
+        }
+      }
+      return(stats)
     },
 
-    tprint = function() {
-      cat("\n#-------------------------------------------------------------------------#")
-      cat("\n#                         Text Object Summary                             #")
-      cat("\n#-------------------------------------------------------------------------#")
-      cat(paste0("\n    Object Id: ", private$..meta$app$id),
-                 "           Created: ", private$..meta$system$created)
-      cat(paste0("\n  Object Name: ", private$..meta$object$name),
-                 "                   User: ", private$..meta$system$user)
-      cat(paste0("\n\n  Description: ", private$..meta$object$description))
-      cat("\n\n\n                     Descriptive Statistics \n\n")
-      print(data.frame(private$..meta$stats), row.names = FALSE)
-      cat("\n\n\n                         Object Metadata \n\n")
-      print(as.data.frame(private$..meta$object, stringsAsFactors = FALSE) %>%
-              filter(-name), row.names = FALSE)
-
+    summary = function(quiet = FALSE) {
+      result <- list()
+      result$meta <- self$summaryObjMeta(quiet = quiet)
+      result$stats <- self$summaryStats(quiet = quiet)
+      result$sys <- self$summarySysMeta(quiet = quiet)
+      names(result) <- c("Metadata", "Descriptive Statistics", "System Info")
     },
 
     #-------------------------------------------------------------------------#
