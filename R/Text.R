@@ -7,7 +7,7 @@
 #' vector containing the text. Once the object is created, users may
 #' add, change and remove metadata via key / value pairs. IO
 #' methods support reading and writing the texts in a variety
-#' of formats using the \code{\link[NLPStudio]{IOStrategy}} factory
+#' of formats using the \code{\link[NLPStudio]{IOFactory}} factory
 #' class.
 #'
 #' @usage myText <- Text$new(name = "skiReport", content = avalanche)
@@ -50,6 +50,14 @@ Text <- R6::R6Class(
   private = list(
     ..content = character(),
 
+    compress = function(x) {
+      memCompress(x, "g")
+    },
+
+    decompress = function(x) {
+      strsplit(memDecompress(x, "g", asChar = TRUE), "\n")[[1]]
+    },
+
     stats = function(content) {
       private$..meta$stats <- list()
       private$..meta$stats$Sentences <- sum(quanteda::nsentence(content))
@@ -60,6 +68,19 @@ Text <- R6::R6Class(
                                          private$..meta$stats$Tokens
       private$..meta$stats$`Ave Sent Len` <- private$..meta$stats$Tokens /
                                          private$..meta$stats$Sentences
+    },
+
+    summaryStats = function(quiet = FALSE) {
+      stats <- as.data.frame(private$..meta$stats, stringsAsFactors = FALSE,
+                             row.names = NULL)
+      if (quiet == FALSE) {
+        if (ncol(stats) > 0) {
+          cat("\nDescriptive Statistics:\n")
+          colnames(stats) <- sapply(colnames(stats), proper)
+          print(stats, row.names = FALSE)
+        }
+      }
+      return(stats)
     }
   ),
 
@@ -68,9 +89,7 @@ Text <- R6::R6Class(
 
       if (missing(value)) {
         private$accessed()
-        txt <- strsplit(memDecompress(private$..content, "g",
-                                      asChar = TRUE), "\n")[[1]]
-        return(txt)
+        return(private$decompress(private$..content))
 
       } else {
         if (!("character" %in% class(value))) {
@@ -79,7 +98,7 @@ Text <- R6::R6Class(
           stop()
         } else {
 
-          private$..content <- memCompress(value, "g")
+          private$..content <- private$compress(value)
           private$modified()
           private$..state <- "Updated text content."
           self$logIt()
@@ -102,7 +121,8 @@ Text <- R6::R6Class(
       private$..logs <- LogR$new()
 
       # Obtain, validate, then clear parameter list
-      private$..params <- as.list(match.call())
+      private$..params$name <- name
+      private$..params$content <- content
       if (private$validateParams()$code == FALSE) stop()
       private$..params <- list()
 
@@ -115,27 +135,64 @@ Text <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
-    #                           Summary Methods                               #
+    #                           Summary Method                               #
     #-------------------------------------------------------------------------#
-    summaryStats = function(quiet = FALSE) {
-      stats <- as.data.frame(private$..meta$stats, stringsAsFactors = FALSE,
-                             row.names = NULL)
-      if (quiet == FALSE) {
-        if (ncol(stats) > 0) {
-          cat("\n\nDescriptive Statistics:\n")
-          colnames(stats) <- sapply(colnames(stats), proper)
-          print(stats, row.names = FALSE)
-        }
-      }
-      return(stats)
+    summary = function(meta = TRUE, stats = TRUE, system = TRUE, quiet = FALSE) {
+      result <- list()
+      if (meta) result$meta <- private$summaryObjMeta(quiet = quiet)
+      if (stats) result$stats <- private$summaryStats(quiet = quiet)
+      if (system) result$sys <- private$summarySysInfo(quiet = quiet)
+      names(result) <- c("Metadata", "Descriptive Statistics", "System Info")
+      return(result)
     },
 
-    summary = function(quiet = FALSE) {
-      result <- list()
-      result$meta <- self$summaryObjMeta(quiet = quiet)
-      result$stats <- self$summaryStats(quiet = quiet)
-      result$sys <- self$summarySysMeta(quiet = quiet)
-      names(result) <- c("Metadata", "Descriptive Statistics", "System Info")
+    #-------------------------------------------------------------------------#
+    #                             IO Methods                                  #
+    #-------------------------------------------------------------------------#
+    read = function(path, io = NULL) {
+
+      private$..methodName <- 'read'
+
+      # Update text file metadata
+      private$..meta$object$filePath <- path
+      private$..meta$object$fileName <- basename(path)
+
+      # Read and compress content
+      if (is.null(io))  io <- IOFactory$new(path)$getIOStrategy()
+      content <- io$read(path = path)
+      private$..content <- private$compress(content)
+
+      # Update log and system metadata
+      private$..state <- paste0("Read ", private$..meta$object$class,
+                                " object, '", private$..meta$object$name,
+                                "' from ", path, ". ")
+      self$logIt()
+      private$modified()
+
+      invisible(content)
+    },
+
+    write = function(path, io = NULL) {
+
+      private$..methodName <- 'write'
+
+      # Update text file metadata
+      private$..meta$object$filePath <- path
+      private$..meta$object$fileName <- basename(path)
+
+      # Decompress, then write text file
+      content <- private$decompress(private$..content)
+      if (is.null(io))  io <- IOFactory$new(path)$getIOStrategy()
+      io$write(path = path, content = content)
+
+      # Update log
+      private$..state <- paste0("Saved ", private$..meta$object$class,
+                                " object, '", private$..meta$object$name,
+                                "' to ", path, ". ")
+      private$accessed
+      self$logIt()
+
+      invisible(self)
     },
 
     #-------------------------------------------------------------------------#

@@ -36,7 +36,7 @@ The object is instantiated with a name and a character
 vector containing the text. Once the object is created, users may
 add, change and remove metadata via key / value pairs. IO
 methods support reading and writing the texts in a variety
-of formats using the \code{\link[NLPStudio]{IOStrategy}} factory
+of formats using the \code{\link[NLPStudio]{IOFactory}} factory
 class.
 }
 \section{Core Methods}{
@@ -52,7 +52,7 @@ class.
   \item{\code{read(path, io = NULL)}}{Reads an object from a specified
   file using the default or designated IO Strategy. See IOStrategy?
   for details w.r.t. the io parameter. If the IO strategy is not
-  indicated, the default io strategy for the file type is used.}#'
+  indicated, the default io strategy for the file type is used.}
   \item{\code{write(path, io = NULL)}}{Writes an object to a specified
   file using the default or designated IO Strategy. See IOStrategy?
   for details w.r.t. the io parameter. If the IO strategy is not

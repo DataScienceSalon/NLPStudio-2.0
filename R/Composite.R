@@ -36,25 +36,13 @@ Composite <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                             Search Method                               #
     #-------------------------------------------------------------------------#
-    #' search
-    #'
-    #' \code{search} Method for searching and retrieving objects from composites
-    #'
-    #' This method enables users to query attachments using metadata. The method
-    #' performs a search based on the key/value pair parameters and returns
-    #' a boolean vector, indexing into the list of attachments, the element
-    #' or elements that match the search criteria.
-    #'
-    #' Tbis method accepts two parameters.
-    #' @param key Character string or vector
-    #' @param value Character string or vector. If key is a single element,
-    #' value may be of length one or greater; otherwise, the value
-    #' parameter must have a length equal to that of the key parameter.
-    #'
-    #' @return Logical vector indexing into the attachment list. A value of
-    #' TRUE at an index position indicates that the element at that index
-    #' matches the search criteria.
-    #'
+    # search
+    #
+    # This method enables users to query attachments using metadata. The method
+    # performs a search based on the key/value pair parameters and returns
+    # a boolean vector, indexing into the list of attachments, the element
+    # or elements that match the search criteria.
+    #
     search = function() {
 
       # get Params

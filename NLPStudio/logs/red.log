@@ -22,3 +22,5 @@ ERROR [2018-03-04 12:38:13] Error in class 'Document', method 'attach. Unable to
 ERROR [2018-03-04 12:38:52] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
 ERROR [2018-03-04 12:40:06] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
 ERROR [2018-03-04 12:45:29] Error in class 'Document', method 'attach. Unable to attach NULL class object to an object of class Document.See ?Document for further assistance.
+ERROR [2018-03-06 20:06:10] Error in class 'Text', method 'initialize. Invalid class. Cannot create Text object. Parameter is not of a valid class. See ?Text for further assistance
+ERROR [2018-03-06 20:07:37] Error in class 'Text', method 'initialize. Invalid class. Cannot create Text object. Parameter is not of a valid class. See ?Text for further assistance

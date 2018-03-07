@@ -41,16 +41,14 @@ Entity <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                                 Init                                    #
     #-------------------------------------------------------------------------#
-    #' init
-    #'
-    #' \code{init} Method that standardizes the instantiation of domain objects
-    #'
-    #' This method is called by constructors once the parameters have been
-    #' validated.  It assigns a unique identifier to the object, adds the
-    #' identifier, name and the object's class to its metadata, logs the
-    #' creation and returns control to the constructor.
-    #'
-    #' @param name Character string containing the name of the object.
+    # init
+    #
+    #  Method that standardizes the instantiation of domain objects
+    #
+    # This method is called by constructors once the parameters have been
+    # validated.  It assigns a unique identifier to the object, adds the
+    # identifier, name and the object's class to its metadata, logs the
+    # creation and returns control to the constructor.
 
     init = function(name) {
 
@@ -113,22 +111,20 @@ Entity <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Validate Parameters                           #
     #-------------------------------------------------------------------------#
-    #' validateParams
-    #'
-    #' \code{validateParams} Initiates the process of validating parameters
-    #'
-    #' Initiates parameter validation for common routines. This method takes
-    #' as its parameter, the calling method name, and initiates the procedure
-    #' by instantiating a validator object and calling the visitor method
-    #' associated with the method name parameter. The validator dispatches
-    #' the appropriate visitor, which performs the validation.
-    #'
-    #' @param what The method name requesting validation services.
-    #'
-    #' @return List containing a logical and a character vector.  If the
-    #' validation passed, the logical is TRUE and the character vector is
-    #' null. If not, the logical is FALSE, and the character vector contains
-    #' text describing the error.
+    # validateParams
+    #
+    # Initiates parameter validation for common routines. This method takes
+    # as its parameter, the calling method name, and initiates the procedure
+    # by instantiating a validator object and calling the visitor method
+    # associated with the method name parameter. The validator dispatches
+    # the appropriate visitor, which performs the validation.
+    #
+    # Parameter: what The method name requesting validation services.
+    #
+    # Returns: List containing a logical and a character vector.  If the
+    # validation passed, the logical is TRUE and the character vector is
+    # null. If not, the logical is FALSE, and the character vector contains
+    # text describing the error.
     validateParams = function(what = "initialize") {
       # Valid values are c("init", "associate")
 
@@ -180,7 +176,7 @@ Entity <- R6::R6Class(
 
         otherMeta <- meta %>% select(-id, -class, -name, -description)
         if (ncol(otherMeta) > 0) {
-          cat("\nObject Metadata:\n")
+          cat("\n\nObject Metadata:\n")
 
           colnames(otherMeta) <- sapply(colnames(otherMeta), proper)
           print(otherMeta, row.names = FALSE)
@@ -189,13 +185,13 @@ Entity <- R6::R6Class(
       return(meta)
     },
 
-    summarySysMeta = function(quiet = FALSE) {
+    summarySysInfo = function(quiet = FALSE) {
 
       sys <- as.data.frame(private$..meta$system, stringsAsFactors = FALSE,
                            row.names = NULL)
       if (quiet == FALSE) {
         if (ncol(sys) > 0) {
-          cat("\nSystem Metadata: \n")
+          cat("\nSystem Information: \n")
           colnames(sys) <- sapply(colnames(sys), proper)
           print(sys, row.names = FALSE)
         }
@@ -212,49 +208,6 @@ Entity <- R6::R6Class(
     getName = function() private$..meta$object$name,
     getId = function() private$..meta$object$id,
     getParams = function() private$..params,
-
-    #-------------------------------------------------------------------------#
-    #                             IO Methods                                  #
-    #-------------------------------------------------------------------------#
-    read = function(path, io = NULL) {
-
-      private$..methodName <- 'read'
-
-      # Update text file metadata
-      private$..meta$app$filePath <- path
-      private$..meta$app$fileName <- basename(path)
-
-      # Read content
-      if (is.null(io))  io <- IOFactory$new(private$..meta$app$filePath)$getIOStrategy()
-      private$..content <- io$read(path = private$..meta$app$filePath)
-
-      # Update log and system metadata
-      private$..state <- paste0("Read Text id ", private$..id, " from ",
-                                private$..meta$app$filePath, ".")
-      self$logIt()
-      private$modified()
-
-      invisible(self)
-    },
-
-    write = function(path, io = NULL) {
-
-      private$..methodName <- 'write'
-
-      # Update text file metadata
-      private$..meta$app$filePath <- path
-      private$..meta$app$fileName <- basename(path)(path)
-
-      # Write text file
-      if (is.null(io))  io <- IOFactory$new(private$..meta$app$filePath)$getIOStrategy()
-      io$write(path = private$..meta$app$filePath, content = private$..content)
-
-      # Update log
-      private$..state <- paste0("Saved Text id ", private$..meta["id"], " to ", path, ". ")
-      self$logIt()
-
-      invisible(self)
-    },
 
     #-------------------------------------------------------------------------#
     #                           Metadata Method                               #
