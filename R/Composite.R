@@ -50,14 +50,22 @@ Composite <- R6::R6Class(
       value <- private$..params$value
 
       if (length(key) == 1) {
-        listCondition <- sapply(private$..attachments, function(a) ( a[[key]] %in% value ))
+        listCondition <- sapply(private$..attachments, function(a) {
+          unlist(unname((a$meta()$object[key] == value)))
+          })
       } else {
-        listConditions <- lapply(seq_along(key), function(k) {
-          sapply(private$..attachments, function(a) ( a[[key[k]]] == value[k] ))
+        listCondition <- sapply(private$..attachments, function(a) {
+          sapply(seq_along(key), function(k) {
+            unlist(unname((a$meta()$object[key[k]] == value[k])))
         })
-      }
+      })
+     }
 
       return(listCondition)
+    },
+
+    summaryAttachments = function() {
+
     }
   ),
 
@@ -76,9 +84,7 @@ Composite <- R6::R6Class(
 
       # Obtain and flatten meta data into list, append the object, then add to attachments.
       id <- x$getId()
-      m <- unlist(x$meta())
-      m$object <- x
-      private$..attachments[[id]] <- m
+      private$..attachments[[id]] <- x
 
       # Update date/time metadata and create log entry
       private$modified()
@@ -100,11 +106,11 @@ Composite <- R6::R6Class(
       private$..params$value <- value
       if (private$validateParams(what = private$..methodName)$code == FALSE) stop()
 
-      listConditions <- private$search()
+      listCondition <- private$search()
 
-      if (exists(private$..attachments[list.condition])) {
-        object <- private$..attachments[list.condition]
-        private$..attachments[list.condition] <- NULL
+      if (exists(private$..attachments[listCondition])) {
+        object <- private$..attachments[listCondition]
+        private$..attachments[listCondition] <- NULL
         private$modified()
         private$..state <- paste0("Detached ", object$getName, " from ",
                                   self$getName, ".")
@@ -120,11 +126,11 @@ Composite <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
-    #                             Attachments                                 #
+    #                         Get Attachment Method                           #
     #-------------------------------------------------------------------------#
-    attachments = function(key = NULL, value = NULL) {
+    get = function(key = NULL, value = NULL) {
 
-      private$..methodName <- "attachments"
+      private$..methodName <- "get"
 
       # Obtain and validate parameters
       private$..params <- list()
@@ -136,13 +142,44 @@ Composite <- R6::R6Class(
       if (is.null(key)) {
         objects <- private$..attachments
       } else {
-        listConditions <- private$search()
-        objects <- private$..attachments[list.condition]
+        listCondition <- private$search()
+        objects <- private$..attachments[listCondition]
       }
 
       private$accessed()
 
       return(objects)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                           Summary Method                                #
+    #-------------------------------------------------------------------------#
+    summary = function(meta = TRUE, stats = TRUE, system = TRUE, quiet = FALSE,
+                       abbreviated = FALSE, attachments = TRUE) {
+      if (abbreviated) {
+        result <- private$summaryShort()
+      } else {
+        result <- list()
+        section <- character()
+
+        if (meta) {
+          result$meta <- private$summaryObjMeta(quiet = quiet)
+          section <- c(section, "Metadata")
+        }
+
+        if (attachments) {
+          result$attachments <- private$summaryAttachments(quiet = quiet)
+          section <- c(section, "Attachments")
+        }
+
+        if (system) {
+          result$sys <- private$summarySysInfo(quiet = quiet)
+          section <- c(section, "System Info")
+        }
+
+        names(result) <- section
+      }
+      return(result)
     }
   )
 )

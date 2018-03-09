@@ -44,14 +44,12 @@ VVGet <- R6::R6Class(
       x <- p$x
       value <- p$value
 
-      if (!is.null(x)) {
-        if (sum(class(x) %in% classes) == 0) {
-          if (is.null(value)) {
+      if ((is.null(key) & !is.null(value)) |
+          (!is.null(key) & is.null(value))) {
             status$code <- FALSE
-            status$msg <- paste0("Value of key/value pair not provided in ",
-                                 "conjunction with the x parameter.")
-          }
-        }
+            status$msg <- paste0("Both key & value, must be both null or ",
+                                 "they both must be non-null. See ?",
+                                 class(object)[1], " for further information.")
       }
       return(status)
     }
@@ -62,22 +60,21 @@ VVGet <- R6::R6Class(
 
     nlpStudio = function(object) {
       classes <- c("Pipeline", "Corpus")
-      return(private$validate(object = object, classes = classes))
+      return(private$validate(object = object))
     },
 
     pipeline = function(object) {
       classes <- "Corpus"
-      return(private$validate(object = object, classes = classes))
+      return(private$validate(object = object))
     },
 
     corpus = function(object) {
       classes <- c("Document")
-      return(private$validate(object = object, classes = classes))
+      return(private$validate(object = object))
     },
 
     document = function(object) {
-      classes <- c("Text", "Data", "Analysis")
-      return(private$validate(object = object, classes = classes))
+      return(private$validate(object = object))
     }
   )
 )

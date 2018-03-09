@@ -85,36 +85,6 @@ Document <- R6::R6Class(
       invisible(self)
     },
 
-    get = function(x = NULL, value = NULL) {
-
-      private$..methodName <- "get"
-
-      # Obtain and validate parameters
-      private$..params <- list()
-      private$..params$x <- x
-      private$..params$value <- value
-      if (private$validateParams(private$..methodName)$code == FALSE) stop()
-
-      # Obtain list condition and return results
-      listConditions <- private$search()
-
-      if (exists(private$..attachments[list.condition])) {
-        object <- private$..attachments[list.condition]
-        private$..state <- paste0("Retrieved ", object$getName, " from ",
-                                  self$getName, ".")
-        self$logIt()
-      } else {
-        object <- NULL
-        private$..state <- paste0("Object is not attached to ",
-                                  self$getName(), ". Returning NULL")
-        self$logIt("Warn")
-      }
-
-      private$accessed()
-
-      return(object)
-    },
-
     #-------------------------------------------------------------------------#
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#

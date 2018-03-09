@@ -83,7 +83,7 @@ Entity <- R6::R6Class(
       private$..meta$system$os <- Sys.info()[["sysname"]]
       private$..meta$system$release <- Sys.info()[["release"]]
       private$..meta$system$version <- Sys.info()[["version"]]
-      private$..meta$system$accessed <- date()
+      private$..meta$system$accessed <- Sys.time()
     },
 
     # Updates system metadata when object has been modified
@@ -93,8 +93,8 @@ Entity <- R6::R6Class(
       private$..meta$system$os <- Sys.info()[["sysname"]]
       private$..meta$system$release <- Sys.info()[["release"]]
       private$..meta$system$version <- Sys.info()[["version"]]
-      private$..meta$system$accessed <- date()
-      private$..meta$system$modified <- date()
+      private$..meta$system$accessed <- Sys.time()
+      private$..meta$system$modified <- Sys.time()
     },
 
     # Updates system metadata when object has been created
@@ -104,9 +104,9 @@ Entity <- R6::R6Class(
       private$..meta$system$os <- Sys.info()[["sysname"]]
       private$..meta$system$release <- Sys.info()[["release"]]
       private$..meta$system$version <- Sys.info()[["version"]]
-      private$..meta$system$created <- date()
-      private$..meta$system$accessed <- date()
-      private$..meta$system$modified <- date()
+      private$..meta$system$created <- Sys.time()
+      private$..meta$system$accessed <- Sys.time()
+      private$..meta$system$modified <- Sys.time()
     },
     #-------------------------------------------------------------------------#
     #                           Validate Parameters                           #
@@ -177,8 +177,6 @@ Entity <- R6::R6Class(
         otherMeta <- meta %>% select(-id, -class, -name, -description)
         if (ncol(otherMeta) > 0) {
           cat("\n\nObject Metadata:\n")
-
-          colnames(otherMeta) <- sapply(colnames(otherMeta), proper)
           print(otherMeta, row.names = FALSE)
         }
       }
@@ -192,7 +190,6 @@ Entity <- R6::R6Class(
       if (quiet == FALSE) {
         if (ncol(sys) > 0) {
           cat("\nSystem Information: \n")
-          colnames(sys) <- sapply(colnames(sys), proper)
           print(sys, row.names = FALSE)
         }
       }

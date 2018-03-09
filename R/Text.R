@@ -58,29 +58,53 @@ Text <- R6::R6Class(
       strsplit(memDecompress(x, "g", asChar = TRUE), "\n")[[1]]
     },
 
-    stats = function(content) {
-      private$..meta$stats <- list()
-      private$..meta$stats$Sentences <- sum(quanteda::nsentence(content))
-      private$..meta$stats$Tokens <- sum(quanteda::ntoken(content))
-      private$..meta$stats$Types <- sum(quanteda::ntype(content))
-      private$..meta$stats$Chars <- sum(nchar(content))
-      private$..meta$stats$`Ave Word Len` <- private$..meta$stats$Chars /
-                                         private$..meta$stats$Tokens
-      private$..meta$stats$`Ave Sent Len` <- private$..meta$stats$Tokens /
-                                         private$..meta$stats$Sentences
+    stats = function() {
+
+      getStats = function() {
+        content <- private$decompress(private$..content)
+        private$..meta$stats <- list()
+        private$..meta$stats$sentences <- sum(quanteda::nsentence(content))
+        private$..meta$stats$tokens <- sum(quanteda::ntoken(content))
+        private$..meta$stats$types <- sum(quanteda::ntype(tolower(content)))
+        private$..meta$stats$created <- Sys.time()
+      }
+
+      if (is.null(private$..meta$stats)) {
+        return(getStats())
+      } else if (is.null(private$..meta$stats$created)) {
+        return(getStats())
+      } else if (private$..meta$stats$created <
+                 private$..meta$system$modified) {
+        return(getStats())
+      }
     },
 
     summaryStats = function(quiet = FALSE) {
+
+      private$stats()
+
       stats <- as.data.frame(private$..meta$stats, stringsAsFactors = FALSE,
                              row.names = NULL)
+      stats <- stats %>% select(-created)
       if (quiet == FALSE) {
         if (ncol(stats) > 0) {
-          cat("\nDescriptive Statistics:\n")
-          colnames(stats) <- sapply(colnames(stats), proper)
+          cat("\n\nDescriptive Statistics:\n")
           print(stats, row.names = FALSE)
         }
       }
       return(stats)
+    },
+
+    summaryShort = function() {
+      short <- data.frame(id = private$..meta$object$id,
+                          name = private$..meta$object$name,
+                          desc = private$..meta$object$desc,
+                          sentences = private$..meta$stats$sentences,
+                          tokens = private$..meta$stats$tokens,
+                          types = private$..meta$stats$types,
+                          created = private$..meta$sys$created,
+                          stringsAsFactors = FALSE)
+      return(short)
     }
   ),
 
@@ -126,24 +150,42 @@ Text <- R6::R6Class(
       if (private$validateParams()$code == FALSE) stop()
       private$..params <- list()
 
-      # Obtain descriptive statistics, compress content, and wrap up instantiation
-      private$stats(content)
-      private$..content <- memCompress(content, "g")
+      # Complete standard initiation tasks, then add content
       private$init(name)
+      private$..content <- private$compress(content)
 
       invisible(self)
     },
 
     #-------------------------------------------------------------------------#
-    #                           Summary Method                               #
+    #                           Summary Method                                #
     #-------------------------------------------------------------------------#
-    summary = function(meta = TRUE, stats = TRUE, system = TRUE, quiet = FALSE) {
-      result <- list()
-      if (meta) result$meta <- private$summaryObjMeta(quiet = quiet)
-      if (stats) result$stats <- private$summaryStats(quiet = quiet)
-      if (system) result$sys <- private$summarySysInfo(quiet = quiet)
-      names(result) <- c("Metadata", "Descriptive Statistics", "System Info")
-      return(result)
+    summary = function(meta = TRUE, stats = TRUE, system = TRUE,
+                       quiet = FALSE, abbreviated = FALSE) {
+      if (abbreviated) {
+        result <- private$summaryShort()
+      } else {
+        result <- list()
+        section <- character()
+
+        if (meta) {
+          result$meta <- private$summaryObjMeta(quiet = quiet)
+          section <- c(section, "Metadata")
+        }
+
+        if (stats) {
+          result$stats <- private$summaryStats(quiet = quiet)
+          section <- c(section, "Descriptive Statistics")
+        }
+
+        if (system) {
+          result$sys <- private$summarySysInfo(quiet = quiet)
+          section <- c(section, "System Info")
+        }
+
+        names(result) <- section
+      }
+      invisible(result)
     },
 
     #-------------------------------------------------------------------------#
