@@ -46,20 +46,20 @@ Composite <- R6::R6Class(
     search = function() {
 
       # get Params
-      key <- private$..params$key
-      value <- private$..params$value
+      k <- private$..params$key
+      v <- private$..params$value
 
-      if (length(key) == 1) {
+      if (length(k) == length(v)) {
         listCondition <- sapply(private$..attachments, function(a) {
-          unlist(unname((a$meta()$object[key] == value)))
+          sapply(seq_along(key), function(x) {
+            (a$meta()$object[[k[x]]] == v[x])
           })
+        })
       } else {
         listCondition <- sapply(private$..attachments, function(a) {
-          sapply(seq_along(key), function(k) {
-            unlist(unname((a$meta()$object[key[k]] == value[k])))
+          (a$meta()$object[[k]] %in%  v)
         })
-      })
-     }
+      }
 
       return(listCondition)
     },

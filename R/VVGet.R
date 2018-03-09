@@ -36,12 +36,12 @@ VVGet <- R6::R6Class(
 
   private = list(
 
-    validate = function(object, classes) {
+    validate = function(object) {
       status <- list()
       status[['code']] <- TRUE
 
       p <- object$getParams()
-      x <- p$x
+      key <- p$key
       value <- p$value
 
       if ((is.null(key) & !is.null(value)) |

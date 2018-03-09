@@ -117,3 +117,111 @@ INFO [2018-03-06 22:03:31] Info in class '', method '. Successfully wrote en_US.
 INFO [2018-03-06 22:03:31] Info in class 'Text', method 'write. Saved Text object, 'lunch' to ./test/testData/output/en_US.twitter.txt. 
 INFO [2018-03-06 22:03:31] Info in class '', method '. Successfully read en_US.twitter.txt.
 INFO [2018-03-06 22:03:31] Info in class 'Text', method 'read. Read Text object, 'lunch' from ./test/testData/output/en_US.twitter.txt. 
+INFO [2018-03-07 19:45:43] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-07 19:48:06] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-07 19:48:07] Info in class '', method '. Successfully read en_US.twitter.txt.
+INFO [2018-03-07 19:48:07] Info in class 'Text', method 'read. Read Text object, 'lunch' from ./test/testData/medium/en_US.twitter.txt. 
+INFO [2018-03-07 19:48:07] Info in class '', method '. Successfully wrote en_US.twitter.txt.
+INFO [2018-03-07 19:48:07] Info in class 'Text', method 'write. Saved Text object, 'lunch' to ./test/testData/output/en_US.twitter.txt. 
+INFO [2018-03-07 19:48:07] Info in class '', method '. Successfully read en_US.twitter.txt.
+INFO [2018-03-07 19:48:07] Info in class 'Text', method 'read. Read Text object, 'lunch' from ./test/testData/output/en_US.twitter.txt. 
+INFO [2018-03-07 19:49:04] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-07 19:49:04] Info in class '', method '. Successfully read en_US.twitter.txt.
+INFO [2018-03-07 19:49:04] Info in class 'Text', method 'read. Read Text object, 'lunch' from ./test/testData/medium/en_US.twitter.txt. 
+INFO [2018-03-07 19:49:04] Info in class '', method '. Successfully wrote en_US.twitter.txt.
+INFO [2018-03-07 19:49:04] Info in class 'Text', method 'write. Saved Text object, 'lunch' to ./test/testData/output/en_US.twitter.txt. 
+INFO [2018-03-07 19:49:04] Info in class '', method '. Successfully read en_US.twitter.txt.
+INFO [2018-03-07 19:49:04] Info in class 'Text', method 'read. Read Text object, 'lunch' from ./test/testData/output/en_US.twitter.txt. 
+INFO [2018-03-08 02:11:00] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-08 02:12:19] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-08 02:13:11] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-08 02:13:12] Info in class '', method '. Successfully read en_US.twitter.txt.
+INFO [2018-03-08 02:13:12] Info in class 'Text', method 'read. Read Text object, 'lunch' from ./test/testData/medium/en_US.twitter.txt. 
+INFO [2018-03-08 02:13:12] Info in class '', method '. Successfully wrote en_US.twitter.txt.
+INFO [2018-03-08 02:13:12] Info in class 'Text', method 'write. Saved Text object, 'lunch' to ./test/testData/output/en_US.twitter.txt. 
+INFO [2018-03-08 02:13:12] Info in class '', method '. Successfully read en_US.twitter.txt.
+INFO [2018-03-08 02:13:12] Info in class 'Text', method 'read. Read Text object, 'lunch' from ./test/testData/output/en_US.twitter.txt. 
+INFO [2018-03-08 18:54:27] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-08 18:54:28] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-08 19:05:36] Info in class 'Text', method 'initialize. Text object, large, instantiated.
+INFO [2018-03-08 19:10:35] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-08 19:10:36] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-08 19:45:37] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-08 19:46:18] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-08 19:46:53] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-08 19:48:02] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-08 19:52:38] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-08 19:53:05] Info in class 'Text', method 'initialize. Text object, lunch, instantiated.
+INFO [2018-03-08 19:53:07] Info in class '', method '. Successfully read en_US.twitter.txt.
+INFO [2018-03-08 19:53:07] Info in class 'Text', method 'read. Read Text object, 'lunch' from ./test/testData/medium/en_US.twitter.txt. 
+INFO [2018-03-08 19:53:07] Info in class '', method '. Successfully wrote en_US.twitter.txt.
+INFO [2018-03-08 19:53:07] Info in class 'Text', method 'write. Saved Text object, 'lunch' to ./test/testData/output/en_US.twitter.txt. 
+INFO [2018-03-08 19:53:07] Info in class '', method '. Successfully read en_US.twitter.txt.
+INFO [2018-03-08 19:53:07] Info in class 'Text', method 'read. Read Text object, 'lunch' from ./test/testData/output/en_US.twitter.txt. 
+INFO [2018-03-08 19:53:35] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-08 19:53:35] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-08 19:53:36] Info in class 'Text', method 'initialize. Text object, large, instantiated.
+INFO [2018-03-08 20:01:35] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-08 20:01:35] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-08 20:02:50] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-08 20:02:50] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-08 20:04:28] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-08 20:04:28] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-08 20:05:48] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-08 20:05:48] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-08 20:06:51] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-08 20:10:41] Info in class 'Text', method 'initialize. Updated text content.
+INFO [2018-03-08 20:11:33] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-08 20:11:33] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-08 20:18:29] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-08 20:18:29] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-08 20:18:30] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-08 20:24:20] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-08 20:24:25] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-08 20:25:08] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-08 20:25:08] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-08 20:25:08] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-08 20:28:52] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-08 20:28:52] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-08 20:28:52] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-08 20:28:52] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-08 20:28:52] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:21:31] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-09 10:21:31] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-09 10:21:31] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-09 10:21:31] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:21:31] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:23:56] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-09 10:23:56] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:23:56] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:25:46] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-09 10:25:46] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:25:46] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:27:44] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-09 10:27:44] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:27:44] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:28:41] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-09 10:28:41] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:28:41] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:30:21] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-09 10:30:29] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-09 10:30:47] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-09 10:30:47] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:30:47] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:44:43] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-09 10:44:43] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:44:43] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:47:38] Info in class 'Text', method 'initialize. Text object, green, instantiated.
+INFO [2018-03-09 10:47:46] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:50:46] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:51:31] Info in class 'Text', method 'initialize. Text object, small, instantiated.
+INFO [2018-03-09 10:51:35] Info in class 'Text', method 'initialize. Text object, medium, instantiated.
+INFO [2018-03-09 10:51:38] Info in class 'Text', method 'initialize. Text object, green, instantiated.
+INFO [2018-03-09 10:51:46] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-09 10:51:46] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:51:46] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 10:51:46] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 11:10:42] Info in class 'Document', method 'initialize. Document object, Blogs, instantiated.
+INFO [2018-03-09 11:10:43] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 11:10:43] Info in class 'Document', method 'attach. Attached  object to Blogs.
+INFO [2018-03-09 11:10:43] Info in class 'Document', method 'attach. Attached  object to Blogs.
