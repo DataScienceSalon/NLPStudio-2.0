@@ -6,10 +6,11 @@
 \title{Text}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-myText <- Text$new(name = "skiReport", content = avalanche)
+myText <- Text$new(name = "skiReport", x = avalanche)
 }
 \arguments{
-\item{content}{Character vectors containing actual content of the Text object.}
+\item{x}{Character vectors containing actual content of the Text object
+or the path to a file containing the text content}
 
 \item{path}{Character string designated the relative path to a file.}
 
@@ -79,12 +80,12 @@ class.
 avalanche <- c("SAN FRANCISCO  — She was snowboarding with her boyfriend when ",
           "she heard someone scream 'Avalanche!'",
           "Then John, 39, saw 'a cloud of snow coming down.'")
-myText <- Text$new(name = 'skiReport', content = avalanche)
+avalancheText <- Text$new(name = 'skiReport', content = avalanche)
 
-myText <- myText$meta(key = c("author", "editor", "year"),
+avalancheText <- myText$meta(key = c("author", "editor", "year"),
                       value = c("Dorfmeister", "Huffington", "2018"))
 
-myText$meta()
+avalancheText$meta()
 
 }
 \seealso{

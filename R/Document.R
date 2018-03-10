@@ -61,6 +61,20 @@ Document <- R6::R6Class(
     ..attachments = list(),
     ..associates = c("Text", "Data", "Analysis"),
 
+    initText = function(x) {
+
+      if (class(x)[1] == "Text") {
+        self$attach(x)
+      } else if (length(x) == 1) {
+        text <- Text$new(name = tools::file_path_sans_ext(basename(x)), x)
+        self$attach(text)
+      } else {
+        text <- Text$new(name = self$getName(), x)
+        self$attach(text)
+      }
+      return(TRUE)
+    },
+
     summaryShort = function() {
 
       aSummary <- rbindlist(lapply(private$summarizeAttachments(quiet = TRUE), function(a) {
@@ -95,7 +109,7 @@ Document <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Core Methods                                  #
     #-------------------------------------------------------------------------#
-    initialize = function(name) {
+    initialize = function(name, x = NULL) {
 
       # Initiate logging variables and system meta data
       private$..className <- 'Document'
@@ -104,10 +118,16 @@ Document <- R6::R6Class(
 
       # Obtain and validate parameters
       private$..params$name <- name
+      private$..params$x <- x
       if (private$validateParams()$code == FALSE) stop()
 
-      # Complete Instantiation
+      # Complete Document Initialization
       private$init(name)
+
+      # If x is not NULL, create text and attach
+      if (!is.null(x)) {
+        private$initText(x)
+      }
 
       invisible(self)
     },

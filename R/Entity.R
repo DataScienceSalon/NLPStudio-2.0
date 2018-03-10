@@ -224,7 +224,7 @@ Entity <- R6::R6Class(
       }
 
       # Return all metadata
-      if (is.null(key) & is.null(value)) {
+      if (missing(key) & missing(value)) {
         metaDataList <- Filter(Negate(is.null), private$..meta)
         metaDataDfs <- lapply(metaDataList, function(m) {
           df <- as.data.frame(m)
@@ -235,7 +235,7 @@ Entity <- R6::R6Class(
         return(metaDataDfs)
 
       # Return selected metadata
-      } else if (!is.null(key) & is.null(value)) {
+      } else if (!is.null(key) & missing(value)) {
         keys <- intersect(names(private$..meta$object), key)
         if (length(keys) > 0) {
           return(as.data.frame(private$..meta$object[names(private$..meta$object) %in% keys]))

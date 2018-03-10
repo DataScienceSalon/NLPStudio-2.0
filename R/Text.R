@@ -10,7 +10,7 @@
 #' of formats using the \code{\link[NLPStudio]{IOFactory}} factory
 #' class.
 #'
-#' @usage myText <- Text$new(name = "skiReport", content = avalanche)
+#' @usage myText <- Text$new(name = "skiReport", x = avalanche)
 #'
 #' @section Core Methods:
 #'  \itemize{
@@ -18,7 +18,8 @@
 #'  }
 #' @template entityMethods
 #'
-#' @param content Character vectors containing actual content of the Text object.
+#' @param x Character vectors containing actual content of the Text object
+#' or the path to a file containing the text content
 #' @template ioParams
 #' @template metaParams
 #'
@@ -30,12 +31,12 @@
 #' avalanche <- c("SAN FRANCISCO  — She was snowboarding with her boyfriend when ",
 #'           "she heard someone scream 'Avalanche!'",
 #'           "Then John, 39, saw 'a cloud of snow coming down.'")
-#' myText <- Text$new(name = 'skiReport', content = avalanche)
+#' avalancheText <- Text$new(name = 'skiReport', content = avalanche)
 #'
-#' myText <- myText$meta(key = c("author", "editor", "year"),
+#' avalancheText <- myText$meta(key = c("author", "editor", "year"),
 #'                       value = c("Dorfmeister", "Huffington", "2018"))
 #'
-#' myText$meta()
+#' avalancheText$meta()
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
@@ -111,7 +112,19 @@ Text <- R6::R6Class(
                           stringsAsFactors = FALSE,
                           row.names = NULL)
       return(short)
+    },
+
+    initContent = function(x) {
+      if (length(x) == 1) {
+        io <- IOFactory$new(x)$getIOStrategy()
+        content <- io$read(x)
+        private$..content <- private$compress(content)
+      } else {
+        private$..content <- private$compress(x)
+      }
+      return(TRUE)
     }
+
   ),
 
   active = list(
@@ -143,7 +156,7 @@ Text <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Core Methods                                  #
     #-------------------------------------------------------------------------#
-    initialize = function(name, content) {
+    initialize = function(name, x) {
 
       # Initiate logging
       private$..className <- 'Text'
@@ -152,13 +165,15 @@ Text <- R6::R6Class(
 
       # Obtain, validate, then clear parameter list
       private$..params$name <- name
-      private$..params$content <- content
+      private$..params$x <- x
       if (private$validateParams()$code == FALSE) stop()
       private$..params <- list()
 
       # Complete standard initiation tasks, then add content
       private$init(name)
-      private$..content <- private$compress(content)
+
+      # Initialize content
+      private$initContent(x)
 
       invisible(self)
     },
@@ -191,6 +206,9 @@ Text <- R6::R6Class(
 
         names(result) <- section
       }
+
+      private$accessed()
+
       invisible(result)
     },
 

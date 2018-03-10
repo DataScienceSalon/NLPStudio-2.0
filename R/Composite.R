@@ -15,7 +15,7 @@
 #'   \item{\code{attachments(key = NULL, value = NULL)}}{Lists an object's attachments.}
 #'  }
 #'
-#'  @param x Object to be attached
+#'  @param x Object or list of objects to be attached
 #'  @param key Character string or vector of strings indicating the metadata
 #'  variable or variables used for matching
 #'  @param value Character string or vector of strings indicating the
@@ -96,19 +96,29 @@ Composite <- R6::R6Class(
 
       private$..methodName <- "attach"
 
-      # Obtain and validate parameters
-      private$..params <- list()
-      private$..params$x <- x
-      if (private$validateParams(what = private$..methodName)$code == FALSE) stop()
+      doAttach = function(a) {
+        # Obtain and validate parameters
+        private$..params <- list()
+        private$..params$x <- a
+        if (private$validateParams(what = private$..methodName)$code == FALSE) stop()
 
-      # Obtain and flatten meta data into list, append the object, then add to attachments.
-      id <- x$getId()
-      private$..attachments[[id]] <- x
+        # Get document id, then attach.
+        id <- a$getId()
+        private$..attachments[[id]] <- a
 
-      # Update date/time metadata and create log entry
-      private$modified()
-      private$..state <- paste0("Attached ", a$name, " object to ", self$getName(), ".")
-      self$logIt()
+        # Update date/time metadata and create log entry
+        private$modified()
+        private$..state <- paste0("Attached ", a$getName(), " object to ", self$getName(), ".")
+        self$logIt()
+      }
+
+      if ("list" %in% class(x)[1]) {
+        lapply(x, function(a) {
+          doAttach(a)
+        })
+      } else {
+        doAttach(x)
+      }
 
       invisible(self)
 

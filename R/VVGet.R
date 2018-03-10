@@ -50,6 +50,12 @@ VVGet <- R6::R6Class(
             status$msg <- paste0("Both key & value, must be both null or ",
                                  "they both must be non-null. See ?",
                                  class(object)[1], " for further information.")
+      } else if (!is.null(key) & !is.null(value)) {
+        if (class(key) != 'character') {
+          status$code <- FALSE
+          status$msg <- paste0("Key must of the character class See ?",
+                               class(object)[1], " for further information.")
+        }
       }
       return(status)
     }

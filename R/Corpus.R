@@ -49,7 +49,7 @@ Corpus <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Core Methods                                  #
     #-------------------------------------------------------------------------#
-    initialize = function(name) {
+    initialize = function(name, x = NULL) {
 
       # Initiate logging variables and system meta data
       private$..className <- 'Corpus'
@@ -58,10 +58,16 @@ Corpus <- R6::R6Class(
 
       # Obtain and validate parameters
       private$..params$name <- name
+      private$..params$x <- x
       if (private$validateParams()$code == FALSE) stop()
 
-      # Complete Instantiation
+      # Complete Initialization
       private$init(name)
+
+      # Create documents if x is not NULL
+      if (!is.null(x)) {
+        initDocuments
+      }
 
       invisible(self)
     },
