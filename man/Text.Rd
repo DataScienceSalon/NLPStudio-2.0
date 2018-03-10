@@ -87,6 +87,9 @@ avalancheText <- myText$meta(key = c("author", "editor", "year"),
 
 avalancheText$meta()
 
+news <- "./data/en_US.news.txt"
+newsText <- Text$new(name = 'news', x = news)
+
 }
 \seealso{
 Other Core Classes: \code{\link{Corpus}},

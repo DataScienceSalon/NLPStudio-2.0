@@ -32,7 +32,8 @@
 #' @return Document object, containing related Text, Data, and Analysis objects.
 #'
 #' @examples
-#' rawText <- c("Capsule networks (CapsNets) are a hot new neural net
+#' # Instantiate with text vector
+#' x <- c("Capsule networks (CapsNets) are a hot new neural net
 #'               architecture that may well have a profound impact on deep
 #'               learning, in particular for computer vision. Wait, isn't
 #'               computer vision pretty much solved already? Haven't we all
@@ -40,12 +41,17 @@
 #'               reaching super-human level in various computer vision tasks,
 #'               such as classification, localization, object detection,
 #'               semantic segmentation or instance segmentation.")
+#'  capsNets <- Document$new(name = "capsNets" , x)
 #'
-#'  raw <- Text$new(name = "capsNets", content = rawText)
 #'
-#'  mlDoc <- Document$new(name = "capsNets")
 #'
-#'  m1Doc <- m1Doc$attach(object = raw)
+#'  # Instantiate with text file
+#'  x <- "./data/en_US.news.txt"
+#'  news <- Document$new(name = 'news', x)
+#'
+#'  # Insantiate with Text Object
+#'  newsTxt <- Text$new(name = 'news', x)
+#'  newsDoc <- Document$new(name = 'news', newsTxt)
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}

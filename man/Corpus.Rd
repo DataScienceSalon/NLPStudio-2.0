@@ -74,11 +74,27 @@ selection, analysis and modeling occurs.
 
 \examples{
 
- capsNets <- Document$new(name = "capsNets", content = rawText)
+# Instantiate from directory
+corpus <- Corpus$new(name = 'corpus', x = "./data")
+corpus$summary()
 
- mlCorpus <- Corpus$new(name = "machineLearning")
+# Instantiate from list of Document objects
+blogs <- Document$new(name = 'blogs', x = "./data/en_US.blogs.txt")
+news <- Document$new(name = 'news', x = "./data/en_US.news.txt")
+twitter <- Document$new(name = 'twitter', x = "./data/en_US.twitter.txt")
 
- m1Corpus <- mlCorpus$attach(object = capsNets)
+corpus <- Corpus$new(name = 'corpus', x = list(blogs, news, twitter))
+
+# Instantiate from Vector: Note this will create subordinate Document
+# objects for each element of the Vector.  To create a single document
+# for each vector, create the Document objects first, then attach
+# to the corpus as above
+news <- readLines("./data/en_US.news.txt")
+corpus <- Corpus$new(name  = 'news', x = news)
+
+# Attach functionality
+newCorpus <- Corpus$new(name = 'newCorpus') # Note, can be instantiated with just the name
+newCorpus$attach(blogs, news, twitter) # Must be Document objects.
 
 }
 \seealso{

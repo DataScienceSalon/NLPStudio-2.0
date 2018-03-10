@@ -23,7 +23,7 @@ classes NLPStudio, Pipeline, Corpus and Document.
   \item{\code{attachments(key = NULL, value = NULL)}}{Lists an object's attachments.}
  }
 
- @param x Object to be attached
+ @param x Object or list of objects to be attached
  @param key Character string or vector of strings indicating the metadata
  variable or variables used for matching
  @param value Character string or vector of strings indicating the

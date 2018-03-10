@@ -38,6 +38,9 @@
 #'
 #' avalancheText$meta()
 #'
+#' news <- "./data/en_US.news.txt"
+#' newsText <- Text$new(name = 'news', x = news)
+#'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family Core Classes
