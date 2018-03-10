@@ -64,8 +64,27 @@ Composite <- R6::R6Class(
       return(listCondition)
     },
 
-    summaryAttachments = function() {
+    summarizeAttachments = function(quiet = FALSE) {
+      attachments <- list()
+      lapply(private$..attachments, function(a) {
+        attachment <- a$summary(abbreviated = TRUE)
+        if (is.null(attachments[[attachment$class]])) {
+          attachments[[attachment$class]] <<- attachment
+        } else {
+          attachments[[attachment$class]] <<- rbind(attachments[[attachment$class]],
+                                                    attachment,
+                                                    make.row.names = FALSE)
+        }
+      })
 
+      if (quiet == FALSE) {
+        sections <- names(attachments)
+        lapply(seq_along(attachments), function(x) {
+          cat("\n\n", paste0(sections[x]), "\n")
+          print(attachments[[x]], row.names = FALSE)
+        })
+      }
+      return(attachments)
     }
   ),
 
@@ -168,7 +187,7 @@ Composite <- R6::R6Class(
         }
 
         if (attachments) {
-          result$attachments <- private$summaryAttachments(quiet = quiet)
+          result$attachments <- private$summarizeAttachments(quiet = quiet)
           section <- c(section, "Attachments")
         }
 
@@ -179,7 +198,7 @@ Composite <- R6::R6Class(
 
         names(result) <- section
       }
-      return(result)
+      invisible(result)
     }
   )
 )

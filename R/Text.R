@@ -96,14 +96,20 @@ Text <- R6::R6Class(
     },
 
     summaryShort = function() {
-      short <- data.frame(id = private$..meta$object$id,
+
+      private$stats()
+
+      short <- data.frame(class = private$..meta$object$class,
+                          id = private$..meta$object$id,
                           name = private$..meta$object$name,
                           desc = private$..meta$object$desc,
                           sentences = private$..meta$stats$sentences,
                           tokens = private$..meta$stats$tokens,
                           types = private$..meta$stats$types,
-                          created = private$..meta$sys$created,
-                          stringsAsFactors = FALSE)
+                          created = private$..meta$system$created,
+                          user = private$..meta$system$user,
+                          stringsAsFactors = FALSE,
+                          row.names = NULL)
       return(short)
     }
   ),

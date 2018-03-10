@@ -57,7 +57,8 @@ Entity <- R6::R6Class(
 
       # Creates unique identifier and update metadata as appropriate
       settings <- hashids::hashid_settings(salt = 'this is my salt', min_length = 8)
-      hashid <- hashids::encode(as.integer(Sys.time()) * 1000, settings)
+      hashid <- hashids::encode(as.integer(Sys.time()) * 1000000 +
+                                  sample(1:1000, 1, replace = TRUE), settings)
       private$..meta$object$name <- name
       private$..meta$object$id <- toupper(hashid)
       private$..meta$object$class <- class(self)[1]

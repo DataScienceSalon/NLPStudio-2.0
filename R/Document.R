@@ -59,7 +59,34 @@ Document <- R6::R6Class(
 
   private = list(
     ..attachments = list(),
-    ..associates = c("Text", "Data", "Analysis")
+    ..associates = c("Text", "Data", "Analysis"),
+
+    summaryShort = function() {
+
+      aSummary <- rbindlist(lapply(private$summarizeAttachments(quiet = TRUE), function(a) {
+        attachments <- list()
+        attachments$class <- unique(a$class)
+        attachments$N <- nrow(a)
+        attachments
+      }))
+      name <- aSummary$class
+      aSummary <- aSummary %>% select(N)
+      names(aSummary) <- name
+
+      short <- data.frame(class = private$..meta$object$class,
+                          id = private$..meta$object$id,
+                          name = private$..meta$object$name,
+                          desc = private$..meta$object$desc,
+                          stringsAsFactors = FALSE,
+                          row.names = NULL)
+      short <- cbind(short, aSummary)
+      other <- data.frame(created = private$..meta$system$created,
+                          user = private$..meta$system$user,
+                          stringsAsFactors = FALSE,
+                          row.names = NULL)
+      short <- cbind(short, other)
+      return(short)
+    }
 
   ),
 
