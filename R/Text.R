@@ -119,9 +119,14 @@ Text <- R6::R6Class(
 
     initContent = function(x) {
       if (length(x) == 1) {
-        io <- IOFactory$new(x)$getIOStrategy()
-        content <- io$read(x)
+        if (tools::file_ext(x) == "txt") {
+          content <- RepairFile$new(x)$execute()
+        } else {
+          io <- IOFactory$new(x)$getIOStrategy()
+          content <- io$read(x)
+        }
         private$..content <- private$compress(content)
+        private$..meta$object$source <- x
       } else {
         private$..content <- private$compress(x)
       }

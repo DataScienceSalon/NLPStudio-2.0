@@ -33,6 +33,10 @@ RepairFile <- R6::R6Class(
   private = list(
     ..path = logical(),
     ..io = list(),
+    ..codes = list(
+      null = 0,
+      sub = 26
+    ),
     ..ctrl = list(
       null = 0,
       soh = 1,
@@ -68,18 +72,23 @@ RepairFile <- R6::R6Class(
       us = 31
     ),
 
-    repair = function(ctrl) {
+    appendCode = function(code) {
+      private$..codes[[names(code)]] <- code
+      invisible(self)
+    },
 
-      content <- private$..io$bin$read(path = path)
+    repair = function() {
 
-      for (i in 1:length(ctrl)) {
-        content[content == as.raw(ctrl[i])] = as.raw(32)
+      content <- private$..io$bin$read(path = private$..path)
+
+      for (i in 1:length(private$..codes)) {
+        content[content == as.raw(private$..codes[[i]])] = as.raw(32)
       }
 
       # Save to temp file and re-read
       d <- tempfile(fileext = '.txt')
       private$..io$bin$write(path = d, content = content)
-      content <- private$..io$txt$read(path = d)
+      content <- private$..io$text$read(path = d)
 
       return(content)
     }
@@ -97,7 +106,7 @@ RepairFile <- R6::R6Class(
       private$..logs <- LogR$new()
 
       # Validate path
-      if (!R.utils::isFile(path)) stop("File does not exist at path.")
+      if (!R.utils::isFile(path)) stop(paste("File", path, "does not exist."))
 
       # Initiate variable and IO methods
       private$..path <- path
@@ -112,41 +121,48 @@ RepairFile <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
-    #                           Repair Methods                                #
+    #                         ASCII Code Methods                              #
     #-------------------------------------------------------------------------#
-    ctrl = function() { private$repair(private$..ctrl) },
-    null = function() { private$repair(private$..ctrl$null) },
-    soh = function() { private$repair(private$..ctrl$soh) },
-    stx = function() { private$repair(private$..ctrl$stx) },
-    etx = function() { private$repair(private$..ctrl$etx) },
-    eot = function() { private$repair(private$..ctrl$eot) },
-    enq = function() { private$repair(private$..ctrl$enq) },
-    ack = function() { private$repair(private$..ctrl$ack) },
-    bel = function() { private$repair(private$..ctrl$bel) },
-    bs = function() { private$repair(private$..ctrl$bs) },
-    ht = function() { private$repair(private$..ctrl$ht) },
-    lf = function() { private$repair(private$..ctrl$lf) },
-    vt = function() { private$repair(private$..ctrl$vt) },
-    ff = function() { private$repair(private$..ctrl$ff) },
-    cr = function() { private$repair(private$..ctrl$cr) },
-    so = function() { private$repair(private$..ctrl$so) },
-    si = function() { private$repair(private$..ctrl$si) },
-    dle = function() { private$repair(private$..ctrl$dle) },
-    dc1 = function() { private$repair(private$..ctrl$dc1) },
-    dc2 = function() { private$repair(private$..ctrl$dc2) },
-    dc3 = function() { private$repair(private$..ctrl$dc3) },
-    dc4 = function() { private$repair(private$..ctrl$dc4) },
-    nak = function() { private$repair(private$..ctrl$nak) },
-    syn = function() { private$repair(private$..ctrl$syn) },
-    etb = function() { private$repair(private$..ctrl$etb) },
-    can = function() { private$repair(private$..ctrl$can) },
-    em = function() { private$repair(private$..ctrl$em) },
-    sub = function() { private$repair(private$..ctrl$sub) },
-    esc = function() { private$repair(private$..ctrl$esc) },
-    fs = function() { private$repair(private$..ctrl$fs) },
-    gs = function() { private$repair(private$..ctrl$gs) },
-    rs = function() { private$repair(private$..ctrl$rs) },
-    us = function() { private$repair(private$..ctrl$us) },
+    null = function() { return(private$appendCode(private$..ctrl$null)) },
+    soh = function() { return(private$appendCode(private$..ctrl$soh)) },
+    stx = function() { return(private$appendCode(private$..ctrl$stx)) },
+    etx = function() { return(private$appendCode(private$..ctrl$etx)) },
+    eot = function() { return(private$appendCode(private$..ctrl$eot)) },
+    enq = function() { return(private$appendCode(private$..ctrl$enq)) },
+    ack = function() { return(private$appendCode(private$..ctrl$ack)) },
+    bel = function() { return(private$appendCode(private$..ctrl$bel)) },
+    bs = function() { return(private$appendCode(private$..ctrl$bs)) },
+    ht = function() { return(private$appendCode(private$..ctrl$ht)) },
+    lf = function() { return(private$appendCode(private$..ctrl$lf)) },
+    vt = function() { return(private$appendCode(private$..ctrl$vt)) },
+    ff = function() { return(private$appendCode(private$..ctrl$ff)) },
+    cr = function() { return(private$appendCode(private$..ctrl$cr)) },
+    so = function() { return(private$appendCode(private$..ctrl$so)) },
+    si = function() { return(private$appendCode(private$..ctrl$si)) },
+    dle = function() { return(private$appendCode(private$..ctrl$dle)) },
+    dc1 = function() { return(private$appendCode(private$..ctrl$dc1)) },
+    dc2 = function() { return(private$appendCode(private$..ctrl$dc2)) },
+    dc3 = function() { return(private$appendCode(private$..ctrl$dc3)) },
+    dc4 = function() { return(private$appendCode(private$..ctrl$dc4)) },
+    nak = function() { return(private$appendCode(private$..ctrl$nak)) },
+    syn = function() { return(private$appendCode(private$..ctrl$syn)) },
+    etb = function() { return(private$appendCode(private$..ctrl$etb)) },
+    can = function() { return(private$appendCode(private$..ctrl$can)) },
+    em = function() { return(private$appendCode(private$..ctrl$em)) },
+    sub = function() { return(private$appendCode(private$..ctrl$sub)) },
+    esc = function() { return(private$appendCode(private$..ctrl$esc)) },
+    fs = function() { return(private$appendCode(private$..ctrl$fs)) },
+    gs = function() { return(private$appendCode(private$..ctrl$gs)) },
+    rs = function() { return(private$appendCode(private$..ctrl$rs)) },
+    us = function() { return(private$appendCode(private$..ctrl$us)) },
+
+    #-------------------------------------------------------------------------#
+    #                            Execute Method                               #
+    #-------------------------------------------------------------------------#
+    execute = function() {
+      content <- private$repair()
+      return(content)
+    },
 
     #-------------------------------------------------------------------------#
     #                            Visitor Method                               #

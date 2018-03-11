@@ -49,8 +49,7 @@ IOFactory <- R6::R6Class(
                    txt = IOText$new(),
                    csv = IOCSV$new(),
                    rdata = IORdata$new(),
-                   rds = IORDS$new(),
-                   IOText$new())
+                   rds = IORDS$new())
 
       return(io)
     },
