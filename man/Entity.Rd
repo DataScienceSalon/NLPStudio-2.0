@@ -18,10 +18,8 @@ classes, including Studio, Corpus, Set, and Document classes.
 \section{Entity methods}{
 
  \itemize{
-  \item{\code{desc()}}{Active binding getter/setter for object description.}
-  \item{\code{getName()}}{Method for retrieving an object's name.}
-  \item{\code{getClassName()}}{Method for retrieving an object's class name}
-  \item{\code{getPath()}}{Method for retrieving an object's path.}
+  \item{\code{getId()}}{Returns the identifier for the object.}
+  \item{\code{getParams()}}{Returns the parameters passed to the constructor.}
  }
 }
 

@@ -42,6 +42,11 @@ Validator <- R6::R6Class(
       object$accept(visitor)
     },
 
+    read = function(object) {
+      visitor <- VVRead$new()
+      object$accept(visitor)
+    },
+
     get = function(object) {
       visitor <- VVGet$new()
       object$accept(visitor)

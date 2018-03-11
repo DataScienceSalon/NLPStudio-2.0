@@ -9,15 +9,9 @@
 myCorpus <- Corpus$new(name = "machineLearning", content = mlAdvances)
 }
 \arguments{
-\item{object}{Document Object to be attached (or detached) to or from the Corpus object.}
+\item{name}{Optional character string containing the name of the object.}
 
-\item{x}{A Document object, or the name thereto. Used in the detach method.}
-
-\item{path}{Character string designated the relative path to a file.}
-
-\item{io}{Object of the IOStrategy class. This is an optional parameter.
-If io is not specified, the default IOStrategy for the file type will
-be used. See ?IOStrategy for further assistance.}
+\item{x}{A Document class object, or a list thereof, to be attached to the Corpus object}
 
 \item{key}{Character string or character vector containing the key or
 keys associated a metadata field or fields.}
@@ -26,7 +20,7 @@ keys associated a metadata field or fields.}
 the key vector, containing the metadata value or values.}
 }
 \value{
-Corpus object, containing related Document objects.
+Corpus object.
 }
 \description{
 \code{Corpus} Class for creating, managing, reading and writing Corpus objects.
@@ -40,20 +34,6 @@ selection, analysis and modeling occurs.
 
  \itemize{
   \item{\code{new()}}{Initializes an object of the Corpus class.}
- }
-}
-
-\section{IO Methods}{
-
- \itemize{
-  \item{\code{read(path, io = NULL)}}{Reads an object from a specified
-  file using the default or designated IO Strategy. See IOStrategy?
-  for details w.r.t. the io parameter. If the IO strategy is not
-  indicated, the default io strategy for the file type is used.}
-  \item{\code{write(path, io = NULL)}}{Writes an object to a specified
-  file using the default or designated IO Strategy. See IOStrategy?
-  for details w.r.t. the io parameter. If the IO strategy is not
-  indicated, the default io strategy for the file type is used.}
  }
 }
 
@@ -74,27 +54,27 @@ selection, analysis and modeling occurs.
 
 \examples{
 
-# Instantiate from directory
-corpus <- Corpus$new(name = 'corpus', x = "./data")
+# Instantiate
+corpus <- Corpus$new(name = 'corpus')
 corpus$summary()
 
-# Instantiate from list of Document objects
-blogs <- Document$new(name = 'blogs', x = "./data/en_US.blogs.txt")
-news <- Document$new(name = 'news', x = "./data/en_US.news.txt")
-twitter <- Document$new(name = 'twitter', x = "./data/en_US.twitter.txt")
+# Attach / Detach Document objects
 
-corpus <- Corpus$new(name = 'corpus', x = list(blogs, news, twitter))
+## Create Text objects
+blogsTxt <- Text$new(name = 'blogs (raw)', x = "./data/en_US.blogs.txt")
+newsTxt <- Text$new(name = 'news (raw)', x = "./data/en_US.news.txt")
+twitterTxt <- Text$new(name = 'twitter (raw)', x = "./data/en_US.twitter.txt")
 
-# Instantiate from Vector: Note this will create subordinate Document
-# objects for each element of the Vector.  To create a single document
-# for each vector, create the Document objects first, then attach
-# to the corpus as above
-news <- readLines("./data/en_US.news.txt")
-corpus <- Corpus$new(name  = 'news', x = news)
+## Create Document objects and attach Texts
+blogsDoc <- Document$new()$attach(blogsTxt)
+newsDoc <- Document$new()$attach(newsTxt)
+twitterDoc <- Document$new()$attach(twitterTxt)
 
-# Attach functionality
-newCorpus <- Corpus$new(name = 'newCorpus') # Note, can be instantiated with just the name
-newCorpus$attach(blogs, news, twitter) # Must be Document objects.
+## Attach Document objects to Corpus
+corpus$attach(x = list(blogsDoc, newsDoc, twitterDoc))
+
+## Detach Document object from Corpus
+corpus$detach(key = 'name', value = 'blogsDoc')
 
 }
 \seealso{

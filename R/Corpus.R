@@ -14,36 +14,35 @@
 #'  }
 #' @template entityMethods
 #'
-#' @param object Document Object to be attached (or detached) to or from the Corpus object.
-#' @param x A Document object, or the name thereto. Used in the detach method.
-#' @template ioParams
+#' @template entityParams
+#' @param x A Document class object, or a list thereof, to be attached to the Corpus object
 #' @template metaParams
 #'
-#' @return Corpus object, containing related Document objects.
+#' @return Corpus object.
 #'
 #' @examples
 #'
-#' # Instantiate from directory
-#' corpus <- Corpus$new(name = 'corpus', x = "./data")
+#' # Instantiate
+#' corpus <- Corpus$new(name = 'corpus')
 #' corpus$summary()
 #'
-#' # Instantiate from list of Document objects
-#' blogs <- Document$new(name = 'blogs', x = "./data/en_US.blogs.txt")
-#' news <- Document$new(name = 'news', x = "./data/en_US.news.txt")
-#' twitter <- Document$new(name = 'twitter', x = "./data/en_US.twitter.txt")
+#' # Attach / Detach Document objects
 #'
-#' corpus <- Corpus$new(name = 'corpus', x = list(blogs, news, twitter))
+#' ## Create Text objects
+#' blogsTxt <- Text$new(name = 'blogs (raw)', x = "./data/en_US.blogs.txt")
+#' newsTxt <- Text$new(name = 'news (raw)', x = "./data/en_US.news.txt")
+#' twitterTxt <- Text$new(name = 'twitter (raw)', x = "./data/en_US.twitter.txt")
 #'
-#' # Instantiate from Vector: Note this will create subordinate Document
-#' # objects for each element of the Vector.  To create a single document
-#' # for each vector, create the Document objects first, then attach
-#' # to the corpus as above
-#' news <- readLines("./data/en_US.news.txt")
-#' corpus <- Corpus$new(name  = 'news', x = news)
+#' ## Create Document objects and attach Texts
+#' blogsDoc <- Document$new()$attach(blogsTxt)
+#' newsDoc <- Document$new()$attach(newsTxt)
+#' twitterDoc <- Document$new()$attach(twitterTxt)
 #'
-#' # Attach functionality
-#' newCorpus <- Corpus$new(name = 'newCorpus') # Note, can be instantiated with just the name
-#' newCorpus$attach(blogs, news, twitter) # Must be Document objects.
+#' ## Attach Document objects to Corpus
+#' corpus$attach(x = list(blogsDoc, newsDoc, twitterDoc))
+#'
+#' ## Detach Document object from Corpus
+#' corpus$detach(key = 'name', value = 'blogsDoc')
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
@@ -60,7 +59,7 @@ Corpus <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Core Methods                                  #
     #-------------------------------------------------------------------------#
-    initialize = function(name, x = NULL) {
+    initialize = function(name = NULL) {
 
       # Initiate logging variables and system meta data
       private$..className <- 'Corpus'
@@ -74,11 +73,6 @@ Corpus <- R6::R6Class(
 
       # Complete Initialization
       private$init(name)
-
-      # Create documents if x is not NULL
-      if (!is.null(x)) {
-        private$initDocuments(x)
-      }
 
       invisible(self)
     },

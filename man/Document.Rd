@@ -9,16 +9,9 @@
 myDocument <- Document$new(name = "machineLearning", content = mlAdvances)
 }
 \arguments{
-\item{x}{A Text, Data or Analyis object, or the name thereto. Used in the detach method.}
+\item{name}{Optional character string containing the name of the object.}
 
-\item{cls}{Class of the object to be detached. Required for detaching objects when the
-x parameter contains the name of the object.}
-
-\item{path}{Character string designated the relative path to a file.}
-
-\item{io}{Object of the IOStrategy class. This is an optional parameter.
-If io is not specified, the default IOStrategy for the file type will
-be used. See ?IOStrategy for further assistance.}
+\item{x}{A Text, Data or Analyis object to be attached to the Document object.}
 
 \item{key}{Character string or character vector containing the key or
 keys associated a metadata field or fields.}
@@ -27,7 +20,7 @@ keys associated a metadata field or fields.}
 the key vector, containing the metadata value or values.}
 }
 \value{
-Document object, containing related Text, Data, and Analysis objects.
+Document object.
 }
 \description{
 \code{Document} Class for creating, managing, reading and writing Documents.
@@ -53,20 +46,6 @@ testing, inference and prediction.
  }
 }
 
-\section{IO Methods}{
-
- \itemize{
-  \item{\code{read(path, io = NULL)}}{Reads an object from a specified
-  file using the default or designated IO Strategy. See IOStrategy?
-  for details w.r.t. the io parameter. If the IO strategy is not
-  indicated, the default io strategy for the file type is used.}
-  \item{\code{write(path, io = NULL)}}{Writes an object to a specified
-  file using the default or designated IO Strategy. See IOStrategy?
-  for details w.r.t. the io parameter. If the IO strategy is not
-  indicated, the default io strategy for the file type is used.}
- }
-}
-
 \section{Metadata Method}{
 
  \itemize{
@@ -83,26 +62,19 @@ testing, inference and prediction.
 }
 
 \examples{
-# Instantiate with text vector
-x <- c("Capsule networks (CapsNets) are a hot new neural net
-              architecture that may well have a profound impact on deep
-              learning, in particular for computer vision. Wait, isn't
-              computer vision pretty much solved already? Haven't we all
-              seen fabulous examples of convolutional neural networks (CNNs)
-              reaching super-human level in various computer vision tasks,
-              such as classification, localization, object detection,
-              semantic segmentation or instance segmentation.")
- capsNets <- Document$new(name = "capsNets" , x)
 
+# Instantiate
+blogsDoc <- Document$new(name = "Blogs")
 
+# Attach Text object
+## Create Text object
+blogsTxt <- Text$new(name = 'blogs (raw)')$read(path = "./data/en_US.blogs.txt")
 
- # Instantiate with text file
- x <- "./data/en_US.news.txt"
- news <- Document$new(name = 'news', x)
+## Attach to Document object
+blogsDoc$attach(blogsTxt)
 
- # Insantiate with Text Object
- newsTxt <- Text$new(name = 'news', x)
- newsDoc <- Document$new(name = 'news', newsTxt)
+## Detach
+blogsDoc$detach(key ='name', value = 'blogs (raw)')
 
 }
 \seealso{

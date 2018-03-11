@@ -26,95 +26,25 @@ VVInit <- R6::R6Class(
       status <- list()
       status[['code']] <- TRUE
 
-      if (class(x)[1] == "character") {
-        if (length(x) == 1) {
-          if (!(R.utils::isDirectory(x))) {
-            status$code <- FALSE
-            status$msg <- paste0("Directory does not exist.",
-                                 "See ?", class(object)[1],
-                                 " for further assistance")
-          }
-        }
-      }
-      return(status)
-    },
-
-    validateFile = function(object, x, required = TRUE) {
-
-      status <- list()
-      status[['code']] <- TRUE
-
-      if (required & is.null(x)) {
+      if (!(R.utils::isDirectory(x))) {
         status$code <- FALSE
-        status$msg <- paste0("File does not exist.",
+        status$msg <- paste0("Directory ", x, " does not exist.",
                              "See ?", class(object)[1],
                              " for further assistance")
       }
-
-      if (!is.null(x) & class(x)[1] == "character") {
-        if (length(x) == 1) {
-          if (!(R.utils::isFile(x))) {
-            status$code <- FALSE
-            status$msg <- paste0("File does not exist.",
-                                 "See ?", class(object)[1],
-                                 " for further assistance")
-          }
-        }
-      }
       return(status)
     },
 
-    validateX = function(object, x, classes, directory = FALSE, required = TRUE) {
+    validateFile = function(object, x) {
 
       status <- list()
       status[['code']] <- TRUE
 
-      if (is.null(x) & required == TRUE) {
-        status[['code']] <- FALSE
-        status[['msg']] <- paste0("x parameter missing with no default. ",
-                                  "  See ?", class(object)[1],
-                                  " for further assistance")
-        return(status)
-      } else if (!is.null(x)) {
-        classVal <- private$validateClass(object, param = x, classes = classes)
-        if (classVal$code == FALSE) {
-          return(classVal)
-        } else if (class(x)[1] == 'character') {
-          if (length(x) == 1) {
-            if (directory) {
-              if (!R.utils::isDirectory(x)) {
-                status[['code']] <- FALSE
-                status[['msg']] <- paste0("Directory does not exist. ",
-                                          "  See ?", class(object)[1],
-                                          " for further assistance")
-                return(status)
-              }
-            } else if (!R.utils::isFile(x)) {
-              status[['code']] <- FALSE
-              status[['msg']] <- paste0("File does not exist. ",
-                                        "  See ?", class(object)[1],
-                                        " for further assistance")
-              return(status)
-            }
-          }
-        }
-      }
-      return(status)
-    },
-
-
-    validateName = function(object, name) {
-
-      status <- list()
-      status[['code']] <- TRUE
-
-      v <- VString$new()
-      if (v$validate(value = name) == FALSE) {
-        status[['code']] <- FALSE
-        status[['msg']] <- paste0("Cannot create ", class(object)[1],
-                                  " object. ", "Object name, must be a character ",
-                                  "string with no spaces.  See ?", class(object)[1],
-                                  " for further assistance")
+      if (!(R.utils::isFile(x))) {
+        status$code <- FALSE
+        status$msg <- paste0("File ", x, " does not exist.",
+                             "See ?", class(object)[1],
+                             " for further assistance")
       }
       return(status)
     },
@@ -149,27 +79,15 @@ VVInit <- R6::R6Class(
       return(status[['code']] <- TRUE)
     },
     corpus = function(object) {
-      p <- object$getParams()
-      nameVal <- private$validateName(object, p$name)
-      if (nameVal$code == FALSE)  return(nameVal)
-      return(private$validateX(object, p$x,
-                               classes = c("Document","character", "list"),
-                               directory = TRUE, required = FALSE))
+      return(status[['code']] <- TRUE)
 
     },
     document = function(object) {
-      p <- object$getParams()
-      nameVal <- private$validateName(object, p$name)
-      if (nameVal$code == FALSE)  return(nameVal)
-      return(private$validateX(object, p$x, classes = c("Text", "character"),
-                               directory = FALSE, required = FALSE))
+      return(status[['code']] <- TRUE)
     },
     text = function(object) {
       p <- object$getParams()
-      nameVal <- private$validateName(object, p$name)
-      if (nameVal$code == FALSE)  return(nameVal)
-      return(private$validateX(object, p$x, classes = "character",
-                               directory = FALSE, required = TRUE))
+      return(private$validateClass(object, p$x, classes = "character"))
     }
   )
 )

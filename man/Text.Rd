@@ -9,14 +9,7 @@
 myText <- Text$new(name = "skiReport", x = avalanche)
 }
 \arguments{
-\item{x}{Character vectors containing actual content of the Text object
-or the path to a file containing the text content}
-
-\item{path}{Character string designated the relative path to a file.}
-
-\item{io}{Object of the IOStrategy class. This is an optional parameter.
-If io is not specified, the default IOStrategy for the file type will
-be used. See ?IOStrategy for further assistance.}
+\item{x}{Character vector containing text}
 
 \item{key}{Character string or character vector containing the key or
 keys associated a metadata field or fields.}
@@ -44,20 +37,6 @@ class.
 
  \itemize{
   \item{\code{new()}}{Initializes an object of the Text class.}
- }
-}
-
-\section{IO Methods}{
-
- \itemize{
-  \item{\code{read(path, io = NULL)}}{Reads an object from a specified
-  file using the default or designated IO Strategy. See IOStrategy?
-  for details w.r.t. the io parameter. If the IO strategy is not
-  indicated, the default io strategy for the file type is used.}
-  \item{\code{write(path, io = NULL)}}{Writes an object to a specified
-  file using the default or designated IO Strategy. See IOStrategy?
-  for details w.r.t. the io parameter. If the IO strategy is not
-  indicated, the default io strategy for the file type is used.}
  }
 }
 

@@ -1,8 +1,6 @@
 #==============================================================================#
 #                               Entity                                         #
 #==============================================================================#
-# TODO: Add info method providing human readable summary of object.
-# TODO: Add attachment method to list attachments
 #' Entity
 #'
 #' \code{Entity} Base class for all entity related classes
@@ -12,10 +10,8 @@
 #'
 #' @section Entity methods:
 #'  \itemize{
-#'   \item{\code{desc()}}{Active binding getter/setter for object description.}
-#'   \item{\code{getName()}}{Method for retrieving an object's name.}
-#'   \item{\code{getClassName()}}{Method for retrieving an object's class name}
-#'   \item{\code{getPath()}}{Method for retrieving an object's path.}
+#'   \item{\code{getId()}}{Returns the identifier for the object.}
+#'   \item{\code{getParams()}}{Returns the parameters passed to the constructor.}
 #'  }
 #'
 #' @docType class
@@ -50,7 +46,7 @@ Entity <- R6::R6Class(
     # identifier, name and the object's class to its metadata, logs the
     # creation and returns control to the constructor.
 
-    init = function(name) {
+    init = function(name = NULL) {
 
       # Clear parameters variables and set datetime stamps
       private$created()
@@ -59,7 +55,9 @@ Entity <- R6::R6Class(
       settings <- hashids::hashid_settings(salt = 'this is my salt', min_length = 8)
       hashid <- hashids::encode(as.integer(Sys.time()) * 1000000 +
                                   sample(1:1000, 1, replace = TRUE), settings)
-      private$..meta$object$name <- name
+      private$..meta$object$name <- ifelse(is.null(name),
+                                           paste0(class(self)[1]," (", toupper(hashid),
+                                                  ")"), name)
       private$..meta$object$id <- toupper(hashid)
       private$..meta$object$class <- class(self)[1]
       private$..meta$object$description <- paste0(private$..meta$object$class,
@@ -157,6 +155,13 @@ Entity <- R6::R6Class(
           private$..state <- status$msg
           self$logIt("Error")
         }
+      } else if (what == "read") {
+        v <- Validator$new()
+        status <- v$read(self)
+        if (status$code == FALSE) {
+          private$..state <- status$msg
+          self$logIt("Error")
+        }
       }
       return(status)
     },
@@ -203,7 +208,6 @@ Entity <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Basic Get  Methods                            #
     #-------------------------------------------------------------------------#
-    getName = function() private$..meta$object$name,
     getId = function() private$..meta$object$id,
     getParams = function() private$..params,
 

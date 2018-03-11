@@ -23,35 +23,26 @@
 #'  }
 #' @template entityMethods
 #'
-#' @param x A Text, Data or Analyis object, or the name thereto. Used in the detach method.
-#' @param cls Class of the object to be detached. Required for detaching objects when the
-#' x parameter contains the name of the object.
-#' @template ioParams
+#' @template entityParams
+#' @param x A Text, Data or Analyis object to be attached to the Document object.
 #' @template metaParams
 #'
-#' @return Document object, containing related Text, Data, and Analysis objects.
+#' @return Document object.
 #'
 #' @examples
-#' # Instantiate with text vector
-#' x <- c("Capsule networks (CapsNets) are a hot new neural net
-#'               architecture that may well have a profound impact on deep
-#'               learning, in particular for computer vision. Wait, isn't
-#'               computer vision pretty much solved already? Haven't we all
-#'               seen fabulous examples of convolutional neural networks (CNNs)
-#'               reaching super-human level in various computer vision tasks,
-#'               such as classification, localization, object detection,
-#'               semantic segmentation or instance segmentation.")
-#'  capsNets <- Document$new(name = "capsNets" , x)
 #'
+#' # Instantiate
+#' blogsDoc <- Document$new(name = "Blogs")
 #'
+#' # Attach Text object
+#' ## Create Text object
+#' blogsTxt <- Text$new(name = 'blogs (raw)')$read(path = "./data/en_US.blogs.txt")
 #'
-#'  # Instantiate with text file
-#'  x <- "./data/en_US.news.txt"
-#'  news <- Document$new(name = 'news', x)
+#' ## Attach to Document object
+#' blogsDoc$attach(blogsTxt)
 #'
-#'  # Insantiate with Text Object
-#'  newsTxt <- Text$new(name = 'news', x)
-#'  newsDoc <- Document$new(name = 'news', newsTxt)
+#' ## Detach
+#' blogsDoc$detach(key ='name', value = 'blogs (raw)')
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
@@ -115,25 +106,15 @@ Document <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Core Methods                                  #
     #-------------------------------------------------------------------------#
-    initialize = function(name, x = NULL) {
+    initialize = function(name = NULL) {
 
       # Initiate logging variables and system meta data
       private$..className <- 'Document'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
 
-      # Obtain and validate parameters
-      private$..params$name <- name
-      private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
-
       # Complete Document Initialization
       private$init(name)
-
-      # If x is not NULL, create text and attach
-      if (!is.null(x)) {
-        private$initText(x)
-      }
 
       invisible(self)
     },

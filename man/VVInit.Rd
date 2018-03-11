@@ -23,7 +23,8 @@ The VVInit methods are as follows:
 }
 \seealso{
 Other Validation Visitor Classes: \code{\link{VVAttach}},
-  \code{\link{VVDetach}}, \code{\link{VVGet}}
+  \code{\link{VVDetach}}, \code{\link{VVGet}},
+  \code{\link{VVRead}}
 }
 \author{
 John James, \email{jjames@DataScienceSalon.org}

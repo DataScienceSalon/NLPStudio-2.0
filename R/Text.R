@@ -18,9 +18,7 @@
 #'  }
 #' @template entityMethods
 #'
-#' @param x Character vectors containing actual content of the Text object
-#' or the path to a file containing the text content
-#' @template ioParams
+#' @param x Character vector containing text
 #' @template metaParams
 #'
 #' @return Text object, containing the text content, the metadata and
@@ -115,24 +113,7 @@ Text <- R6::R6Class(
                           stringsAsFactors = FALSE,
                           row.names = NULL)
       return(short)
-    },
-
-    initContent = function(x) {
-      if (length(x) == 1) {
-        if (tools::file_ext(x) == "txt") {
-          content <- RepairFile$new(x)$execute()
-        } else {
-          io <- IOFactory$new(x)$getIOStrategy()
-          content <- io$read(x)
-        }
-        private$..content <- private$compress(content)
-        private$..meta$object$source <- x
-      } else {
-        private$..content <- private$compress(x)
-      }
-      return(TRUE)
     }
-
   ),
 
   active = list(
@@ -164,7 +145,7 @@ Text <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Core Methods                                  #
     #-------------------------------------------------------------------------#
-    initialize = function(name, x) {
+    initialize = function(x = NULL, name = NULL) {
 
       # Initiate logging
       private$..className <- 'Text'
@@ -172,16 +153,17 @@ Text <- R6::R6Class(
       private$..logs <- LogR$new()
 
       # Obtain, validate, then clear parameter list
-      private$..params$name <- name
       private$..params$x <- x
       if (private$validateParams()$code == FALSE) stop()
       private$..params <- list()
 
-      # Complete standard initiation tasks, then add content
-      private$init(name)
+      # Compress and store content
+      if (!is.null(x)) {
+        private$..content <- private$compress(x)
+      }
 
-      # Initialize content
-      private$initContent(x)
+      # Complete standard initiation tasks
+      private$init(name)
 
       invisible(self)
     },
@@ -223,48 +205,30 @@ Text <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                             IO Methods                                  #
     #-------------------------------------------------------------------------#
-    read = function(path, io = NULL) {
+    read = function(path, repair = FALSE) {
+
+      # Validate parameter
+      private$..params <- list()
+      private$..params$path <- path
+      if (private$validateParams()$code == FALSE) stop()
 
       private$..methodName <- 'read'
-
-      # Update text file metadata
-      private$..meta$object$filePath <- path
-      private$..meta$object$fileName <- basename(path)
-
-      # Read and compress content
-      if (is.null(io))  io <- IOFactory$new(path)$getIOStrategy()
-      content <- io$read(path = path)
+      content <- IO$new()$read(path = path, repair = repair)
       private$..content <- private$compress(content)
-
-      # Update log and system metadata
-      private$..state <- paste0("Read ", private$..meta$object$class,
-                                " object, '", private$..meta$object$name,
-                                "' from ", path, ". ")
-      self$logIt()
       private$modified()
 
-      invisible(content)
+      return(content)
     },
 
-    write = function(path, io = NULL) {
+    write = function(path) {
 
       private$..methodName <- 'write'
 
-      # Update text file metadata
-      private$..meta$object$filePath <- path
-      private$..meta$object$fileName <- basename(path)
-
       # Decompress, then write text file
       content <- private$decompress(private$..content)
-      if (is.null(io))  io <- IOFactory$new(path)$getIOStrategy()
-      io$write(path = path, content = content)
+      IO$new()$write(path = path, content = content)
 
-      # Update log
-      private$..state <- paste0("Saved ", private$..meta$object$class,
-                                " object, '", private$..meta$object$name,
-                                "' to ", path, ". ")
       private$accessed
-      self$logIt()
 
       invisible(self)
     },

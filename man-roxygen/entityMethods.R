@@ -1,15 +1,3 @@
-#' @section IO Methods:
-#'  \itemize{
-#'   \item{\code{read(path, io = NULL)}}{Reads an object from a specified
-#'   file using the default or designated IO Strategy. See IOStrategy?
-#'   for details w.r.t. the io parameter. If the IO strategy is not
-#'   indicated, the default io strategy for the file type is used.}
-#'   \item{\code{write(path, io = NULL)}}{Writes an object to a specified
-#'   file using the default or designated IO Strategy. See IOStrategy?
-#'   for details w.r.t. the io parameter. If the IO strategy is not
-#'   indicated, the default io strategy for the file type is used.}
-#'  }
-#'
 #' @section Metadata Method:
 #'  \itemize{
 #'   \item{\code{meta(key = NULL, value = NULL)}}{Provides facility for

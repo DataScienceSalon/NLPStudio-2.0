@@ -48,7 +48,7 @@ IO <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                             Read Method                                 #
     #-------------------------------------------------------------------------#
-    read = function(path, repair = TRUE) {
+    read = function(path, repair = FALSE) {
 
       private$..methodName <- 'read'
 
