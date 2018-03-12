@@ -21,6 +21,27 @@ VVInit <- R6::R6Class(
 
   private = list(
 
+    validateVector = function(object, x) {
+      status <- list()
+      status[['code']] <- TRUE
+
+      if (!("character" %in% class(x)[1])) {
+        if ("list" %in% class(x)[1]) {
+          classes <- unique(sapply(x, function(i) {class(i)[1]}))
+          if (length(classes) > 1) {
+            status$code <- FALSE
+            status$msg <- paste0("List must contain only character vectors.")
+            return(status)
+          } else if (!("character" %in% classes)) {
+            status$code <- FALSE
+            status$msg <- paste0("List must contain only character vectors.")
+            return(status)
+          }
+        }
+      }
+      return(status)
+    },
+
     validateDir = function(object, x) {
 
       status <- list()
@@ -88,6 +109,11 @@ VVInit <- R6::R6Class(
     text = function(object) {
       p <- object$getParams()
       return(private$validateClass(object, p$x, classes = "character"))
+    },
+
+    csourceVector = function(object) {
+      p <- object$getParams()
+      return(private$validateVector(object, p$x))
     }
   )
 )

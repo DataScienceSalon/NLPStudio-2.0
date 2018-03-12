@@ -58,25 +58,11 @@ Document <- R6::R6Class(
     ..attachments = list(),
     ..associates = c("Text", "Data", "Analysis"),
 
-    initText = function(x) {
-
-      if (class(x)[1] == "Text") {
-        self$attach(x)
-      } else if (length(x) == 1) {
-        text <- Text$new(name = tools::file_path_sans_ext(basename(x)), x)
-        self$attach(text)
-      } else {
-        text <- Text$new(name = self$getName(), x)
-        self$attach(text)
-      }
-      return(TRUE)
-    },
-
     summaryShort = function() {
 
       aSummary <- rbindlist(lapply(private$summarizeAttachments(quiet = TRUE), function(a) {
         attachments <- list()
-        attachments$class <- unique(a$class)
+        attachments$class <- a$class[1]
         attachments$N <- nrow(a)
         attachments
       }))

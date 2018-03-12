@@ -66,11 +66,6 @@ Corpus <- R6::R6Class(
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
 
-      # Obtain and validate parameters
-      private$..params$name <- name
-      private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
-
       # Complete Initialization
       private$init(name)
 

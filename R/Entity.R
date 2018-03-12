@@ -21,6 +21,7 @@ Entity <- R6::R6Class(
   classname = "Entity",
   lock_objects = FALSE,
   lock_class = FALSE,
+  inherit = Base,
 
   private = list(
     ..meta = list(
@@ -28,12 +29,6 @@ Entity <- R6::R6Class(
       stats = list(),
       system = list()
     ),
-    ..params = list(),
-    ..className = character(),
-    ..methodName = character(),
-    ..state = character(),
-    ..logs = character(),
-
     #-------------------------------------------------------------------------#
     #                                 Init                                    #
     #-------------------------------------------------------------------------#
@@ -61,7 +56,7 @@ Entity <- R6::R6Class(
       private$..meta$object$id <- toupper(hashid)
       private$..meta$object$class <- class(self)[1]
       private$..meta$object$description <- paste0(private$..meta$object$class,
-                                                  " object, '", name,
+                                                  " object, '", private$..meta$object$name,
                                                   "', created on ",
                                                   format(Sys.Date(), "%a %b %d %Y"),
                                                   " by ", Sys.info()[['user']], ".")
@@ -107,64 +102,6 @@ Entity <- R6::R6Class(
       private$..meta$system$accessed <- Sys.time()
       private$..meta$system$modified <- Sys.time()
     },
-    #-------------------------------------------------------------------------#
-    #                           Validate Parameters                           #
-    #-------------------------------------------------------------------------#
-    # validateParams
-    #
-    # Initiates parameter validation for common routines. This method takes
-    # as its parameter, the calling method name, and initiates the procedure
-    # by instantiating a validator object and calling the visitor method
-    # associated with the method name parameter. The validator dispatches
-    # the appropriate visitor, which performs the validation.
-    #
-    # Parameter: what The method name requesting validation services.
-    #
-    # Returns: List containing a logical and a character vector.  If the
-    # validation passed, the logical is TRUE and the character vector is
-    # null. If not, the logical is FALSE, and the character vector contains
-    # text describing the error.
-    validateParams = function(what = "initialize") {
-      # Valid values are c("init", "associate")
-
-      if (what == "initialize") {
-        v <- Validator$new()
-        status <- v$init(self)
-        if (status$code == FALSE) {
-          private$..state <- status$msg
-          self$logIt("Error")
-        }
-      } else if (what == "get") {
-        v <- Validator$new()
-        status <- v$get(self)
-        if (status$code == FALSE) {
-          private$..state <- status$msg
-          self$logIt("Error")
-        }
-      } else if (what == "attach") {
-        v <- Validator$new()
-        status <- v$attach(self)
-        if (status$code == FALSE) {
-          private$..state <- status$msg
-          self$logIt("Error")
-        }
-      }  else if (what == "detach") {
-        v <- Validator$new()
-        status <- v$detach(self)
-        if (status$code == FALSE) {
-          private$..state <- status$msg
-          self$logIt("Error")
-        }
-      } else if (what == "read") {
-        v <- Validator$new()
-        status <- v$read(self)
-        if (status$code == FALSE) {
-          private$..state <- status$msg
-          self$logIt("Error")
-        }
-      }
-      return(status)
-    },
 
     #-------------------------------------------------------------------------#
     #                           Summary Methods                               #
@@ -209,7 +146,6 @@ Entity <- R6::R6Class(
     #                           Basic Get  Methods                            #
     #-------------------------------------------------------------------------#
     getId = function() private$..meta$object$id,
-    getParams = function() private$..params,
 
     #-------------------------------------------------------------------------#
     #                           Metadata Method                               #
@@ -217,6 +153,12 @@ Entity <- R6::R6Class(
     meta = function(key = NULL, value = NULL) {
 
       # Validate
+      if (!is.null(key)) {
+        if ('class' %in% key) {
+          private$..state <- "Unable to change the 'class' of an object."
+          self$logIt("Warn")
+        }
+      }
       if (!is.null(key) & !is.null(value) & (length(key) != length(value))) {
         private$..state <- "Non-null key/value pairs must be of equal length"
         self$logIt("Error")
@@ -246,6 +188,7 @@ Entity <- R6::R6Class(
         } else {
           private$..state <- "Non existent metadata variable"
           self$logIt("Warn")
+          return(NULL)
         }
 
       # Assign / add key value pairs
@@ -255,20 +198,6 @@ Entity <- R6::R6Class(
         }
       }
       invisible(self)
-    },
-
-    #-------------------------------------------------------------------------#
-    #                            Log Method                                   #
-    #-------------------------------------------------------------------------#
-    logIt = function(level = 'Info', fieldName = NA) {
-
-      private$..logs$entry$className <- private$..className
-      private$..logs$entry$methodName <- private$..methodName
-      private$..logs$entry$level <- level
-      private$..logs$entry$msg <- private$..state
-      private$..logs$entry$fieldName <- fieldName
-      private$..logs$created <- Sys.time()
-      private$..logs$writeLog()
     }
   )
 )
