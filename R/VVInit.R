@@ -32,11 +32,16 @@ VVInit <- R6::R6Class(
             status$code <- FALSE
             status$msg <- paste0("List must contain only character vectors.")
             return(status)
-          } else if (!("character" %in% classes)) {
+          } else if (sum("character" %in% classes) != length(classes)) {
             status$code <- FALSE
             status$msg <- paste0("List must contain only character vectors.")
             return(status)
           }
+        } else {
+          status$code <- FALSE
+          status$msg <- paste0("Parameter must be a character vector ",
+                               "or a list of character vectors.")
+          return(status)
         }
       }
       return(status)

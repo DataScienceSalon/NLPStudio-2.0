@@ -175,6 +175,10 @@ Composite <- R6::R6Class(
         objects <- private$..attachments[listCondition]
       }
 
+      if (length(objects) == 1) {
+        objects <- objects[[1]]
+      }
+
       private$accessed()
 
       return(objects)

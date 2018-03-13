@@ -77,7 +77,7 @@ CSource <- R6::R6Class(
     #-------------------------------------------------------------------------#
     vector = function() {
       private$..methodName = 'vector'
-      corpus <- CSourceVector$new(private$..x)$execute()
+      corpus <- CSourceVector$new(x = private$..x)$execute()
       return(corpus)
     },
 
