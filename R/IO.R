@@ -29,7 +29,7 @@ IO <- R6::R6Class(
   classname = "IO",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Entity,
+  inherit = Base,
 
   public = list(
     #-------------------------------------------------------------------------#

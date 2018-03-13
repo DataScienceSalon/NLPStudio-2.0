@@ -3,6 +3,8 @@
 export(Base)
 export(CSource)
 export(CSource0)
+export(CSourceDir)
+export(CSourceQuanteda)
 export(CSourceVector)
 export(Composite)
 export(Corpus)

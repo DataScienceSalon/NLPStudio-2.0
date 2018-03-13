@@ -21,7 +21,7 @@ IOCSV <- R6::R6Class(
   classname = "IOCSV",
   lock_objects = TRUE,
   lock_class = FALSE,
-  inherit = Entity,
+  inherit = Base,
   public = list(
 
     #-------------------------------------------------------------------------#
@@ -38,7 +38,6 @@ IOCSV <- R6::R6Class(
                             stringsAsFactors = FALSE,
                             sep = ",", quote = "\"'")
         private$..state <- paste0("Successfully read ", fileName, ".")
-        private$..meta[["accessed"]] <- Sys.time()
         self$logIt()
       } else {
         private$..state <- paste0('Unable to read ', fileName, '. ',

@@ -1,13 +1,10 @@
-#' CSourceVector
+#' CSourceQuanteda
 #'
-#' \code{CSourceVector} Sources a Corpus object from a character vector or a list of character vectors.
-#'
-#' Sources a Corpus object from a character vector or a list thereof. Each vector will create
-#' a single Text object and one Document object.
+#' \code{CSourceQuanteda} Sources a Corpus object from a Quanteda corpus object
 #'
 #' @section Methods:
 #'  \itemize{
-#'   \item{\code{new()}}{Initializes an object of the CSourceVector class.}
+#'   \item{\code{new()}}{Initializes an object of the CSourceQuanteda class.}
 #'   \item{\code{execute()}}{Executes the process of sourcing the Corpus object.}
 #'  }
 #'
@@ -18,8 +15,8 @@
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family Corpus Source Classes
 #' @export
-CSourceVector <- R6::R6Class(
-  classname = "CSourceVector",
+CSourceQuanteda <- R6::R6Class(
+  classname = "CSourceQuanteda",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = CSource0,
@@ -37,7 +34,7 @@ CSourceVector <- R6::R6Class(
     initialize = function(x, name = NULL) {
 
       # Initiate logging variables and system meta data
-      private$..className <- 'CSourceVector'
+      private$..className <- 'CSourceQuanteda'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
 
@@ -54,7 +51,6 @@ CSourceVector <- R6::R6Class(
       invisible(self)
     },
 
-
     #-------------------------------------------------------------------------#
     #                          Execute Method                                 #
     #-------------------------------------------------------------------------#
@@ -62,28 +58,52 @@ CSourceVector <- R6::R6Class(
 
       private$..methodName <- 'execute'
 
-      if ("list" %in% class(private$..x)[1]) {
-        lapply(private$..x, function(x) {
-          name <- names(x)
-          txt <- Text$new(name = name, x = x)
-          doc <- Document$new(name = name)
-          doc <- doc$attach(txt)
-          private$..corpus$attach(x = doc)
-        })
+      # Extract data and metadata
+      texts <- private$..x$documents[["texts"]]
+
+      metaData <- private$..x$documents[-which(names(private$..x$documents) == "texts")]
+      rownames(metaData) <- NULL
+
+      # Extract a name variable
+      if (is.null(metaData$doc_id)) {
+        n <- paste0(private$..name, "-document-", seq(1:length(texts)))
       } else {
-        name <- names(private$..x)
-        txt <- Text$new(name = name, x = private$..x)
-        doc <- Document$new(name = name)
-        doc <- doc$attach(txt)
-        private$..corpus$attach(x = doc)
+        n <- metaData$doc_id
+        metaData <- metaData %>% select(-doc_id)
       }
+
+      # Create Texts, Documents and add to Corpus
+      for (i in 1:length(texts)) {
+
+        # Create Text object
+        text <- Text$new(x = texts[i], name = n[i])
+        keys <- names(metaData[i,])
+        values <- metaData[i,]
+        if (length(keys) > 0) {
+          for (j in 1:length(keys)) {
+            text <- text$meta(key = keys[j], value = values[j])
+          }
+        }
+
+        # Create Document Object and attach Text
+        doc <- Document$new(name = n[i])
+        if (length(keys) > 0) {
+          for (j in 1:length(keys)) {
+            doc <- doc$meta(key = keys[j], value = values[j])
+          }
+        }
+        doc <- doc$attach(text)
+        private$..corpus <- private$..corpus$attach(doc)
+      }
+
+
       return(private$..corpus)
     },
     #-------------------------------------------------------------------------#
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$csourceVector(self)
+      visitor$csourceQuanteda(self)
     }
   )
 )

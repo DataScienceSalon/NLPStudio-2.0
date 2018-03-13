@@ -112,7 +112,7 @@ Entity <- R6::R6Class(
                             row.names = NULL)
 
       if (quiet == FALSE)  {
-        cat(paste0("\nObject Id    : ", private$..meta$object$id))
+        cat(paste0("\n\nObject Id    : ", private$..meta$object$id))
         cat(paste0("\nObject Class : ", private$..meta$object$class))
         cat(paste0("\nObject Name  : ", private$..meta$object$name))
         cat(paste0("\nDescription  : ", private$..meta$object$description))

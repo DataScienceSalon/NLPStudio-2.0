@@ -20,7 +20,7 @@ IOBin <- R6::R6Class(
   classname = "IOBin",
   lock_objects = TRUE,
   lock_class = FALSE,
-  inherit =  Entity,
+  inherit = Base,
 
   public = list(
 
@@ -36,7 +36,6 @@ IOBin <- R6::R6Class(
       if (file.exists(path)) {
         content <- readBin(path, raw(), file.info(path)$size)
         private$..state <- paste0("Successfully read ", fileName, ".")
-        private$..meta[["accessed"]] <- Sys.time()
         self$logIt()
       } else {
         private$..state <- paste0('Unable to read ', fileName, '. ',

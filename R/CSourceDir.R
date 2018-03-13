@@ -1,13 +1,13 @@
-#' CSourceVector
+#' CSourceDir
 #'
-#' \code{CSourceVector} Sources a Corpus object from a character vector or a list of character vectors.
+#' \code{CSourceDir} Sources a Corpus object from a directory source.
 #'
-#' Sources a Corpus object from a character vector or a list thereof. Each vector will create
-#' a single Text object and one Document object.
+#' Sources a Corpus object from a directory source. Each file yields a single Document
+#' object and a single associated Text object.
 #'
 #' @section Methods:
 #'  \itemize{
-#'   \item{\code{new()}}{Initializes an object of the CSourceVector class.}
+#'   \item{\code{new()}}{Initializes an object of the CSourceDir class.}
 #'   \item{\code{execute()}}{Executes the process of sourcing the Corpus object.}
 #'  }
 #'
@@ -18,8 +18,8 @@
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family Corpus Source Classes
 #' @export
-CSourceVector <- R6::R6Class(
-  classname = "CSourceVector",
+CSourceDir <- R6::R6Class(
+  classname = "CSourceDir",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = CSource0,
@@ -37,7 +37,7 @@ CSourceVector <- R6::R6Class(
     initialize = function(x, name = NULL) {
 
       # Initiate logging variables and system meta data
-      private$..className <- 'CSourceVector'
+      private$..className <- 'CSourceDir'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
 
@@ -62,28 +62,30 @@ CSourceVector <- R6::R6Class(
 
       private$..methodName <- 'execute'
 
-      if ("list" %in% class(private$..x)[1]) {
-        lapply(private$..x, function(x) {
-          name <- names(x)
-          txt <- Text$new(name = name, x = x)
-          doc <- Document$new(name = name)
-          doc <- doc$attach(txt)
-          private$..corpus$attach(x = doc)
-        })
+      if (isDirectory(private$..x)) {
+        files <- list.files(private$..x, full.names = TRUE)
       } else {
-        name <- names(private$..x)
-        txt <- Text$new(name = name, x = private$..x)
+        glob <- basename(private$..x)
+        dir <- dirname(private$..x)
+        files <- list.files(dir, pattern = glob2rx(glob), full.names = TRUE)
+      }
+
+      lapply(files, function(f) {
+        name <- basename(f)
+        content <- IO$new()$read(f, repair = TRUE)
+        txt <- Text$new(name = name, x = content)
         doc <- Document$new(name = name)
         doc <- doc$attach(txt)
         private$..corpus$attach(x = doc)
-      }
+      })
+
       return(private$..corpus)
     },
     #-------------------------------------------------------------------------#
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$csourceVector(self)
+      visitor$csourceDir(self)
     }
   )
 )

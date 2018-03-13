@@ -26,6 +26,7 @@ IOFactory <- R6::R6Class(
   "IOFactory",
   lock_class = FALSE,
   lock_objects = FALSE,
+  inherit = Base,
 
   private = list(
     ..path = character()

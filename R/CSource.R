@@ -59,7 +59,7 @@ CSource <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                       Instantiation Method                              #
     #-------------------------------------------------------------------------#
-    initialize = function(x) {
+    initialize = function(x, name = NULL) {
 
       # Initiate logging variables and system meta data
       private$..className <- 'CSource'
@@ -68,6 +68,7 @@ CSource <- R6::R6Class(
 
       # Complete Initialization
       private$..x <- x
+      private$..name <- name
 
       invisible(self)
     },
@@ -77,19 +78,19 @@ CSource <- R6::R6Class(
     #-------------------------------------------------------------------------#
     vector = function() {
       private$..methodName = 'vector'
-      corpus <- CSourceVector$new(x = private$..x)$execute()
+      corpus <- CSourceVector$new(x = private$..x, name = private$..name)$execute()
       return(corpus)
     },
 
     file = function() {
       private$..methodName = 'file'
-      corpus <- CSourceFile$new(private$..x)$execute()
+      corpus <- CSourceFile$new(private$..x, name = private$..name)$execute()
       return(corpus)
     },
 
     dir = function() {
       private$..methodName = 'dir'
-      corpus <- CSourceDir$new(private$..x)$execute()
+      corpus <- CSourceDir$new(private$..x, name = private$..name)$execute()
       return(corpus)
     },
 
@@ -105,25 +106,25 @@ CSource <- R6::R6Class(
 
     quanteda = function() {
       private$..methodName = 'quanteda'
-      corpus <- CSourceQuanteda$new(private$..x)$execute()
+      corpus <- CSourceQuanteda$new(private$..x, name = private$..name)$execute()
       return(corpus)
     },
 
     tm = function() {
       private$..methodName = 'tm'
-      corpus <- CSourceTM$new(private$..x)$execute()
+      corpus <- CSourceTM$new(private$..x, name = private$..name)$execute()
       return(corpus)
     },
 
     korpus = function() {
       private$..methodName = 'korpus'
-      corpus <- CSourceKorpus$new(private$..x)$execute()
+      corpus <- CSourceKorpus$new(private$..x, name = private$..name)$execute()
       return(corpus)
     },
 
     qdap = function() {
       private$..methodName = 'qdap'
-      corpus <- CSourceQdap$new(private$..x)$execute()
+      corpus <- CSourceQdap$new(private$..x, name = private$..name)$execute()
       return(corpus)
     },
 

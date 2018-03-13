@@ -21,6 +21,45 @@ VVInit <- R6::R6Class(
 
   private = list(
 
+    validateQ = function(object, x) {
+      status <- list()
+      status[['code']] <- TRUE
+
+      if (!("corpus" %in% class(x)[1])) {
+        status$code <- FALSE
+        status$msg <- paste0("Invalid object. Must be a Quanteda 'corpus' object.")
+      }
+
+      return(status)
+    },
+
+    validateDir = function(object, x) {
+
+      status <- list()
+      status[['code']] <- TRUE
+
+      if (class(x)[1] == 'character') {
+
+        if (isDirectory(x)) {
+          files <- list.files(x, full.names = TRUE)
+        } else {
+          glob <- basename(x)
+          dir <- dirname(x)
+          files <- list.files(dir, pattern = glob2rx(glob), full.names = TRUE)
+        }
+
+        if (is.null(files) | length(files) == 0) {
+          status$code <- FALSE
+          status$msg <- paste0("No files match the criteria entered.")
+        }
+      } else {
+        status$code <- FALSE
+        status$msg <- paste0("Parameter must be class character and indicate ",
+                             "a directory or wildcard string.")
+      }
+      return(status)
+    },
+
     validateVector = function(object, x) {
       status <- list()
       status[['code']] <- TRUE
@@ -43,20 +82,6 @@ VVInit <- R6::R6Class(
                                "or a list of character vectors.")
           return(status)
         }
-      }
-      return(status)
-    },
-
-    validateDir = function(object, x) {
-
-      status <- list()
-      status[['code']] <- TRUE
-
-      if (!(R.utils::isDirectory(x))) {
-        status$code <- FALSE
-        status$msg <- paste0("Directory ", x, " does not exist.",
-                             "See ?", class(object)[1],
-                             " for further assistance")
       }
       return(status)
     },
@@ -119,6 +144,16 @@ VVInit <- R6::R6Class(
     csourceVector = function(object) {
       p <- object$getParams()
       return(private$validateVector(object, p$x))
+    },
+
+    csourceDir = function(object) {
+      p <- object$getParams()
+      return(private$validateDir(object, p$x))
+    },
+
+    csourceQuanteda = function(object) {
+      p <- object$getParams()
+      return(private$validateQ(object, p$x))
     }
   )
 )

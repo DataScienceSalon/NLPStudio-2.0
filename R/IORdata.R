@@ -23,7 +23,7 @@ IORdata <- R6::R6Class(
   classname = "IORdata",
   lock_objects = TRUE,
   lock_class = FALSE,
-  inherit = Entity,
+  inherit = Base,
   public = list(
 
     #-------------------------------------------------------------------------#
@@ -40,7 +40,6 @@ IORdata <- R6::R6Class(
         content <- load(path, envir = env)
         content <- env[[content]]
         private$..state <- paste0("Successfully read ", fileName, ".")
-        private$..meta[["accessed"]] <- Sys.time()
         self$logIt()
       } else {
         private$..state <- paste0('Unable to read ', fileName, '. ',

@@ -27,7 +27,7 @@ IOText <- R6::R6Class(
   classname = "IOText",
   lock_objects = TRUE,
   lock_class = FALSE,
-  inherit = Entity,
+  inherit = Base,
   public = list(
 
     #-------------------------------------------------------------------------#
