@@ -77,7 +77,7 @@ Document <- R6::R6Class(
                           stringsAsFactors = FALSE,
                           row.names = NULL)
       short <- cbind(short, aSummary)
-      other <- data.frame(created = private$..meta$system$created,
+      other <- data.frame(created = private$..meta$app$created,
                           user = private$..meta$system$user,
                           stringsAsFactors = FALSE,
                           row.names = NULL)

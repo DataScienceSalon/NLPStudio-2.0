@@ -79,6 +79,7 @@ CSourceVector <- R6::R6Class(
         lapply(private$..x, function(x) {
           name <- names(x)
           txt <- Text$new(name = name, x = x)
+          txt$state <- 'raw'
           doc <- Document$new(name = name)
           doc <- doc$attach(txt)
           private$..corpus$attach(x = doc)
@@ -86,6 +87,7 @@ CSourceVector <- R6::R6Class(
       } else {
         name <- names(private$..x)
         txt <- Text$new(name = name, x = private$..x)
+        txt$state <- 'raw'
         doc <- Document$new(name = name)
         doc <- doc$attach(txt)
         private$..corpus$attach(x = doc)

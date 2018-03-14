@@ -76,7 +76,7 @@ Text <- R6::R6Class(
       } else if (is.null(private$..meta$stats$created)) {
         return(getStats())
       } else if (private$..meta$stats$created <
-                 private$..meta$system$modified) {
+                 private$..meta$app$modified) {
         return(getStats())
       }
     },
@@ -108,7 +108,7 @@ Text <- R6::R6Class(
                           sentences = private$..meta$stats$sentences,
                           tokens = private$..meta$stats$tokens,
                           types = private$..meta$stats$types,
-                          created = private$..meta$system$created,
+                          created = private$..meta$app$created,
                           user = private$..meta$system$user,
                           stringsAsFactors = FALSE,
                           row.names = NULL)
@@ -125,15 +125,15 @@ Text <- R6::R6Class(
 
       } else {
         if (!("character" %in% class(value))) {
-          private$..state <- "Text must be of the 'character' class."
-          self$logIt("Error")
+          private$..action <- "Text must be of the 'character' class."
+          private$logIt("Error")
           stop()
         } else {
 
           private$..content <- private$compress(value)
           private$modified()
-          private$..state <- "Updated text content."
-          self$logIt()
+          private$..action <- "Updated text content."
+          private$logIt()
         }
       }
       invisible(self)

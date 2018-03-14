@@ -39,7 +39,7 @@ IO <- R6::R6Class(
     initialize = function() {
 
       # Initiate logging variables
-      private$..className <- 'Document'
+      private$..className <- 'IO'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
       invisible(self)
@@ -54,12 +54,12 @@ IO <- R6::R6Class(
 
       # Validate path
       if (!R.utils::isFile(path)) {
-        private$..state <- paste0("File path ", path, " not found.")
-        self$logIt("Error")
+        private$..action <- paste0("File path ", path, " not found.")
+        private$logIt("Error")
         stop()
       } else if (is.null(IOFactory$new(path)$getIOStrategy())) {
-        private$..state <- paste0("File ", path, " is an unsupported file type.")
-        self$logIt("Error")
+        private$..action <- paste0("File ", path, " is an unsupported file type.")
+        private$logIt("Error")
         stop()
       }
 
@@ -71,8 +71,8 @@ IO <- R6::R6Class(
       }
 
       # Update log and system metadata
-      private$..state <- paste0("Read file from ", path, ". ")
-      self$logIt()
+      private$..action <- paste0("Read file from ", path, ". ")
+      private$logIt()
 
       return(content)
     },
@@ -88,9 +88,9 @@ IO <- R6::R6Class(
       io$write(path = path, content = content)
 
       # Update log
-      private$..state <- paste0("Saved content to ", path, ". ")
+      private$..action <- paste0("Saved content to ", path, ". ")
       private$accessed
-      self$logIt()
+      private$logIt()
 
       invisible(self)
     },

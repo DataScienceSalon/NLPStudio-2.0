@@ -68,6 +68,7 @@ CSourceTM <- R6::R6Class(
         # Create Text and Document Objects
         content <- private$..x[[x]]$content
         text <- Text$new(x =content, name = docNames[x])
+        text$state <- 'raw'
         doc <- Document$new(name = docNames[x])
 
         # Create metadata

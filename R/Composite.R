@@ -108,8 +108,8 @@ Composite <- R6::R6Class(
 
         # Update date/time metadata and create log entry
         private$modified()
-        private$..state <- paste0("Attached ", a$getName(), " object to ", self$getName(), ".")
-        self$logIt()
+        private$..action <- paste0("Attached ", a$getName(), " object to ", self$getName(), ".")
+        private$logIt(level = "Info")
       }
 
       if ("list" %in% class(x)[1]) {
@@ -141,15 +141,15 @@ Composite <- R6::R6Class(
         object <- private$..attachments[listCondition]
         private$..attachments[listCondition] <- NULL
         private$modified()
-        private$..state <- paste0("Detached ", object$getName, " from ",
+        private$..action <- paste0("Detached ", object$getName, " from ",
                                   self$getName, ".")
-        self$logIt()
+        private$logIt()
       } else {
         object <- NULL
         self$access()
-        private$..state <- paste0("Object is not attached to ",
+        private$..action <- paste0("Object is not attached to ",
                                   self$getName(), ". Returning NULL")
-        self$logIt("Warn")
+        private$logIt("Warn")
         return(object)
       }
     },
@@ -187,8 +187,8 @@ Composite <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Summary Method                                #
     #-------------------------------------------------------------------------#
-    summary = function(meta = TRUE, stats = TRUE, system = TRUE, quiet = FALSE,
-                       abbreviated = FALSE, attachments = TRUE) {
+    summary = function(meta = TRUE, stats = TRUE, system = TRUE, app = TRUE,
+                       quiet = FALSE, abbreviated = FALSE, attachments = TRUE) {
       if (abbreviated) {
         result <- private$summaryShort()
       } else {
@@ -198,6 +198,11 @@ Composite <- R6::R6Class(
         if (meta) {
           result$meta <- private$summaryObjMeta(quiet = quiet)
           section <- c(section, "Metadata")
+        }
+
+        if (app) {
+          result$app <- private$summaryAppInfo(quiet = quiet)
+          section <- c(section, "Application Info")
         }
 
         if (attachments) {

@@ -27,8 +27,9 @@ Base <- R6::R6Class(
     ..params = list(),
     ..className = character(),
     ..methodName = character(),
-    ..state = character(),
+    ..action = character(),
     ..logs = character(),
+    ..log = data.frame(),
 
     #-------------------------------------------------------------------------#
     #                           Validate Parameters                           #
@@ -54,42 +55,62 @@ Base <- R6::R6Class(
         v <- Validator$new()
         status <- v$init(self)
         if (status$code == FALSE) {
-          private$..state <- status$msg
-          self$logIt("Error")
+          private$..action <- status$msg
+          private$logIt("Error")
         }
       } else if (what == "get") {
         v <- Validator$new()
         status <- v$get(self)
         if (status$code == FALSE) {
-          private$..state <- status$msg
-          self$logIt("Error")
+          private$..action <- status$msg
+          private$logIt("Error")
         }
       } else if (what == "attach") {
         v <- Validator$new()
         status <- v$attach(self)
         if (status$code == FALSE) {
-          private$..state <- status$msg
-          self$logIt("Error")
+          private$..action <- status$msg
+          private$logIt("Error")
         }
       }  else if (what == "detach") {
         v <- Validator$new()
         status <- v$detach(self)
         if (status$code == FALSE) {
-          private$..state <- status$msg
-          self$logIt("Error")
+          private$..action <- status$msg
+          private$logIt("Error")
         }
       } else if (what == "read") {
         v <- Validator$new()
         status <- v$read(self)
         if (status$code == FALSE) {
-          private$..state <- status$msg
-          self$logIt("Error")
+          private$..action <- status$msg
+          private$logIt("Error")
         }
       }
       return(status)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                           Log Methods                                   #
+    #-------------------------------------------------------------------------#
+    logIt = function(level = 'Info', fieldName = NA) {
+      private$..logs$entry$className <- private$..className
+      private$..logs$entry$methodName <- private$..methodName
+      private$..logs$entry$level <- level
+      private$..logs$entry$msg <- private$..action
+      private$..logs$entry$fieldName <- fieldName
+      private$..logs$created <- Sys.time()
+      private$..logs$writeLog()
+
+      if (level %in% c("Info", 'info', 'INFO')) {
+        log <- data.frame(user = Sys.info()[['user']],
+                          date = Sys.time(),
+                          action = private$..action)
+        private$..log <- rbind(private$..log, log)
+
+      }
     }
   ),
-
   public = list(
 
     #-------------------------------------------------------------------------#
@@ -97,20 +118,6 @@ Base <- R6::R6Class(
     #-------------------------------------------------------------------------#
     getId = function() private$..meta$object$id,
     getName = function() private$..meta$object$name,
-    getParams = function() private$..params,
-
-    #-------------------------------------------------------------------------#
-    #                            Log Method                                   #
-    #-------------------------------------------------------------------------#
-    logIt = function(level = 'Info', fieldName = NA) {
-
-      private$..logs$entry$className <- private$..className
-      private$..logs$entry$methodName <- private$..methodName
-      private$..logs$entry$level <- level
-      private$..logs$entry$msg <- private$..state
-      private$..logs$entry$fieldName <- fieldName
-      private$..logs$created <- Sys.time()
-      private$..logs$writeLog()
-    }
+    getParams = function() private$..params
   )
 )

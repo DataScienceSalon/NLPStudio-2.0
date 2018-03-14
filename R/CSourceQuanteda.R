@@ -83,6 +83,7 @@ CSourceQuanteda <- R6::R6Class(
 
         # Create Text object
         text <- Text$new(x = texts[i], name = n[i])
+        text$state <- 'raw'
         keys <- names(metaData[i,])
         values <- metaData[i,]
         if (length(keys) > 0) {

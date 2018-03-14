@@ -78,6 +78,7 @@ CSourceDir <- R6::R6Class(
         name <- basename(f)
         content <- IO$new()$read(f, repair = TRUE)
         txt <- Text$new(name = name, x = content)
+        txt$state <- 'raw'
         doc <- Document$new(name = name)
         doc <- doc$attach(txt)
         private$..corpus$attach(x = doc)
