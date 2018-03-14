@@ -78,18 +78,14 @@ CSourceVector <- R6::R6Class(
       if ("list" %in% class(private$..x)[1]) {
         lapply(private$..x, function(x) {
           name <- names(x)
-          txt <- Text$new(name = name, x = x)
-          txt$state <- 'raw'
-          doc <- Document$new(name = name)
-          doc <- doc$attach(txt)
+          doc <- Document$new(x = x[x], name = name)
+          doc$state <- 'raw'
           private$..corpus$attach(x = doc)
         })
       } else {
         name <- names(private$..x)
-        txt <- Text$new(name = name, x = private$..x)
-        txt$state <- 'raw'
-        doc <- Document$new(name = name)
-        doc <- doc$attach(txt)
+        doc <- Document$new(x = private$..x, name = name)
+        doc$state <- 'raw'
         private$..corpus$attach(x = doc)
       }
       return(private$..corpus)

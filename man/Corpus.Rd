@@ -78,8 +78,7 @@ corpus$detach(key = 'name', value = 'blogsDoc')
 
 }
 \seealso{
-Other Core Classes: \code{\link{Document}},
-  \code{\link{Text}}
+Other Core Classes: \code{\link{Document}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

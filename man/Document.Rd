@@ -6,12 +6,10 @@
 \title{Document}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-myDocument <- Document$new(name = "machineLearning", content = mlAdvances)
+myDocument <- Document$new(name = "skiReport", x = avalanche)
 }
 \arguments{
-\item{name}{Optional character string containing the name of the object.}
-
-\item{x}{A Text, Data or Analyis object to be attached to the Document object.}
+\item{x}{Character vector containing Document}
 
 \item{key}{Character string or character vector containing the key or
 keys associated a metadata field or fields.}
@@ -20,24 +18,21 @@ keys associated a metadata field or fields.}
 the key vector, containing the metadata value or values.}
 }
 \value{
-Document object.
+Document object, containing the Document content, the metadata and
+the methods to manage both.
 }
 \description{
-\code{Document} Class for creating, managing, reading and writing Documents.
+\code{Document} Class for creating, managing, reading and writing
+Document content and metadata.
 }
 \details{
-Document objects are abstractions of information resources comprised of
-one or several versions of a single resource or text, each encapsulated in
-a Text object, as well as Data and information or Analysis objects. This broad
-definition allows one to "attach" any number of raw, preprocessed,
-training, or cross-validation Text objects to a single Document. Data
-objects are the transformations of the original or preprocessed Text
-object into forms which can be analyzed and studied. A Document's Analysis
-objects include analyses such as readibility, collocation, document similarity,
-semantic analysis and so on. This class provides allows users to
-encapsulate raw text, its conversions into data, and all associated analyses
-into a single document unit for processing, experimentation, modeling,
-testing, inference and prediction.
+Class contains Document content and metadata for the Document object.
+The object is instantiated with a name and character
+vectors containing the Document text. Once the object is created, users may
+add, change and remove metadata via key / value pairs. IO
+methods support reading and writing the Documents in a variety
+of formats using the \code{\link[NLPStudio]{IOFactory}} factory
+class.
 }
 \section{Core Methods}{
 
@@ -62,24 +57,22 @@ testing, inference and prediction.
 }
 
 \examples{
+avalanche <- c("SAN FRANCISCO  — She was snowboarding with her boyfriend when ",
+          "she heard someone scream 'Avalanche!'",
+          "Then John, 39, saw 'a cloud of snow coming down.'")
+avalancheDocument <- Document$new(name = 'skiReport', content = avalanche)
 
-# Instantiate
-blogsDoc <- Document$new(name = "Blogs")
+avalancheDocument <- myDocument$meta(key = c("author", "editor", "year"),
+                      value = c("Dorfmeister", "Huffington", "2018"))
 
-# Attach Text object
-## Create Text object
-blogsTxt <- Text$new(name = 'blogs (raw)')$read(path = "./data/en_US.blogs.txt")
+avalancheDocument$meta()
 
-## Attach to Document object
-blogsDoc$attach(blogsTxt)
-
-## Detach
-blogsDoc$detach(key ='name', value = 'blogs (raw)')
+news <- "./data/en_US.news.txt"
+newsDocument <- Document$new(name = 'news', x = news)
 
 }
 \seealso{
-Other Core Classes: \code{\link{Corpus}},
-  \code{\link{Text}}
+Other Core Classes: \code{\link{Corpus}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

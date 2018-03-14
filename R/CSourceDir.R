@@ -15,7 +15,7 @@
 #' @param x Character vector or a list of character vectors containing text.
 #'
 #' @examples
-#' dir <- "./foo
+#' dir <- "./foo"
 #' corpus <- CSource$new(x = dir, name = "Foo")$dir()
 #'
 #' @docType class
@@ -77,10 +77,8 @@ CSourceDir <- R6::R6Class(
       lapply(files, function(f) {
         name <- basename(f)
         content <- IO$new()$read(f, repair = TRUE)
-        txt <- Text$new(name = name, x = content)
-        txt$state <- 'raw'
-        doc <- Document$new(name = name)
-        doc <- doc$attach(txt)
+        doc <- Document$new(name = name, x = content)
+        doc$state <- 'raw'
         private$..corpus$attach(x = doc)
       })
 

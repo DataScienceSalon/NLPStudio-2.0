@@ -67,27 +67,22 @@ CSourceTM <- R6::R6Class(
 
         # Create Text and Document Objects
         content <- private$..x[[x]]$content
-        text <- Text$new(x =content, name = docNames[x])
-        text$state <- 'raw'
-        doc <- Document$new(name = docNames[x])
+        doc <- Document$new(x =content, name = docNames[x])
+        doc$state <- 'raw'
 
         # Create metadata
         for (i in 1:length(private$..x[[x]]$meta)) {
           if (length(private$..x[[x]]$meta[[i]]) > 0) {
             if (names(private$..x[[x]]$meta[i]) == 'datetimestamp') {
-              text$meta(key = 'tmCreated', value = private$..x[[x]]$meta[[i]])
               doc$meta(key = 'tmCreated', value = private$..x[[x]]$meta[[i]])
             } else {
-              text$meta(key = names(private$..x[[x]]$meta[i]),
-                        value = private$..x[[x]]$meta[[i]])
               doc$meta(key = names(private$..x[[x]]$meta[i]),
                         value = private$..x[[x]]$meta[[i]])
             }
           }
         }
 
-        # Attach Objects
-        doc$attach(text)
+        # Attach Document
         private$..corpus$attach(doc)
       })
 

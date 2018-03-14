@@ -64,9 +64,9 @@ Entity <- R6::R6Class(
 
       # Log the entry
       private$..action <- paste0(private$..className, " object, ", name, ", ", state, ".")
-      private$..meta$app[["state"]] <- state
-      private$..meta$app[["stateDate"]] <- Sys.time()
-      private$..meta$app[["user"]] <- Sys.info()[['user']]
+      private$..meta$state[["current"]] <- state
+      private$..meta$state[["date"]] <- Sys.time()
+      private$..meta$state[["user"]] <- Sys.info()[['user']]
       private$logIt()
     },
 
@@ -81,7 +81,7 @@ Entity <- R6::R6Class(
       private$..meta$system$os <- Sys.info()[["sysname"]]
       private$..meta$system$release <- Sys.info()[["release"]]
       private$..meta$system$version <- Sys.info()[["version"]]
-      private$..meta$app$accessed <- Sys.time()
+      private$..meta$state$accessed <- Sys.time()
     },
 
     # Updates system metadata when object has been modified
@@ -91,8 +91,8 @@ Entity <- R6::R6Class(
       private$..meta$system$os <- Sys.info()[["sysname"]]
       private$..meta$system$release <- Sys.info()[["release"]]
       private$..meta$system$version <- Sys.info()[["version"]]
-      private$..meta$app$accessed <- Sys.time()
-      private$..meta$app$modified <- Sys.time()
+      private$..meta$state$accessed <- Sys.time()
+      private$..meta$state$modified <- Sys.time()
     },
 
     # Updates system metadata when object has been created
@@ -102,9 +102,9 @@ Entity <- R6::R6Class(
       private$..meta$system$os <- Sys.info()[["sysname"]]
       private$..meta$system$release <- Sys.info()[["release"]]
       private$..meta$system$version <- Sys.info()[["version"]]
-      private$..meta$app$created <- Sys.time()
-      private$..meta$app$accessed <- Sys.time()
-      private$..meta$app$modified <- Sys.time()
+      private$..meta$state$created <- Sys.time()
+      private$..meta$state$accessed <- Sys.time()
+      private$..meta$state$modified <- Sys.time()
     },
 
     #-------------------------------------------------------------------------#
@@ -130,17 +130,18 @@ Entity <- R6::R6Class(
       return(meta)
     },
 
-    summaryAppInfo = function(quiet = FALSE) {
+    summaryState = function(quiet = FALSE) {
 
-      sys <- as.data.frame(private$..meta$app, stringsAsFactors = FALSE,
+      state <- as.data.frame(private$..meta$state, stringsAsFactors = FALSE,
                            row.names = NULL)
+      state <- state %>% select(user, current, date, created, accessed, modified)
       if (quiet == FALSE) {
-        if (ncol(sys) > 0) {
-          cat("\nApplication Information: \n")
-          print(sys, row.names = FALSE)
+        if (ncol(state) > 0) {
+          cat("\n\nState Information: \n")
+          print(state, row.names = FALSE)
         }
       }
-      return(sys)
+      return(state)
     },
 
     summarySysInfo = function(quiet = FALSE) {
@@ -161,14 +162,14 @@ Entity <- R6::R6Class(
 
     state = function(value) {
       if (missing(value)) {
-        s <- data.frame(state = private$..meta$app[["state"]],
-                        date = private$..meta$app[["stateDate"]],
-                        user = private$..meta$app[["stateUser"]])
+        s <- data.frame(state = private$..meta$state[["current"]],
+                        date = private$..meta$state[["date"]],
+                        user = private$..meta$state[["user"]])
         invisible(s)
       } else {
-        private$..meta$app[["state"]] <- value
-        private$..meta$app[["stateDate"]] <- Sys.time()
-        private$..meta$app[['stateUser']] <- Sys.info()[['user']]
+        private$..meta$state[["current"]] <- value
+        private$..meta$state[["date"]] <- Sys.time()
+        private$..meta$state[['user']] <- Sys.info()[['user']]
         private$..action <- paste0("State changed to '", value, "' by ", Sys.info()[['user']])
         private$logIt()
       }
@@ -226,9 +227,9 @@ Entity <- R6::R6Class(
         } else {
 
           # Check application level metadata
-          keys <- intersect(names(private$..meta$app), key)
+          keys <- intersect(names(private$..meta$state), key)
           if (length(keys) > 0) {
-            return(as.data.frame(private$..meta$app[names(private$..meta$app) %in% keys]))
+            return(as.data.frame(private$..meta$state[names(private$..meta$state) %in% keys]))
           } else {
             private$..state <- "Non existent metadata variable"
             private$logIt("Warn")

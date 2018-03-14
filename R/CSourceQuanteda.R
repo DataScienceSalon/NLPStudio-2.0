@@ -78,28 +78,18 @@ CSourceQuanteda <- R6::R6Class(
         metaData <- metaData %>% select(-doc_id)
       }
 
-      # Create Texts, Documents and add to Corpus
+      # Create Documents and add to Corpus
       for (i in 1:length(texts)) {
 
-        # Create Text object
-        text <- Text$new(x = texts[i], name = n[i])
-        text$state <- 'raw'
+        doc <- Document$new(x = texts[i], name = n[i])
+        doc$state <- 'raw'
         keys <- names(metaData[i,])
         values <- metaData[i,]
-        if (length(keys) > 0) {
-          for (j in 1:length(keys)) {
-            text <- text$meta(key = keys[j], value = values[j])
-          }
-        }
-
-        # Create Document Object and attach Text
-        doc <- Document$new(name = n[i])
         if (length(keys) > 0) {
           for (j in 1:length(keys)) {
             doc <- doc$meta(key = keys[j], value = values[j])
           }
         }
-        doc <- doc$attach(text)
         private$..corpus <- private$..corpus$attach(doc)
       }
 

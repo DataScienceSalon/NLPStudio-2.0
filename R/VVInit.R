@@ -120,13 +120,15 @@ VVInit <- R6::R6Class(
       status <- list()
       status[['code']] <- TRUE
 
-      if (!is.null(param) & sum(class(param) %in% classes) == 0) {
-        status[['code']] <- FALSE
-        status[['msg']] <- paste0("Invalid class. Cannot create ",
-                                  class(object)[1],
-                                  " object. ", "Parameter is not of a valid class. ",
-                                  "See ?", class(object)[1],
-                                  " for further assistance")
+      if (!is.null(param)) {
+        if  (!(class(param)[1] %in% classes)) {
+          status[['code']] <- FALSE
+          status[['msg']] <- paste0("Invalid class. Cannot create ",
+                                    class(object)[1],
+                                    " object. ", "Parameter is not of a valid class. ",
+                                    "See ?", class(object)[1],
+                                    " for further assistance")
+        }
       }
       return(status)
     }
@@ -149,9 +151,6 @@ VVInit <- R6::R6Class(
 
     },
     document = function(object) {
-      return(status[['code']] <- TRUE)
-    },
-    text = function(object) {
       p <- object$getParams()
       return(private$validateClass(object, p$x, classes = "character"))
     },

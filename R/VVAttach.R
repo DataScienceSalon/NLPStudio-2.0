@@ -82,11 +82,6 @@ VVAttach <- R6::R6Class(
     corpus = function(object) {
       classes <- c("Document")
       return(private$validate(object = object, classes = classes))
-    },
-
-    document = function(object) {
-      classes <- c("Text", "Data", "Analysis")
-      return(private$validate(object = object, classes = classes))
     }
   )
 )

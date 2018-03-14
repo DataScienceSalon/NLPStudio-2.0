@@ -1,21 +1,17 @@
 #' Document
 #'
-#' \code{Document} Class for creating, managing, reading and writing Documents.
+#' \code{Document} Class for creating, managing, reading and writing
+#' Document content and metadata.
 #'
-#' Document objects are abstractions of information resources comprised of
-#' one or several versions of a single resource or text, each encapsulated in
-#' a Text object, as well as Data and information or Analysis objects. This broad
-#' definition allows one to "attach" any number of raw, preprocessed,
-#' training, or cross-validation Text objects to a single Document. Data
-#' objects are the transformations of the original or preprocessed Text
-#' object into forms which can be analyzed and studied. A Document's Analysis
-#' objects include analyses such as readibility, collocation, document similarity,
-#' semantic analysis and so on. This class provides allows users to
-#' encapsulate raw text, its conversions into data, and all associated analyses
-#' into a single document unit for processing, experimentation, modeling,
-#' testing, inference and prediction.
+#' Class contains Document content and metadata for the Document object.
+#' The object is instantiated with a name and character
+#' vectors containing the Document text. Once the object is created, users may
+#' add, change and remove metadata via key / value pairs. IO
+#' methods support reading and writing the Documents in a variety
+#' of formats using the \code{\link[NLPStudio]{IOFactory}} factory
+#' class.
 #'
-#' @usage myDocument <- Document$new(name = "machineLearning", content = mlAdvances)
+#' @usage myDocument <- Document$new(name = "skiReport", x = avalanche)
 #'
 #' @section Core Methods:
 #'  \itemize{
@@ -23,26 +19,26 @@
 #'  }
 #' @template entityMethods
 #'
-#' @template entityParams
-#' @param x A Text, Data or Analyis object to be attached to the Document object.
+#' @param x Character vector containing Document
 #' @template metaParams
 #'
-#' @return Document object.
+#' @return Document object, containing the Document content, the metadata and
+#' the methods to manage both.
+#'
 #'
 #' @examples
+#' avalanche <- c("SAN FRANCISCO  — She was snowboarding with her boyfriend when ",
+#'           "she heard someone scream 'Avalanche!'",
+#'           "Then John, 39, saw 'a cloud of snow coming down.'")
+#' avalancheDocument <- Document$new(name = 'skiReport', content = avalanche)
 #'
-#' # Instantiate
-#' blogsDoc <- Document$new(name = "Blogs")
+#' avalancheDocument <- myDocument$meta(key = c("author", "editor", "year"),
+#'                       value = c("Dorfmeister", "Huffington", "2018"))
 #'
-#' # Attach Text object
-#' ## Create Text object
-#' blogsTxt <- Text$new(name = 'blogs (raw)')$read(path = "./data/en_US.blogs.txt")
+#' avalancheDocument$meta()
 #'
-#' ## Attach to Document object
-#' blogsDoc$attach(blogsTxt)
-#'
-#' ## Detach
-#' blogsDoc$detach(key ='name', value = 'blogs (raw)')
+#' news <- "./data/en_US.news.txt"
+#' newsDocument <- Document$new(name = 'news', x = news)
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
@@ -52,39 +48,98 @@ Document <- R6::R6Class(
   classname = "Document",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Composite,
+  inherit = Entity,
 
   private = list(
-    ..attachments = list(),
-    ..associates = c("Text", "Data", "Analysis"),
+    ..content = character(),
+
+    compress = function(x) {
+      memCompress(x, "g")
+    },
+
+    decompress = function(x) {
+      strsplit(memDecompress(x, "g", asChar = TRUE), "\n")[[1]]
+    },
+
+    stats = function() {
+
+      getStats = function() {
+        content <- private$decompress(private$..content)
+        private$..meta$stats <- list()
+        private$..meta$stats$sentences <- sum(quanteda::nsentence(content))
+        private$..meta$stats$tokens <- sum(quanteda::ntoken(content))
+        private$..meta$stats$types <- sum(quanteda::ntype(tolower(content)))
+        private$..meta$stats$created <- Sys.time()
+      }
+
+      if (is.null(private$..meta$stats)) {
+        return(getStats())
+      } else if (is.null(private$..meta$stats$created)) {
+        return(getStats())
+      } else if (private$..meta$stats$created <
+                 private$..meta$state$modified) {
+        return(getStats())
+      }
+    },
+
+    summaryStats = function(quiet = FALSE) {
+
+      private$stats()
+
+      stats <- as.data.frame(private$..meta$stats, stringsAsFactors = FALSE,
+                             row.names = NULL)
+      stats <- stats %>% select(-created)
+      if (quiet == FALSE) {
+        if (ncol(stats) > 0) {
+          cat("\n\nDescriptive Statistics:\n")
+          print(stats, row.names = FALSE)
+        }
+      }
+      return(stats)
+    },
 
     summaryShort = function() {
 
-      aSummary <- rbindlist(lapply(private$summarizeAttachments(quiet = TRUE), function(a) {
-        attachments <- list()
-        attachments$class <- a$class[1]
-        attachments$N <- nrow(a)
-        attachments
-      }))
-      name <- aSummary$class
-      aSummary <- aSummary %>% select(N)
-      names(aSummary) <- name
+      private$stats()
 
       short <- data.frame(class = private$..meta$object$class,
                           id = private$..meta$object$id,
                           name = private$..meta$object$name,
                           desc = private$..meta$object$desc,
-                          stringsAsFactors = FALSE,
-                          row.names = NULL)
-      short <- cbind(short, aSummary)
-      other <- data.frame(created = private$..meta$app$created,
+                          sentences = private$..meta$stats$sentences,
+                          tokens = private$..meta$stats$tokens,
+                          types = private$..meta$stats$types,
+                          created = private$..meta$state$created,
                           user = private$..meta$system$user,
                           stringsAsFactors = FALSE,
                           row.names = NULL)
-      short <- cbind(short, other)
       return(short)
     }
+  ),
 
+  active = list(
+    content = function(value) {
+
+      if (missing(value)) {
+        private$accessed()
+        return(private$decompress(private$..content))
+
+      } else {
+        if (!("character" %in% class(value))) {
+          private$..action <- "Document must be of the 'character' class."
+          private$logIt("Error")
+          stop()
+        } else {
+
+          private$..content <- private$compress(value)
+          private$modified()
+          private$..action <- "Updated Document content."
+          self$state <- private$..action
+          private$logIt()
+        }
+      }
+      invisible(self)
+    }
   ),
 
   public = list(
@@ -92,15 +147,95 @@ Document <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Core Methods                                  #
     #-------------------------------------------------------------------------#
-    initialize = function(name = NULL) {
+    initialize = function(x = NULL, name = NULL) {
 
-      # Initiate logging variables and system meta data
+      # Initiate logging
       private$..className <- 'Document'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
 
-      # Complete Document Initialization
+      # Obtain, validate, then clear parameter list
+      private$..params$x <- x
+      if (private$validateParams()$code == FALSE) stop()
+      private$..params <- list()
+
+      # Compress and store content
+      if (!is.null(x)) {
+        private$..content <- private$compress(x)
+      }
+
+      # Complete standard initiation tasks
       private$init(name)
+
+      invisible(self)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                           Summary Method                                #
+    #-------------------------------------------------------------------------#
+    summary = function(meta = TRUE, stats = TRUE, state = TRUE, system = TRUE,
+                       quiet = FALSE, abbreviated = FALSE) {
+      if (abbreviated) {
+        result <- private$summaryShort()
+      } else {
+        result <- list()
+        section <- character()
+
+        if (meta) {
+          result$meta <- private$summaryObjMeta(quiet = quiet)
+          section <- c(section, "Metadata")
+        }
+
+        if (stats) {
+          result$stats <- private$summaryStats(quiet = quiet)
+          section <- c(section, "Descriptive Statistics")
+        }
+
+        if (state) {
+          result$state <- private$summaryState(quiet = quiet)
+          section <- c(section, "State Info")
+        }
+
+        if (system) {
+          result$sys <- private$summarySysInfo(quiet = quiet)
+          section <- c(section, "System Info")
+        }
+
+        names(result) <- section
+      }
+
+      private$accessed()
+
+      invisible(result)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                             IO Methods                                  #
+    #-------------------------------------------------------------------------#
+    read = function(path, repair = FALSE) {
+
+      # Validate parameter
+      private$..params <- list()
+      private$..params$path <- path
+      if (private$validateParams()$code == FALSE) stop()
+
+      private$..methodName <- 'read'
+      content <- IO$new()$read(path = path, repair = repair)
+      private$..content <- private$compress(content)
+      private$modified()
+
+      return(content)
+    },
+
+    write = function(path) {
+
+      private$..methodName <- 'write'
+
+      # Decompress, then write Document file
+      content <- private$decompress(private$..content)
+      IO$new()$write(path = path, content = content)
+
+      private$accessed
 
       invisible(self)
     },

@@ -28,6 +28,11 @@ object and a single associated Text object.
  }
 }
 
+\examples{
+dir <- "./foo"
+corpus <- CSource$new(x = dir, name = "Foo")$dir()
+
+}
 \seealso{
 Other Corpus Source Classes: \code{\link{CSource0}},
   \code{\link{CSourceQuanteda}}, \code{\link{CSourceTM}},

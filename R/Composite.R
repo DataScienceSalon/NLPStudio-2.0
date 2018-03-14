@@ -201,7 +201,7 @@ Composite <- R6::R6Class(
         }
 
         if (app) {
-          result$app <- private$summaryAppInfo(quiet = quiet)
+          result$app <- private$summaryState(quiet = quiet)
           section <- c(section, "Application Info")
         }
 
