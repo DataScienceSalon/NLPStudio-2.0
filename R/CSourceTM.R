@@ -1,38 +1,25 @@
-#' CSourceVector
+#' CSourceTM
 #'
-#' \code{CSourceVector} Sources a Corpus object from a character vector or a list of character vectors.
-#'
-#' Sources a Corpus object from a character vector or a list thereof. Each vector will create
-#' a single Text object and one Document object.
+#' \code{CSourceTM} Sources a Corpus object from a TM corpus object
 #'
 #' @section Methods:
 #'  \itemize{
-#'   \item{\code{new(x, name = NULL)}}{Initializes an object of the CSourceVector class.}
+#'   \item{\code{new(x, name = NULL)}}{Initializes an object of the CSourceTM class.}
 #'   \item{\code{execute()}}{Executes the process of sourcing the Corpus object.}
 #'  }
 #'
+#'  tmc <- tm::VCorpus(DirSource("./foo))
+#'  corpus <- CSource$new(x = tmc, name = "Alexandra")$tm()
+#'
 #' @param name Optional character vector indicating name for Corpus object.
 #' @param x Character vector or a list of character vectors containing text.
-#'
-#' @examples
-#' text <- c("The firm possesses unparalleled leverage in Washington,
-#' thanks in part to its track record of funneling executives into
-#' senior government posts. Even the Trump administration, which
-#' rode a populist wave to electoral victory, is stocked with
-#' Goldman alumni, including Treasury Secretary Steven Mnuchin and
-#' the departing White House economic adviser Gary D. Cohn.",
-#' "Goldman is also an adviser to many of America’s — and the
-#' world’s — largest companies, ranging from stalwarts like Walt
-#' Disney to upstarts like Uber.")
-#'
-#' corpus <- CSource$new(x = txt, name = "Goldman")$vector()
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family Corpus Source Classes
 #' @export
-CSourceVector <- R6::R6Class(
-  classname = "CSourceVector",
+CSourceTM <- R6::R6Class(
+  classname = "CSourceTM",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = CSource0,
@@ -50,7 +37,7 @@ CSourceVector <- R6::R6Class(
     initialize = function(x, name = NULL) {
 
       # Initiate logging variables and system meta data
-      private$..className <- 'CSourceVector'
+      private$..className <- 'CSourceTM'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
 
@@ -67,7 +54,6 @@ CSourceVector <- R6::R6Class(
       invisible(self)
     },
 
-
     #-------------------------------------------------------------------------#
     #                          Execute Method                                 #
     #-------------------------------------------------------------------------#
@@ -75,28 +61,42 @@ CSourceVector <- R6::R6Class(
 
       private$..methodName <- 'execute'
 
-      if ("list" %in% class(private$..x)[1]) {
-        lapply(private$..x, function(x) {
-          name <- names(x)
-          txt <- Text$new(name = name, x = x)
-          doc <- Document$new(name = name)
-          doc <- doc$attach(txt)
-          private$..corpus$attach(x = doc)
-        })
-      } else {
-        name <- names(private$..x)
-        txt <- Text$new(name = name, x = private$..x)
-        doc <- Document$new(name = name)
-        doc <- doc$attach(txt)
-        private$..corpus$attach(x = doc)
-      }
+      docNames <- names(private$..x)
+
+      lapply(seq_along(private$..x), function(x) {
+
+        # Create Text and Document Objects
+        content <- private$..x[[x]]$content
+        text <- Text$new(x =content, name = docNames[x])
+        doc <- Document$new(name = docNames[x])
+
+        # Create metadata
+        for (i in 1:length(private$..x[[x]]$meta)) {
+          if (length(private$..x[[x]]$meta[[i]]) > 0) {
+            if (names(private$..x[[x]]$meta[i]) == 'datetimestamp') {
+              text$meta(key = 'tmCreated', value = private$..x[[x]]$meta[[i]])
+              doc$meta(key = 'tmCreated', value = private$..x[[x]]$meta[[i]])
+            } else {
+              text$meta(key = names(private$..x[[x]]$meta[i]),
+                        value = private$..x[[x]]$meta[[i]])
+              doc$meta(key = names(private$..x[[x]]$meta[i]),
+                        value = private$..x[[x]]$meta[[i]])
+            }
+          }
+        }
+
+        # Attach Objects
+        doc$attach(text)
+        private$..corpus$attach(doc)
+      })
+
       return(private$..corpus)
     },
     #-------------------------------------------------------------------------#
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$csourceVector(self)
+      visitor$csourceTM(self)
     }
   )
 )

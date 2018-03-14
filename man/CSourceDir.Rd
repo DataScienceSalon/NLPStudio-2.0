@@ -23,14 +23,14 @@ object and a single associated Text object.
 \section{Methods}{
 
  \itemize{
-  \item{\code{new()}}{Initializes an object of the CSourceDir class.}
+  \item{\code{new(X, name = NULL)}}{Initializes an object of the CSourceDir class.}
   \item{\code{execute()}}{Executes the process of sourcing the Corpus object.}
  }
 }
 
 \seealso{
 Other Corpus Source Classes: \code{\link{CSource0}},
-  \code{\link{CSourceQuanteda}},
+  \code{\link{CSourceQuanteda}}, \code{\link{CSourceTM}},
   \code{\link{CSourceVector}}, \code{\link{CSource}}
 }
 \author{

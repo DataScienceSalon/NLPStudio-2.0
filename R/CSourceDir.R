@@ -7,12 +7,16 @@
 #'
 #' @section Methods:
 #'  \itemize{
-#'   \item{\code{new()}}{Initializes an object of the CSourceDir class.}
+#'   \item{\code{new(X, name = NULL)}}{Initializes an object of the CSourceDir class.}
 #'   \item{\code{execute()}}{Executes the process of sourcing the Corpus object.}
 #'  }
 #'
 #' @param name Optional character vector indicating name for Corpus object.
 #' @param x Character vector or a list of character vectors containing text.
+#'
+#' @examples
+#' dir <- "./foo
+#' corpus <- CSource$new(x = dir, name = "Foo")$dir()
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}

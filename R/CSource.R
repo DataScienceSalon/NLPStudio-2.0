@@ -82,12 +82,6 @@ CSource <- R6::R6Class(
       return(corpus)
     },
 
-    file = function() {
-      private$..methodName = 'file'
-      corpus <- CSourceFile$new(private$..x, name = private$..name)$execute()
-      return(corpus)
-    },
-
     dir = function() {
       private$..methodName = 'dir'
       corpus <- CSourceDir$new(private$..x, name = private$..name)$execute()

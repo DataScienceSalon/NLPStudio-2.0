@@ -56,7 +56,7 @@ corpus <- CSource$new(x)$qdap()
 \seealso{
 Other Corpus Source Classes: \code{\link{CSource0}},
   \code{\link{CSourceDir}}, \code{\link{CSourceQuanteda}},
-  \code{\link{CSourceVector}}
+  \code{\link{CSourceTM}}, \code{\link{CSourceVector}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

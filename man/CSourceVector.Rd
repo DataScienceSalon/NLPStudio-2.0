@@ -23,15 +23,29 @@ a single Text object and one Document object.
 \section{Methods}{
 
  \itemize{
-  \item{\code{new()}}{Initializes an object of the CSourceVector class.}
+  \item{\code{new(x, name = NULL)}}{Initializes an object of the CSourceVector class.}
   \item{\code{execute()}}{Executes the process of sourcing the Corpus object.}
  }
 }
 
+\examples{
+text <- c("The firm possesses unparalleled leverage in Washington,
+thanks in part to its track record of funneling executives into
+senior government posts. Even the Trump administration, which
+rode a populist wave to electoral victory, is stocked with
+Goldman alumni, including Treasury Secretary Steven Mnuchin and
+the departing White House economic adviser Gary D. Cohn.",
+"Goldman is also an adviser to many of America’s — and the
+world’s — largest companies, ranging from stalwarts like Walt
+Disney to upstarts like Uber.")
+
+corpus <- CSource$new(x = txt, name = "Goldman")$vector()
+
+}
 \seealso{
 Other Corpus Source Classes: \code{\link{CSource0}},
   \code{\link{CSourceDir}}, \code{\link{CSourceQuanteda}},
-  \code{\link{CSource}}
+  \code{\link{CSourceTM}}, \code{\link{CSource}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

@@ -21,6 +21,21 @@ VVInit <- R6::R6Class(
 
   private = list(
 
+    validateTM = function(object, x) {
+      status <- list()
+      status[['code']] <- TRUE
+
+      classes <- c("VCorpus", "Corpus", "SimpleCorpus", "PCorpus")
+
+      if (!(class(x)[1] %in% classes)) {
+        status$code <- FALSE
+        status$msg <- paste0("Invalid object. Must be a tm package 'VCorpus', ",
+                             "'Corpus','SimpleCorpus' or 'PCorpus' object.")
+      }
+
+      return(status)
+    },
+
     validateQ = function(object, x) {
       status <- list()
       status[['code']] <- TRUE
@@ -154,6 +169,11 @@ VVInit <- R6::R6Class(
     csourceQuanteda = function(object) {
       p <- object$getParams()
       return(private$validateQ(object, p$x))
+    },
+
+    csourceTM = function(object) {
+      p <- object$getParams()
+      return(private$validateTM(object, p$x))
     }
   )
 )

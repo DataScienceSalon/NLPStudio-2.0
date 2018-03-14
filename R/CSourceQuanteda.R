@@ -4,12 +4,18 @@
 #'
 #' @section Methods:
 #'  \itemize{
-#'   \item{\code{new()}}{Initializes an object of the CSourceQuanteda class.}
+#'   \item{\code{new(x, name = NULL)}}{Initializes an object of the CSourceQuanteda class.}
 #'   \item{\code{execute()}}{Executes the process of sourcing the Corpus object.}
 #'  }
 #'
 #' @param name Optional character vector indicating name for Corpus object.
 #' @param x Character vector or a list of character vectors containing text.
+#'
+#' @examples
+#' text <- readtext::readtext(file = d1)
+#' q <- quanteda::corpus(text)
+#'
+#' corpus <- CSource$new(x = q, name = "Joy")$quanteda()
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
