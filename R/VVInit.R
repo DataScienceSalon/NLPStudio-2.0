@@ -21,13 +21,63 @@ VVInit <- R6::R6Class(
 
   private = list(
 
-    validateTM = function(object, x) {
+    validateSplits = function(object) {
+
       status <- list()
       status[['code']] <- TRUE
 
+      p <- object$getParams()
+
+      # Validate class of parameter
+      if ("SplitCorpus" %in% class(object)[1]) {
+        if (!("Corpus" %in%  class(p$x)[1])) {
+          status$code <- FALSE
+          status$msg <- paste0("Object must be of the Corpus class. ",
+                               "See ?", class(object)[1], " for further assistance.")
+          return(status)
+        }
+      } else if ("SplitDocument" %in% class(object)[1]) {
+        if (!("Document" %in%  class(p$x)[1])) {
+          status$code <- FALSE
+          status$msg <- paste0("Object must be of the Document class. ",
+                               "See ?", class(object)[1], " for further assistance.")
+          return(status)
+        }
+      } else {
+        status$code <- FALSE
+        status$msg <- paste0("This method is for validating SplitCorpus and ",
+                             "SplitDocument class instantiation.",
+                             "See ?", class(object)[1], " for further assistance.")
+        return(status)
+      }
+
+
+      # Validate splits add to 1
+      if (sum(p$splits) != 1) {
+        status$code <- FALSE
+        status$msg <- paste0("Splits must add to one.")
+        return(status)
+      }
+      if (!is.null(p$setNames)) {
+        if (length(p$setNames) != length(p$splits)) {
+          status$code <- FALSE
+          status$msg <- paste0("The setNames vector must be of length zero ",
+                               " or length equal to that of the splits vector.
+                               See ?", class(object)[1], " for further assistance.")
+          return(status)
+        }
+      }
+      return(status)
+    },
+
+    validateTM = function(object) {
+      status <- list()
+      status[['code']] <- TRUE
+
+      p <- object$getParams()
       classes <- c("VCorpus", "Corpus", "SimpleCorpus", "PCorpus")
 
-      if (!(class(x)[1] %in% classes)) {
+      if (!(class(p$x)[1] %in% classes)) {
         status$code <- FALSE
         status$msg <- paste0("Invalid object. Must be a tm package 'VCorpus', ",
                              "'Corpus','SimpleCorpus' or 'PCorpus' object.")
@@ -37,10 +87,13 @@ VVInit <- R6::R6Class(
     },
 
     validateQ = function(object, x) {
+
       status <- list()
       status[['code']] <- TRUE
 
-      if (!("corpus" %in% class(x)[1])) {
+      p <- object$getParams()
+
+      if (!("corpus" %in% class(p$x)[1])) {
         status$code <- FALSE
         status$msg <- paste0("Invalid object. Must be a Quanteda 'corpus' object.")
       }
@@ -48,18 +101,20 @@ VVInit <- R6::R6Class(
       return(status)
     },
 
-    validateDir = function(object, x) {
+    validateDir = function(object) {
 
       status <- list()
       status[['code']] <- TRUE
 
-      if (class(x)[1] == 'character') {
+      p <- object$getParams()
 
-        if (isDirectory(x)) {
-          files <- list.files(x, full.names = TRUE)
+      if (class(p$x)[1] == 'character') {
+
+        if (isDirectory(p$x)) {
+          files <- list.files(p$x, full.names = TRUE)
         } else {
-          glob <- basename(x)
-          dir <- dirname(x)
+          glob <- basename(p$x)
+          dir <- dirname(p$x)
           files <- list.files(dir, pattern = glob2rx(glob), full.names = TRUE)
         }
 
@@ -75,13 +130,15 @@ VVInit <- R6::R6Class(
       return(status)
     },
 
-    validateVector = function(object, x) {
+    validateVector = function(object) {
       status <- list()
       status[['code']] <- TRUE
 
-      if (!("character" %in% class(x)[1])) {
-        if ("list" %in% class(x)[1]) {
-          classes <- unique(sapply(x, function(i) {class(i)[1]}))
+      p <- object$getParams()
+
+      if (!("character" %in% class(p$x)[1])) {
+        if ("list" %in% class(p$x)[1]) {
+          classes <- unique(sapply(p$x, function(i) {class(i)[1]}))
           if (length(classes) > 1) {
             status$code <- FALSE
             status$msg <- paste0("List must contain only character vectors.")
@@ -101,12 +158,14 @@ VVInit <- R6::R6Class(
       return(status)
     },
 
-    validateFile = function(object, x) {
+    validateFile = function(object) {
 
       status <- list()
       status[['code']] <- TRUE
 
-      if (!(R.utils::isFile(x))) {
+      p <- object$getParams()
+
+      if (!(R.utils::isFile(p$x))) {
         status$code <- FALSE
         status$msg <- paste0("File ", x, " does not exist.",
                              "See ?", class(object)[1],
@@ -115,13 +174,16 @@ VVInit <- R6::R6Class(
       return(status)
     },
 
-    validateClass = function(object, param, classes) {
+    validateClass = function(object, classes) {
 
       status <- list()
       status[['code']] <- TRUE
 
-      if (!is.null(param)) {
-        if  (!(class(param)[1] %in% classes)) {
+      p <- object$getParams()
+
+      if (!is.null(p$x)) {
+
+        if  (!(class(p$x)[1] %in% classes)) {
           status[['code']] <- FALSE
           status[['msg']] <- paste0("Invalid class. Cannot create ",
                                     class(object)[1],
@@ -130,6 +192,7 @@ VVInit <- R6::R6Class(
                                     " for further assistance")
         }
       }
+
       return(status)
     }
   ),
@@ -151,28 +214,38 @@ VVInit <- R6::R6Class(
 
     },
     document = function(object) {
-      p <- object$getParams()
-      return(private$validateClass(object, p$x, classes = "character"))
+      return(private$validateClass(object, classes = "character"))
     },
 
+    #-------------------------------------------------------------------------#
+    #                   Validate Corpus Source Classes                        #
+    #-------------------------------------------------------------------------#
+
     csourceVector = function(object) {
-      p <- object$getParams()
-      return(private$validateVector(object, p$x))
+      return(private$validateVector(object))
     },
 
     csourceDir = function(object) {
-      p <- object$getParams()
-      return(private$validateDir(object, p$x))
+      return(private$validateDir(object))
     },
 
     csourceQuanteda = function(object) {
-      p <- object$getParams()
-      return(private$validateQ(object, p$x))
+      return(private$validateQ(object))
     },
 
     csourceTM = function(object) {
-      p <- object$getParams()
-      return(private$validateTM(object, p$x))
+      return(private$validateTM(object))
+    },
+
+    #-------------------------------------------------------------------------#
+    #                 Validate Text Processing Classes                        #
+    #-------------------------------------------------------------------------#
+    splitCorpus = function(object) {
+      return(private$validateSplits(object))
+    },
+
+    splitDocument = function(object) {
+      return(private$validateSplits(object))
     }
   )
 )

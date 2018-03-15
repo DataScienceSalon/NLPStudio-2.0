@@ -61,9 +61,9 @@ TextStudio0 <- R6::R6Class(
       }
 
       # Log it
-      private$..state <- paste0("Executed ", class(self)[1], " on ",
+      private$..action <- paste0("Executed ", class(self)[1], " on ",
                                 private$..x$getName(), ". ")
-      self$logIt()
+      private$logIt()
 
       return(private$..x)
     }

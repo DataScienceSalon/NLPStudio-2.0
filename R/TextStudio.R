@@ -52,7 +52,7 @@ TextStudio <- R6::R6Class(
       # Instantiate variables
       private$..className <- 'TextStudio'
       private$..methodName <- 'initialize'
-      private$..state <- paste0("TextStudio, ", private$..meta[["name"]], ", instantiated.")
+      private$..action <- paste0("TextStudio, ", private$..meta[["name"]], ", instantiated.")
       private$..logs <- LogR$new()
       private$..x <- x
 
@@ -60,7 +60,7 @@ TextStudio <- R6::R6Class(
       if (private$validateParams()$code == FALSE) stop()
 
       # Create log entry
-      self$logIt()
+      private$logIt()
 
       invisible(self)
     },
@@ -75,19 +75,19 @@ TextStudio <- R6::R6Class(
       private$..methodName <- "addCommand"
 
       if (!c("TextStudio0") %in% class(cmd)) {
-        private$..state <- paste0("Invalid text command object. Object must be ",
+        private$..action <- paste0("Invalid text command object. Object must be ",
                                   "of the TextStudio0 classes.  See ?", class(self)[1],
                                   " for further assistance.")
-        self$logIt("Error")
+        private$logIt("Error")
         stop()
       }
 
       name <- cmd$getName()
       private$..jobQueue[[name]] <- cmd
 
-      private$..state <- paste0("Added ", cmd$getName(), " to ", private$..x$getName(),
+      private$..action <- paste0("Added ", cmd$getName(), " to ", private$..x$getName(),
                                 " job queue." )
-      self$logIt()
+      private$logIt()
 
       invisible(self)
     },
@@ -97,19 +97,19 @@ TextStudio <- R6::R6Class(
       private$..methodName <- "removeCommand"
 
       if (!c("TextStudio0") %in% class(cmd)) {
-        private$..state <- paste0("Invalid text command object. Object must be ",
+        private$..action <- paste0("Invalid text command object. Object must be ",
                                   "of the TextStudio0 classes.  See ?", class(self)[1],
                                   " for further assistance.")
-        self$logIt("Error")
+        private$logIt("Error")
         stop()
       }
 
       name <- cmd$getName()
       private$..jobQueue[[name]] <- NULL
 
-      private$..state <- paste0("Removed ", cmd$getName(), " from ", private$..x$getName(),
+      private$..action <- paste0("Removed ", cmd$getName(), " from ", private$..x$getName(),
                                 " job queue." )
-      self$logIt()
+      private$logIt()
 
       invisible(self)
 
@@ -123,9 +123,9 @@ TextStudio <- R6::R6Class(
         private$..x <- private$..jobQueue[[i]]$execute(private$..x)
       }
 
-      private$..state <- paste0("Processed text processing commands on ",
+      private$..action <- paste0("Processed text processing commands on ",
                                 private$..x$getName(), "." )
-      self$logIt()
+      private$logIt()
 
       invisible(self)
 

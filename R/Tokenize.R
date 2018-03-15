@@ -65,8 +65,8 @@ Tokenize <- R6::R6Class(
       data <- Data$new(id = id, content = tokenized)
       document$addDNA(data)
       
-      private$..state <- paste0("Tokenized ", document$getName(), " document.")
-      self$logIt()
+      private$..action <- paste0("Tokenized ", document$getName(), " document.")
+      private$logIt()
       
       return(document)
     },
@@ -78,8 +78,8 @@ Tokenize <- R6::R6Class(
       lapply(docs, function(d) {
         corpus$addDocument(private$processDocument(d))
       })
-      private$..state <- paste0("Tokenized ", corpus$getName(), " corpus. ")
-      self$logIt()
+      private$..action <- paste0("Tokenized ", corpus$getName(), " corpus. ")
+      private$logIt()
       return(corpus)
     }
   ),
@@ -106,9 +106,9 @@ Tokenize <- R6::R6Class(
       corpus <- private$processCorpus(private$..x)
       
       # Log it
-      private$..state <- paste0("Executed ", class(self)[1], " on ",
+      private$..action <- paste0("Executed ", class(self)[1], " on ",
                                 private$..x$getName(), ". ")
-      self$logIt()
+      private$logIt()
       
       return(corpus)
     },

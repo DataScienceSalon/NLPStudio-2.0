@@ -214,12 +214,14 @@ Document <- R6::R6Class(
     #-------------------------------------------------------------------------#
     read = function(path, repair = FALSE) {
 
+
+      private$..methodName <- 'read'
+
       # Validate parameter
       private$..params <- list()
       private$..params$path <- path
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validateParams(what = "read")$code == FALSE) stop()
 
-      private$..methodName <- 'read'
       content <- IO$new()$read(path = path, repair = repair)
       private$..content <- private$compress(content)
       private$modified()

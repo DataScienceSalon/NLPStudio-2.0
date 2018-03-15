@@ -6,16 +6,17 @@
 \title{SplitCorpus}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-SplitCorpus$new(x, trainSize = .7, valSize = .15, testSize = .15, seed = 232)$execute()$getResult()
+SplitCorpus$new(x, splits = c(.7, .15, .15),
+                       setNames =  c("Train", "Validation", "Test"),
+                       seed = 232)$execute()
 }
 \arguments{
 \item{x}{Object of to be processed. This can be an object of the Corpus, Document, character classes, or a list of character vectors.}
 
-\item{trainSize}{Numeric between 0 and 1, indicating the proportion of the data set to include in the training set}
+\item{splits}{Numeric vector of splits.}
 
-\item{valSize}{Numeric between 0 and 1, indicating the proportion of the data set to include in the validation set}
-
-\item{testSize}{Numeric between 0 and 1, indicating the proportion of the data set to include in the test set}
+\item{setNames}{Character string vector, of equal length to the splits vector,
+containing the names to which the cross-validation sets will be assigned.}
 
 \item{seed}{Numeric seed used by the sample function.}
 }
@@ -99,7 +100,6 @@ Other TextStudio Classes: \code{\link{LowerCaseCmd}},
   \code{\link{ReplaceWordElongationCmd}},
   \code{\link{ReplaceWordElongation}},
   \code{\link{SplitCorpusCmd}},
-  \code{\link{SplitDocumentCmd}},
   \code{\link{SplitDocument}}, \code{\link{StripTextCmd}},
   \code{\link{Tokenize}}
 }

@@ -192,16 +192,16 @@ Entity <- R6::R6Class(
       # Validate
       if (!is.null(key)) {
         if ('class' %in% key) {
-          private$..state <- "Unable to change the 'class' of an object."
+          private$..action <- "Unable to change the 'class' of an object."
           private$logIt("Warn")
         }
       }
       if (!is.null(key) & !is.null(value) & (length(key) != length(value))) {
-        private$..state <- "Non-null key/value pairs must be of equal length"
+        private$..action <- "Non-null key/value pairs must be of equal length"
         private$logIt("Error")
         stop()
       } else if (is.null(key) & (!(is.null(value)))) {
-        private$..state <- "Unable to change meta data. No key provided for value."
+        private$..action <- "Unable to change meta data. No key provided for value."
         private$logIt("Error")
         stop()
       }
@@ -231,7 +231,7 @@ Entity <- R6::R6Class(
           if (length(keys) > 0) {
             return(as.data.frame(private$..meta$state[names(private$..meta$state) %in% keys]))
           } else {
-            private$..state <- "Non existent metadata variable"
+            private$..action <- "Non existent metadata variable"
             private$logIt("Warn")
             return(NULL)
           }

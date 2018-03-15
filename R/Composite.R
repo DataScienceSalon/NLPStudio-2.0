@@ -175,10 +175,6 @@ Composite <- R6::R6Class(
         objects <- private$..attachments[listCondition]
       }
 
-      if (length(objects) == 1) {
-        objects <- objects[[1]]
-      }
-
       private$accessed()
 
       return(objects)
@@ -187,7 +183,7 @@ Composite <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Summary Method                                #
     #-------------------------------------------------------------------------#
-    summary = function(meta = TRUE, stats = TRUE, system = TRUE, app = TRUE,
+    summary = function(meta = TRUE, stats = TRUE, system = TRUE, state = TRUE,
                        quiet = FALSE, abbreviated = FALSE, attachments = TRUE) {
       if (abbreviated) {
         result <- private$summaryShort()
@@ -200,9 +196,9 @@ Composite <- R6::R6Class(
           section <- c(section, "Metadata")
         }
 
-        if (app) {
+        if (state) {
           result$app <- private$summaryState(quiet = quiet)
-          section <- c(section, "Application Info")
+          section <- c(section, "State Info")
         }
 
         if (attachments) {

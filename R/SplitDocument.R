@@ -4,16 +4,19 @@
 #' SplitDocument
 #'
 #'
-#' \code{SplitDocument} Splits a Document object into training, test and optionally, validation sets
+#' \code{SplitDocument} Splits a Document object into cross-validation sets.
 #'
-#' Splits a Document object into training, test, and optionally, validation sets.
+#' Splits a Document object into cross validation sets, given document
+#' split proportions.
 #'
-#' @usage SplitDocument$new(x, trainSize = .7, valSize = .15, testSize = .15, seed = 232)$execute()$getResult()
+#' @usage SplitDocument$new(x, splits = c(.7, .15, .15),
+#'                        setNames =  c("Train", "Validation", "Test"),
+#'                        seed = 232)$execute()
 #'
 #' @template textStudioParams
-#' @param trainSize Numeric between 0 and 1, indicating the proportion of the data set to include in the training set
-#' @param valSize Numeric between 0 and 1, indicating the proportion of the data set to include in the validation set
-#' @param testSize Numeric between 0 and 1, indicating the proportion of the data set to include in the test set
+#' @param splits Numeric vector of splits.
+#' @param setNames Character string vector, of equal length to the splits vector,
+#' containing the names to which the cross-validation sets will be assigned.
 #' @param seed Numeric seed used by the sample function.
 #' @template textStudioMethods
 #' @template textStudioClasses
@@ -28,106 +31,66 @@ SplitDocument <- R6::R6Class(
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = Split0,
-  
+
   private = list(
-    cloneDocument = function(inDocument, outDocument) {
-      
-      keys <- names(as.list(inDocument$meta()))
-      keys <- keys[keys!= "name"]
-      values <- as.list(inDocument$meta())
-      values["name"] <- NULL
-      lapply(seq_along(keys), function(k) {
-        outDocument$meta(key = keys[[k]], value = values[[k]])
-      })
-      
-      return(outDocument)
+
+    spawn = function() {
+      Document$new()
     }
   ),
 
   public = list(
-
-    initialize = function(x, trainSize, valSize = 0, testSize, name = NULL, seed = NULL)  {
+    initialize = function(x, name = NULL, splits, setNames = NULL, seed = NULL) {
 
       private$..className <- "SplitDocument"
       private$..methodName <- "initialize"
-      private$..x <- x
-      private$..meta[["name"]] <- name
-      private$..trainSize <- trainSize
-      private$..valSize <- valSize
-      private$..testSize <- testSize
-      private$..seed <- seed
       private$..logs <- LogR$new()
+
+      private$..params <- list()
+      private$..params$x <- x
+      private$..params$splits <- splits
+      private$..params$setNames <- setNames
 
       if (private$validateParams()$code == FALSE) stop()
 
-      # Confirm splits sum to one.
-      if (sum(trainSize, valSize, testSize) != 1) {
-        private$..state <- paste0("Unable to perform split operation. ",
-                                  "The sum of proportions must equal one. ",
-                                  "See ?", class(self)[1], " for further assistance.")
-        self$logIt("Error")
-        stop()
-      }
+      private$..x <- x
+      private$..splits <- splits
+      private$..setNames <- setNames
+      private$..seed <- seed
+
+      # Initialize individual cross-validation sets
+      private$initCvSets()
 
       # log
-      private$..state <- paste0("Successfully initialized SplitDocument class object.")
-      self$logIt()
+      private$..action <- paste0("Successfully initialized SplitDocument class object.")
+      private$logIt()
 
       invisible(self)
     },
 
     execute = function() {
-      
+
       # Obtain content
-      content <- private$..x$text
-      
+      content <- private$..x$content
+
       # Set seed
       if (!is.null(private$..seed)) {
         set.seed(private$..seed)
       }
 
       # Establish sample indices
-      proportions <- c(private$..trainSize, private$..valSize, private$..testSize)
-      x <- c(1:length(proportions))
-      ss <- sample(x, size = length(content), replace = TRUE, prob = proportions)
-      
-      # Format name
-      name <- ifelse(is.null(private$..meta[["name"]]), private$..x$getName(), private$..meta[["name"]])
+      x <- c(1:length(private$..splits))
+      ss <- sample(x, size = length(content), replace = TRUE, prob = private$..splits)
 
-      # Create training set
-      if (private$..trainSize > 0) {
-        train <- Document$new(name = paste0(name, ".train"))
-        train <- private$cloneDocument(private$..x, train)
-        train$text <- content[ss==1]
-        private$..cvSet[["train"]] <- train
+      for (i in 1:length(private$..cvSets)) {
+
+        private$..cvSets[[i]]$content <- content[ss == i]
       }
-
-      # Create validation set
-      if (private$..valSize > 0) {
-        val <- Document$new(name = paste0(name, ".validation"))
-        val <- private$cloneDocument(private$..x, val)
-        val$text <- content[ss==2]
-        private$..cvSet[["validation"]] <- val
-      }
-
-      # Create test set
-      if (private$..testSize > 0) {
-        test <- Document$new(name = paste0(name, ".test"))
-        test <- private$cloneDocument(private$..x, test)
-        test$text <- content[ss==3]
-        private$..cvSet[["test"]] <- test
-      }
-
       # log
-      private$..state <- paste0("Successfully split Document")
-      self$logIt()
+      private$..action <- paste0("Successfully split Document")
+      private$logIt()
 
-      invisible(self)
-    },
-
-
-    getResult = function() {
-      return(private$..cvSet)
+      invisible(private$..cvSets)
     },
 
     #-------------------------------------------------------------------------#

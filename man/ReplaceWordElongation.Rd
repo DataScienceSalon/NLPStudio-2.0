@@ -111,7 +111,6 @@ Other TextStudio Classes: \code{\link{LowerCaseCmd}},
   \code{\link{ReplaceTokens}},
   \code{\link{ReplaceWordElongationCmd}},
   \code{\link{SplitCorpusCmd}}, \code{\link{SplitCorpus}},
-  \code{\link{SplitDocumentCmd}},
   \code{\link{SplitDocument}}, \code{\link{StripTextCmd}},
   \code{\link{Tokenize}}
 }
