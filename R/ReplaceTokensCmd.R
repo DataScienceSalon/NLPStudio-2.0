@@ -53,7 +53,7 @@ ReplaceTokensCmd <- R6::R6Class(
     initialize = function(tokens, replacement, leadspace = FALSE, trailspace = FALSE,
                           fixed = TRUE, trim = FALSE, orderPattern = fixed) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceTokensCmd"
+      private$..meta$object$name <- "ReplaceTokensCmd"
       private$..tokens <- tokens
       private$..replacement <- replacement
       private$..leadspace <- leadspace

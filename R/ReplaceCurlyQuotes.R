@@ -32,7 +32,7 @@ ReplaceCurlyQuotes <- R6::R6Class(
 
   private = list(
 
-    processText = function(content) {
+    processDocument = function(content) {
       Encoding(content) <- "latin1"
       content <- textclean::replace_curly_quote(x = content)
       return(content)
@@ -43,7 +43,7 @@ ReplaceCurlyQuotes <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "ReplaceCurlyQuotes"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceCurlyQuotes"
+      private$..meta$object$name <-  "ReplaceCurlyQuotes"
       private$..x <- x
       private$..logs  <- LogR$new()
       invisible(self)

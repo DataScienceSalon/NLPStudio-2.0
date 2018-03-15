@@ -29,7 +29,7 @@ LowerCaseCmd <- R6::R6Class(
     initialize = function(keepChars = NULL, removeDigits = TRUE,
                           removeApostrophe = TRUE, lowerCase = TRUE) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "LowerCaseCmd"
+      private$..meta$object$name <- "LowerCase"
       private$..logs  <- LogR$new()
       invisible(self)
     },

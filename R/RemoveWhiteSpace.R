@@ -26,7 +26,7 @@ RemoveWhiteSpace <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveWhiteSpace"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "RemoveWhiteSpace"
+      private$..meta$object$name <-  "RemoveWhiteSpace"
       private$..x <- x
       private$..regex <- "\\s+"
       private$..replacement <- " "

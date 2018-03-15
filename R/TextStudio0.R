@@ -29,20 +29,21 @@ TextStudio0 <- R6::R6Class(
     ..replacement = character(),
 
     processDocument = function(document) {
-      content <- gsub(private$..regex,
+      document$content <- gsub(private$..regex,
                       private$..replacement,
-                      document$text, perl = TRUE)
-      document$text <- content
+                      document$content, perl = TRUE)
+      document$log(event = private$..className)
       return(document)
     },
 
     processCorpus = function() {
-      docs <- private$..x$getDocuments()
+      docs <- private$..x$get()
       for (i in 1:length(docs)) {
         doc <- private$processDocument(docs[[i]])
         private$..x$attach(doc)
       }
-      return()
+      private$..x$log(event = private$..className)
+      return(TRUE)
     }
   ),
 
@@ -61,11 +62,18 @@ TextStudio0 <- R6::R6Class(
       }
 
       # Log it
-      private$..action <- paste0("Executed ", class(self)[1], " on ",
+      private$..event <- paste0("Executed ", class(self)[1], " on ",
                                 private$..x$getName(), ". ")
       private$logIt()
 
       return(private$..x)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                           Visitor Methods                               #
+    #-------------------------------------------------------------------------#
+    accept = function(visitor)  {
+      visitor$textStudio(self)
     }
   )
 )

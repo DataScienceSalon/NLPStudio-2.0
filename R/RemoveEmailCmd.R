@@ -28,7 +28,7 @@ RemoveEmailCmd <- R6::R6Class(
   public = list(
     initialize = function() {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "RemoveEmailCmd"
+      private$..meta$object$name <- "RemoveEmailCmd"
       private$..logs  <- LogR$new()
       invisible(self)
     },

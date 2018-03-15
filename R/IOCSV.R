@@ -37,10 +37,10 @@ IOCSV <- R6::R6Class(
         content <- read.csv(file = path, header = header,
                             stringsAsFactors = FALSE,
                             sep = ",", quote = "\"'")
-        private$..action <- paste0("Successfully read ", fileName, ".")
+        private$..event <- paste0("Successfully read ", fileName, ".")
         private$logIt()
       } else {
-        private$..action <- paste0('Unable to read ', fileName, '. ',
+        private$..event <- paste0('Unable to read ', fileName, '. ',
                                   'File does not exist.')
         private$logIt("Error")
         stop()
@@ -60,7 +60,7 @@ IOCSV <- R6::R6Class(
 
       write.csv(content, file = path, row.names = FALSE)
 
-      private$..action <- paste0("Successfully wrote ", fileName, ".")
+      private$..event <- paste0("Successfully wrote ", fileName, ".")
       private$logIt()
 
       invisible(self)

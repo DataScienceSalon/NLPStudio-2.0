@@ -246,6 +246,10 @@ VVInit <- R6::R6Class(
 
     splitDocument = function(object) {
       return(private$validateSplits(object))
+    },
+
+    textStudio = function(object) {
+      return(private$validateClass(object, classes = c("Corpus", "Document")))
     }
   )
 )

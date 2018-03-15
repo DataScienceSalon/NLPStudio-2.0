@@ -28,7 +28,7 @@ RemoveWhiteSpaceCmd <- R6::R6Class(
   public = list(
     initialize = function() {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "RemoveWhiteSpaceCmd"
+      private$..meta$object$name <- "RemoveWhiteSpaceCmd"
       private$..logs  <- LogR$new()
       invisible(self)
     },

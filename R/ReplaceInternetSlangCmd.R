@@ -36,7 +36,7 @@ ReplaceInternetSlangCmd <- R6::R6Class(
   public = list(
     initialize = function(slang = NULL, replacement = NULL, ignoreCase = TRUE) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceInternetSlangCmd"
+      private$..meta$object$name <- "ReplaceInternetSlangCmd"
       private$..slang <- slang
       private$..replacement <- replacement
       private$..ignoreCase <- ignoreCase

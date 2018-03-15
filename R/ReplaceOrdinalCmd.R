@@ -35,7 +35,7 @@ ReplaceOrdinalCmd <- R6::R6Class(
   public = list(
     initialize = function(joinOrdinal = FALSE, remove = FALSE) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceOrdinalCmd"
+      private$..meta$object$name <- "ReplaceOrdinalCmd"
       private$..joinOrdinal <- joinOrdinal
       private$..remove <- remove
       private$..logs  <- LogR$new()

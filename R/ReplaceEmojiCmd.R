@@ -34,7 +34,7 @@ ReplaceEmojiCmd <- R6::R6Class(
   public = list(
     initialize = function(emojis = NULL) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceEmojiCmd"
+      private$..meta$object$name <- "ReplaceEmojiCmd"
       private$..emojis <- emojis
       private$..logs  <- LogR$new()
       invisible(self)

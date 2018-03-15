@@ -11,23 +11,40 @@ myDocument <- Document$new(name = "skiReport", x = avalanche)
 \arguments{
 \item{x}{Character vector containing Document}
 
+\item{name}{Character string containing the name for the Document object.}
+
+\item{repair}{Logical. If TRUE, the read method will invoke the RepairFile class on the text.}
+
+\item{task}{Character string containing the name of the TextStudio class associated with the change to the Document content}
+
 \item{key}{Character string or character vector containing the key or
 keys associated a metadata field or fields.}
 
 \item{value}{Character string or character vector, equal in length to
 the key vector, containing the metadata value or values.}
+
+\item{meta}{Logical.  If TRUE, object metadata are included in the summary.}
+
+\item{stats}{Logical.  If TRUE, object descriptive statistics are included in the summary.}
+
+\item{state}{Logical. If TRUE, object state information is included in the summary.}
+
+\item{system}{Logical. If TRUE, system information is included in the summary.}
+
+\item{quiet}{Logical, If TRUE, summary is not printed to console.}
+
+\item{abbreviated}{Logical.  If TRUE, a one row data frame containing key metadata is returned.}
 }
 \value{
 Document object, containing the Document content, the metadata and
 the methods to manage both.
 }
 \description{
-\code{Document} Class for creating, managing, reading and writing
-Document content and metadata.
+\code{Document} Class for creating, managing, reading and writing Document content and metadata.
 }
 \details{
 Class contains Document content and metadata for the Document object.
-The object is instantiated with a name and character
+The object may be instantiated with a name and character
 vectors containing the Document text. Once the object is created, users may
 add, change and remove metadata via key / value pairs. IO
 methods support reading and writing the Documents in a variety
@@ -37,7 +54,14 @@ class.
 \section{Core Methods}{
 
  \itemize{
-  \item{\code{new()}}{Initializes an object of the Document class.}
+  \item{\code{new(x = NULL, name = NULL)}}{Initializes an object of the Document class.}
+  \item{\code{content(value)}}{Active binding method for updating Document text content.}
+  \item{\code{read(path, repair = FALSE)}}{Reads text from a file designated by the path variable.
+  If repair is set to TRUE, select ASCII control characters are replaced with spaces
+  using \code{\link[NLPStudio]{RepairFile}} }
+  \item{\code{write(path)}}{Writes the Document object content to a file in plain text format.}
+  \item{\code{summary(meta = TRUE, stats = TRUE, state = TRUE, system = TRUE,
+  quiet = FALSE, abbreviated = FALSE)}}{Summarizes Document object.}
  }
 }
 
@@ -53,6 +77,11 @@ class.
   and system metadata, in data frame format. If a character
   string or vector is passed via the key parameter, the value
   or values associated with the keys are returned.}
+  \item{\code{log(event = NULL)}}{Class for posting to and
+  retrieving an object's log. If the event parameter is provided,
+  the event is posted to the object's log and the log is returned
+  invisibly.  If the event parameter is NULL, the existing log
+  is returned.}
 }
 }
 
@@ -60,7 +89,7 @@ class.
 avalanche <- c("SAN FRANCISCO  — She was snowboarding with her boyfriend when ",
           "she heard someone scream 'Avalanche!'",
           "Then John, 39, saw 'a cloud of snow coming down.'")
-avalancheDocument <- Document$new(name = 'skiReport', content = avalanche)
+avalancheDocument <- Document$new(x = avalanche, name = 'skiReport')
 
 avalancheDocument <- myDocument$meta(key = c("author", "editor", "year"),
                       value = c("Dorfmeister", "Huffington", "2018"))

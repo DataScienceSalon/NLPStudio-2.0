@@ -27,7 +27,7 @@ RemoveSymbols <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveSymbols"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "RemoveSymbols"
+      private$..meta$object$name <-  "RemoveSymbols"
       private$..x <- x
       private$..regex <- "[^[:alnum:]]"
       private$..replacement <- " "

@@ -29,7 +29,7 @@ ReplaceBacktickCmd <- R6::R6Class(
   public = list(
     initialize = function() {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceBacktickCmd"
+      private$..meta$object$name <- "ReplaceBacktickCmd"
       private$..logs  <- LogR$new()
       invisible(self)
     },

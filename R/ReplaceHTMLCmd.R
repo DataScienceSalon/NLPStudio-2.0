@@ -34,7 +34,7 @@ ReplaceHTMLCmd <- R6::R6Class(
   public = list(
     initialize = function(symbol = TRUE) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceHTMLCmd"
+      private$..meta$object$name <- "ReplaceHTMLCmd"
       private$..symbol <- symbol
       private$..logs  <- LogR$new()
       invisible(self)

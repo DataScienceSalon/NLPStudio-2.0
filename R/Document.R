@@ -1,10 +1,9 @@
 #' Document
 #'
-#' \code{Document} Class for creating, managing, reading and writing
-#' Document content and metadata.
+#' \code{Document} Class for creating, managing, reading and writing Document content and metadata.
 #'
 #' Class contains Document content and metadata for the Document object.
-#' The object is instantiated with a name and character
+#' The object may be instantiated with a name and character
 #' vectors containing the Document text. Once the object is created, users may
 #' add, change and remove metadata via key / value pairs. IO
 #' methods support reading and writing the Documents in a variety
@@ -15,12 +14,23 @@
 #'
 #' @section Core Methods:
 #'  \itemize{
-#'   \item{\code{new()}}{Initializes an object of the Document class.}
+#'   \item{\code{new(x = NULL, name = NULL)}}{Initializes an object of the Document class.}
+#'   \item{\code{content(value)}}{Active binding method for updating Document text content.}
+#'   \item{\code{read(path, repair = FALSE)}}{Reads text from a file designated by the path variable.
+#'   If repair is set to TRUE, select ASCII control characters are replaced with spaces
+#'   using \code{\link[NLPStudio]{RepairFile}} }
+#'   \item{\code{write(path)}}{Writes the Document object content to a file in plain text format.}
+#'   \item{\code{summary(meta = TRUE, stats = TRUE, state = TRUE, system = TRUE,
+#'   quiet = FALSE, abbreviated = FALSE)}}{Summarizes Document object.}
 #'  }
 #' @template entityMethods
 #'
 #' @param x Character vector containing Document
+#' @param name Character string containing the name for the Document object.
+#' @param repair Logical. If TRUE, the read method will invoke the RepairFile class on the text.
+#' @param task Character string containing the name of the TextStudio class associated with the change to the Document content
 #' @template metaParams
+#' @template summaryParams
 #'
 #' @return Document object, containing the Document content, the metadata and
 #' the methods to manage both.
@@ -30,7 +40,7 @@
 #' avalanche <- c("SAN FRANCISCO  — She was snowboarding with her boyfriend when ",
 #'           "she heard someone scream 'Avalanche!'",
 #'           "Then John, 39, saw 'a cloud of snow coming down.'")
-#' avalancheDocument <- Document$new(name = 'skiReport', content = avalanche)
+#' avalancheDocument <- Document$new(x = avalanche, name = 'skiReport')
 #'
 #' avalancheDocument <- myDocument$meta(key = c("author", "editor", "year"),
 #'                       value = c("Dorfmeister", "Huffington", "2018"))
@@ -126,15 +136,15 @@ Document <- R6::R6Class(
 
       } else {
         if (!("character" %in% class(value))) {
-          private$..action <- "Document must be of the 'character' class."
+          private$..event <- "Document must be of the 'character' class."
           private$logIt("Error")
           stop()
         } else {
 
           private$..content <- private$compress(value)
           private$modified()
-          private$..action <- "Updated Document content."
-          self$state <- private$..action
+          private$..event <- "Updated Document content."
+          self$state <- private$..event
           private$logIt()
         }
       }

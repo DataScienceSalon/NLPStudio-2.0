@@ -45,7 +45,7 @@ StripTextCmd <- R6::R6Class(
     initialize = function(keepChars = NULL, removeDigits = TRUE,
                           removeApostrophe = TRUE, lowerCase = TRUE) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "StripTextCmd"
+      private$..meta$object$name <- "StripTextCmd"
       private$..keepChars <- keepChars
       private$..removeDigits <- removeDigits
       private$..removeApostrophe <- removeApostrophe

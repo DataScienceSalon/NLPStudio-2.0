@@ -38,7 +38,7 @@ ReplaceInternetSlang <- R6::R6Class(
     ..slang = character(),
     ..ignoreCase = logical(),
 
-    processText = function(content) {
+    processDocument = function(content) {
       content <- textclean::replace_internet_slang(x = content,
                                          slang = private$..slang,
                                          replacement = private$..replacement,
@@ -51,7 +51,7 @@ ReplaceInternetSlang <- R6::R6Class(
     initialize = function(x, slang = NULL, replacement = NULL, ignoreCase = TRUE) {
       private$..className <- "ReplaceInternetSlang"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceInternetSlang"
+      private$..meta$object$name <-  "ReplaceInternetSlang"
       private$..x <- x
       private$..slang <- slang
       private$..replacement <- replacement

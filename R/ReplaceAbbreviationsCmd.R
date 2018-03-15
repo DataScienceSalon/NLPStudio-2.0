@@ -37,7 +37,7 @@ ReplaceAbbreviationsCmd <- R6::R6Class(
   public = list(
     initialize = function(abbreviations = NULL, replacement = NULL, ignoreCase = TRUE) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceAbbreviationsCmd"
+      private$..meta$object$name <- "ReplaceAbbreviationsCmd"
       private$..abbreviations <- abbreviations
       private$..replacement <- replacement
       private$..ignoreCase <- ignoreCase

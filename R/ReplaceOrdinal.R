@@ -38,7 +38,7 @@ ReplaceOrdinal <- R6::R6Class(
     ..joinOrdinal = logical(),
     ..remove = logical(),
 
-    processText = function(content) {
+    processDocument = function(content) {
       content <- textclean::replace_number(x = content,
                                             num.paste = private$..joinOrdinal,
                                             remove = private$..remove)
@@ -50,7 +50,7 @@ ReplaceOrdinal <- R6::R6Class(
     initialize = function(x, joinOrdinal = FALSE, remove = FALSE) {
       private$..className <- "ReplaceOrdinal"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceOrdinal"
+      private$..meta$object$name <-  "ReplaceOrdinal"
       private$..x <- x
       private$..joinOrdinal <- joinOrdinal
       private$..remove <- remove

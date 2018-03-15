@@ -35,10 +35,10 @@ IOBin <- R6::R6Class(
 
       if (file.exists(path)) {
         content <- readBin(path, raw(), file.info(path)$size)
-        private$..action <- paste0("Successfully read ", fileName, ".")
+        private$..event <- paste0("Successfully read ", fileName, ".")
         private$logIt()
       } else {
-        private$..action <- paste0('Unable to read ', fileName, '. ',
+        private$..event <- paste0('Unable to read ', fileName, '. ',
                                   'File does not exist.')
         private$logIt("Error")
         stop()
@@ -59,7 +59,7 @@ IOBin <- R6::R6Class(
 
       writeBin(content, path)
 
-      private$..action <- paste0("Successfully wrote ", fileName, ".")
+      private$..event <- paste0("Successfully wrote ", fileName, ".")
       private$logIt()
 
       invisible(self)

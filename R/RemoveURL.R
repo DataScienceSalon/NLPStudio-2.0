@@ -28,7 +28,7 @@ RemoveURL <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveURL"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "RemoveURL"
+      private$..meta$object$name <-  "RemoveURL"
       private$..x <- x
       private$..regex <- "(?:(?:https?:\\/\\/)|(?:www\\.))[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b(?:[-a-zA-Z0-9@:%_\\+.~#?&/=]*)"
 

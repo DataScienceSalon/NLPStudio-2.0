@@ -28,7 +28,7 @@ ReplaceKernCmd <- R6::R6Class(
   public = list(
     initialize = function() {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceKernCmd"
+      private$..meta$object$name <- "ReplaceKernCmd"
       private$..logs  <- LogR$new()
       invisible(self)
     },

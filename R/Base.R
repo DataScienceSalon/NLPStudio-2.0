@@ -27,7 +27,7 @@ Base <- R6::R6Class(
     ..params = list(),
     ..className = character(),
     ..methodName = character(),
-    ..action = character(),
+    ..event = character(),
     ..logs = character(),
     ..log = data.frame(),
 
@@ -55,35 +55,35 @@ Base <- R6::R6Class(
         v <- Validator$new()
         status <- v$init(self)
         if (status$code == FALSE) {
-          private$..action <- status$msg
+          private$..event <- status$msg
           private$logIt("Error")
         }
       } else if (what == "get") {
         v <- Validator$new()
         status <- v$get(self)
         if (status$code == FALSE) {
-          private$..action <- status$msg
+          private$..event <- status$msg
           private$logIt("Error")
         }
       } else if (what == "attach") {
         v <- Validator$new()
         status <- v$attach(self)
         if (status$code == FALSE) {
-          private$..action <- status$msg
+          private$..event <- status$msg
           private$logIt("Error")
         }
       }  else if (what == "detach") {
         v <- Validator$new()
         status <- v$detach(self)
         if (status$code == FALSE) {
-          private$..action <- status$msg
+          private$..event <- status$msg
           private$logIt("Error")
         }
       } else if (what == "read") {
         v <- Validator$new()
         status <- v$read(self)
         if (status$code == FALSE) {
-          private$..action <- status$msg
+          private$..event <- status$msg
           private$logIt("Error")
         }
       }
@@ -97,7 +97,7 @@ Base <- R6::R6Class(
       private$..logs$entry$className <- private$..className
       private$..logs$entry$methodName <- private$..methodName
       private$..logs$entry$level <- level
-      private$..logs$entry$msg <- private$..action
+      private$..logs$entry$msg <- private$..event
       private$..logs$entry$fieldName <- fieldName
       private$..logs$created <- Sys.time()
       private$..logs$writeLog()
@@ -105,7 +105,7 @@ Base <- R6::R6Class(
       if (level %in% c("Info", 'info', 'INFO')) {
         log <- data.frame(user = Sys.info()[['user']],
                           date = Sys.time(),
-                          action = private$..action)
+                          event = private$..event)
         private$..log <- rbind(private$..log, log)
 
       }
@@ -119,5 +119,6 @@ Base <- R6::R6Class(
     getId = function() private$..meta$object$id,
     getName = function() private$..meta$object$name,
     getParams = function() private$..params
+
   )
 )

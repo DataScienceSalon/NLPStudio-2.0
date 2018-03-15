@@ -44,7 +44,7 @@ Tokenize <- R6::R6Class(
       
       private$..method <- "processDocument"
       
-      content <- document$text
+      content <- document$content
       
       # Produce data object content
       if (private$..what == "sentence") {
@@ -65,7 +65,7 @@ Tokenize <- R6::R6Class(
       data <- Data$new(id = id, content = tokenized)
       document$addDNA(data)
       
-      private$..action <- paste0("Tokenized ", document$getName(), " document.")
+      private$..event <- paste0("Tokenized ", document$getName(), " document.")
       private$logIt()
       
       return(document)
@@ -74,11 +74,11 @@ Tokenize <- R6::R6Class(
     processCorpus = function(corpus) {
       
       private$..method <- "processCorpus"
-      docs <- corpus$getDocuments()
+      docs <- corpus$get()
       lapply(docs, function(d) {
         corpus$addDocument(private$processDocument(d))
       })
-      private$..action <- paste0("Tokenized ", corpus$getName(), " corpus. ")
+      private$..event <- paste0("Tokenized ", corpus$getName(), " corpus. ")
       private$logIt()
       return(corpus)
     }
@@ -88,7 +88,7 @@ Tokenize <- R6::R6Class(
     initialize = function(x, what= NULL) {
       private$..className <- "Tokenize"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "Tokenize"
+      private$..meta$object$name <-  "Tokenize"
       private$..x <- x
       private$..what <- what
       private$..logs  <- LogR$new()
@@ -106,7 +106,7 @@ Tokenize <- R6::R6Class(
       corpus <- private$processCorpus(private$..x)
       
       # Log it
-      private$..action <- paste0("Executed ", class(self)[1], " on ",
+      private$..event <- paste0("Executed ", class(self)[1], " on ",
                                 private$..x$getName(), ". ")
       private$logIt()
       

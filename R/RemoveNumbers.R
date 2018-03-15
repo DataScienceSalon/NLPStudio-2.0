@@ -26,7 +26,7 @@ RemoveNumbers <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveNumbers"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "RemoveNumbers"
+      private$..meta$object$name <-  "RemoveNumbers"
       private$..x <- x
       private$..regex <- '[[:digit:]]'
       private$..replacement <- ""

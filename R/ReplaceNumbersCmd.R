@@ -35,7 +35,7 @@ ReplaceNumbersCmd <- R6::R6Class(
   public = list(
     initialize = function(joinNumbers = FALSE, remove = FALSE) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceNumbersCmd"
+      private$..meta$object$name <- "ReplaceNumbersCmd"
       private$..joinNumbers <- joinNumbers
       private$..remove <- remove
       private$..logs  <- LogR$new()

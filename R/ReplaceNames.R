@@ -36,9 +36,9 @@ ReplaceNames <- R6::R6Class(
 
     ..names = character(),
 
-    processText = function(content) {
+    processDocument = function(content) {
       content <- textclean::replace_names(x = content,
-                                          names = private$..meta[["name"]],
+                                          names = private$..meta$object$name,
                                           replacement = private$..replacement)
       return(content)
     }
@@ -48,9 +48,9 @@ ReplaceNames <- R6::R6Class(
     initialize = function(x, names = NULL, replacement = NULL) {
       private$..className <- "ReplaceNames"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceNames"
+      private$..meta$object$name <-  "ReplaceNames"
       private$..x <- x
-      private$..meta[["name"]] <- names
+      private$..meta$object$name <- names
       private$..replacement <- replacement
       private$..logs  <- LogR$new()
       invisible(self)

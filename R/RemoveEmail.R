@@ -26,7 +26,7 @@ RemoveEmail <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveEmail"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "RemoveEmail"
+      private$..meta$object$name <-  "RemoveEmail"
       private$..x <- x
       private$..regex <- "[a-zA-Z0-9\\-_~]+(\\.[a-zA-Z0-9\\-_~]+)*@[a-zA-Z0-9\\-_~]+(\\.[a-zA-Z0-9\\-_~]+)*\\.[a-zA-Z]{2,}"
       private$..replacement <- ""

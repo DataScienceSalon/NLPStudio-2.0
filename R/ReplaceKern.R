@@ -36,7 +36,7 @@ ReplaceKern <- R6::R6Class(
 
   private = list(
 
-    processText = function(content) {
+    processDocument = function(content) {
       content <- textclean::replace_kern(x = content)
       return(content)
     }
@@ -46,7 +46,7 @@ ReplaceKern <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "ReplaceKern"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceKern"
+      private$..meta$object$name <-  "ReplaceKern"
       private$..x <- x
       private$..logs  <- LogR$new()
       invisible(self)

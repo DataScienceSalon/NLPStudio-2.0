@@ -28,7 +28,7 @@ RemoveTwitter <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveTwitter"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "RemoveTwitter"
+      private$..meta$object$name <-  "RemoveTwitter"
       private$..x <- x
       private$..regex <- '\\B#\\w*[a-zA-Z]+\\w*'
       private$..replacement <- " "

@@ -108,7 +108,7 @@ Composite <- R6::R6Class(
 
         # Update date/time metadata and create log entry
         private$modified()
-        private$..action <- paste0("Attached ", a$getName(), " object to ", self$getName(), ".")
+        private$..event <- paste0("Attached ", a$getName(), " object to ", self$getName(), ".")
         private$logIt(level = "Info")
       }
 
@@ -141,13 +141,13 @@ Composite <- R6::R6Class(
         object <- private$..attachments[listCondition]
         private$..attachments[listCondition] <- NULL
         private$modified()
-        private$..action <- paste0("Detached ", object$getName, " from ",
+        private$..event <- paste0("Detached ", object$getName, " from ",
                                   self$getName, ".")
         private$logIt()
       } else {
         object <- NULL
         self$access()
-        private$..action <- paste0("Object is not attached to ",
+        private$..event <- paste0("Object is not attached to ",
                                   self$getName(), ". Returning NULL")
         private$logIt("Warn")
         return(object)

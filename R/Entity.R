@@ -44,7 +44,7 @@ Entity <- R6::R6Class(
 
     init = function(name = NULL, state = "instantiated") {
 
-      # Clear parameters variables and set datetime stamps
+      # Set datetime stamps
       private$created()
 
       # Creates unique identifier and update metadata as appropriate
@@ -63,7 +63,8 @@ Entity <- R6::R6Class(
                                                   " by ", Sys.info()[['user']], ".")
 
       # Log the entry
-      private$..action <- paste0(private$..className, " object, ", name, ", ", state, ".")
+      private$..event <- paste0(private$..className, " object, ", private$..meta$object$name,
+                                ", ", state, ".")
       private$..meta$state[["current"]] <- state
       private$..meta$state[["date"]] <- Sys.time()
       private$..meta$state[["user"]] <- Sys.info()[['user']]
@@ -170,7 +171,7 @@ Entity <- R6::R6Class(
         private$..meta$state[["current"]] <- value
         private$..meta$state[["date"]] <- Sys.time()
         private$..meta$state[['user']] <- Sys.info()[['user']]
-        private$..action <- paste0("State changed to '", value, "' by ", Sys.info()[['user']])
+        private$..event <- paste0("State changed to '", value, "' by ", Sys.info()[['user']])
         private$logIt()
       }
       invisible(self)
@@ -192,16 +193,16 @@ Entity <- R6::R6Class(
       # Validate
       if (!is.null(key)) {
         if ('class' %in% key) {
-          private$..action <- "Unable to change the 'class' of an object."
+          private$..event <- "Unable to change the 'class' of an object."
           private$logIt("Warn")
         }
       }
       if (!is.null(key) & !is.null(value) & (length(key) != length(value))) {
-        private$..action <- "Non-null key/value pairs must be of equal length"
+        private$..event <- "Non-null key/value pairs must be of equal length"
         private$logIt("Error")
         stop()
       } else if (is.null(key) & (!(is.null(value)))) {
-        private$..action <- "Unable to change meta data. No key provided for value."
+        private$..event <- "Unable to change meta data. No key provided for value."
         private$logIt("Error")
         stop()
       }
@@ -231,7 +232,7 @@ Entity <- R6::R6Class(
           if (length(keys) > 0) {
             return(as.data.frame(private$..meta$state[names(private$..meta$state) %in% keys]))
           } else {
-            private$..action <- "Non existent metadata variable"
+            private$..event <- "Non existent metadata variable"
             private$logIt("Warn")
             return(NULL)
           }
@@ -244,6 +245,23 @@ Entity <- R6::R6Class(
         }
       }
       invisible(self)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                           Log Methods                                   #
+    #-------------------------------------------------------------------------#
+    log = function(event = NULL) {
+      if (is.null(event)) {
+        cat("\n\n")
+        print(paste0("Event Log for ", class(self)[1], " object, '",
+                     private$..meta$object$name, "'."))
+        print(private$..log)
+        invisible(private$..log)
+      } else {
+        private$..event <- event
+        private$logIt()
+        invisible(private$..log)
+      }
     }
   )
 )

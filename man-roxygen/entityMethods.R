@@ -9,4 +9,9 @@
 #'   and system metadata, in data frame format. If a character
 #'   string or vector is passed via the key parameter, the value
 #'   or values associated with the keys are returned.}
+#'   \item{\code{log(event = NULL)}}{Class for posting to and
+#'   retrieving an object's log. If the event parameter is provided,
+#'   the event is posted to the object's log and the log is returned
+#'   invisibly.  If the event parameter is NULL, the existing log
+#'   is returned.}
 #' }

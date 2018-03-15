@@ -114,7 +114,7 @@ RepairFile <- R6::R6Class(
       private$..io$text <- IOText$new()
 
       # Create log entry
-      private$..action <- paste0("Instantiated RepairFile for ", path, ".")
+      private$..event <- paste0("Instantiated RepairFile for ", path, ".")
       private$logIt()
 
       invisible(self)

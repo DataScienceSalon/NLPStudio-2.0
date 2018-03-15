@@ -43,10 +43,10 @@ IOText <- R6::R6Class(
         con <- file(path)
         on.exit(close(con))
         content <- readLines(con)
-        private$..action <- paste0("Successfully read ", fileName, ".")
+        private$..event <- paste0("Successfully read ", fileName, ".")
         private$logIt()
       } else {
-        private$..action <- paste0('Unable to read ', path, '. ',
+        private$..event <- paste0('Unable to read ', path, '. ',
                                   'File does not exist.')
         private$logIt("Error")
         stop()
@@ -68,7 +68,7 @@ IOText <- R6::R6Class(
       on.exit(close(con))
       writeLines(content, con)
 
-      private$..action <- paste0("Successfully wrote ", fileName, ".")
+      private$..event <- paste0("Successfully wrote ", fileName, ".")
       private$logIt()
 
       invisible(self)

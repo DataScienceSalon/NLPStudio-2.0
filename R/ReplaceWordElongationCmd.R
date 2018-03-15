@@ -34,7 +34,7 @@ ReplaceWordElongationCmd <- R6::R6Class(
   public = list(
     initialize = function(impartMeaning = FALSE) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceWordElongationCmd"
+      private$..meta$object$name <- "ReplaceWordElongationCmd"
       private$..impartMeaning <- impartMeaning
       private$..logs  <- LogR$new()
       invisible(self)

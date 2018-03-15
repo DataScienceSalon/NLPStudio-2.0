@@ -54,11 +54,11 @@ IO <- R6::R6Class(
 
       # Validate path
       if (!R.utils::isFile(path)) {
-        private$..action <- paste0("File path ", path, " not found.")
+        private$..event <- paste0("File path ", path, " not found.")
         private$logIt("Error")
         stop()
       } else if (is.null(IOFactory$new(path)$getIOStrategy())) {
-        private$..action <- paste0("File ", path, " is an unsupported file type.")
+        private$..event <- paste0("File ", path, " is an unsupported file type.")
         private$logIt("Error")
         stop()
       }
@@ -71,7 +71,7 @@ IO <- R6::R6Class(
       }
 
       # Update log and system metadata
-      private$..action <- paste0("Read file from ", path, ". ")
+      private$..event <- paste0("Read file from ", path, ". ")
       private$logIt()
 
       return(content)
@@ -88,7 +88,7 @@ IO <- R6::R6Class(
       io$write(path = path, content = content)
 
       # Update log
-      private$..action <- paste0("Saved content to ", path, ". ")
+      private$..event <- paste0("Saved content to ", path, ". ")
       private$accessed
       private$logIt()
 

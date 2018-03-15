@@ -35,7 +35,7 @@ RemovePunctCmd <- R6::R6Class(
   public = list(
     initialize = function(endmark = FALSE, apostrophe = FALSE) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "RemovePunctCmd"
+      private$..meta$object$name <- "RemovePunctCmd"
       private$..endmark <- endmark
       private$..apostrophe <- apostrophe
 

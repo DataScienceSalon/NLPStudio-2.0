@@ -28,7 +28,7 @@ RemovePunct <- R6::R6Class(
     initialize = function(x, endmark = FALSE, apostrophe = FALSE) {
       private$..className <- "RemovePunct"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "RemovePunct"
+      private$..meta$object$name <-  "RemovePunct"
       private$..x <- x
 
       if (endmark == FALSE & apostrophe == FALSE) {

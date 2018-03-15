@@ -51,7 +51,7 @@ ReplaceTokens <- R6::R6Class(
     ..trim = logical(),
     ..orderPattern = character(),
 
-    processText = function(content) {
+    processDocument = function(content) {
       
       content <- textclean::mgsub(x = content,
                                   pattern = private$..tokens,
@@ -71,7 +71,7 @@ ReplaceTokens <- R6::R6Class(
                           orderPattern = fixed) {
       private$..className <- "ReplaceTokens"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceTokens"
+      private$..meta$object$name <-  "ReplaceTokens"
       private$..x <- x
       private$..tokens <- tokens
       private$..replacement <- replacement

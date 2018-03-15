@@ -1,5 +1,5 @@
 #==============================================================================#
-#                               TextStudio                                      #
+#                               TextStudio                                     #
 #==============================================================================#
 #' TextStudio
 #'
@@ -52,20 +52,21 @@ TextStudio <- R6::R6Class(
       # Instantiate variables
       private$..className <- 'TextStudio'
       private$..methodName <- 'initialize'
-      private$..action <- paste0("TextStudio, ", private$..meta[["name"]], ", instantiated.")
       private$..logs <- LogR$new()
-      private$..x <- x
 
       # Validation
+      private$..params <- list()
+      private$..params$x <- x
       if (private$validateParams()$code == FALSE) stop()
 
+      private$..x <- x
+
       # Create log entry
+      private$..event <- paste0("TextStudio object instantiated.")
       private$logIt()
 
       invisible(self)
     },
-
-    getInput = function() return(private$..x),
 
     #-------------------------------------------------------------------------#
     #                           Command Management                            #
@@ -75,7 +76,7 @@ TextStudio <- R6::R6Class(
       private$..methodName <- "addCommand"
 
       if (!c("TextStudio0") %in% class(cmd)) {
-        private$..action <- paste0("Invalid text command object. Object must be ",
+        private$..event <- paste0("Invalid text command object. Object must be ",
                                   "of the TextStudio0 classes.  See ?", class(self)[1],
                                   " for further assistance.")
         private$logIt("Error")
@@ -85,7 +86,7 @@ TextStudio <- R6::R6Class(
       name <- cmd$getName()
       private$..jobQueue[[name]] <- cmd
 
-      private$..action <- paste0("Added ", cmd$getName(), " to ", private$..x$getName(),
+      private$..event <- paste0("Added ", cmd$getName(), " to ", private$..x$getName(),
                                 " job queue." )
       private$logIt()
 
@@ -97,7 +98,7 @@ TextStudio <- R6::R6Class(
       private$..methodName <- "removeCommand"
 
       if (!c("TextStudio0") %in% class(cmd)) {
-        private$..action <- paste0("Invalid text command object. Object must be ",
+        private$..event <- paste0("Invalid text command object. Object must be ",
                                   "of the TextStudio0 classes.  See ?", class(self)[1],
                                   " for further assistance.")
         private$logIt("Error")
@@ -107,7 +108,7 @@ TextStudio <- R6::R6Class(
       name <- cmd$getName()
       private$..jobQueue[[name]] <- NULL
 
-      private$..action <- paste0("Removed ", cmd$getName(), " from ", private$..x$getName(),
+      private$..event <- paste0("Removed ", cmd$getName(), " from ", private$..x$getName(),
                                 " job queue." )
       private$logIt()
 
@@ -123,7 +124,7 @@ TextStudio <- R6::R6Class(
         private$..x <- private$..jobQueue[[i]]$execute(private$..x)
       }
 
-      private$..action <- paste0("Processed text processing commands on ",
+      private$..event <- paste0("Processed text processing commands on ",
                                 private$..x$getName(), "." )
       private$logIt()
 
@@ -139,18 +140,7 @@ TextStudio <- R6::R6Class(
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$textSalon(self)
-    },
-
-    #-------------------------------------------------------------------------#
-    #                            Test Methods                                 #
-    #-------------------------------------------------------------------------#
-    exposeObject = function() {
-      TextStudio <- list(
-        x = private$..x,
-        jobQueue = private$..jobQueue
-      )
-      return(TextStudio)
+      visitor$textStudio(self)
     }
   )
 )

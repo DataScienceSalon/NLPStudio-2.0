@@ -81,7 +81,7 @@ Corpus <- R6::R6Class(
 
       if (length(values) != 1) {
         if (length(values) != length(private$..attachments)) {
-          private$..action <- paste0("Unable to add metadata. The values ",
+          private$..event <- paste0("Unable to add metadata. The values ",
                                      "parameter must be of length one or ",
                                      "length equal to that number of documents ",
                                      "in the Corpus object.")
@@ -98,7 +98,7 @@ Corpus <- R6::R6Class(
         print(private$..attachments[[i]]$meta())
       }
 
-      private$..action <- paste0("Updated document metadata")
+      private$..event <- paste0("Updated document metadata")
       private$logIt()
 
       invisible(self)
@@ -124,7 +124,7 @@ Corpus <- R6::R6Class(
           }),".txt"))
       } else {
         if (length(fileNames) != length(private$..attachments)) {
-          private$..action <- paste0("Unable to write the Corpus object. The ",
+          private$..event <- paste0("Unable to write the Corpus object. The ",
                                      "fileNames parameter must be NULL or have",
                                      "length = ", length(private$..attachments), ".")
           private$logIt("Error")

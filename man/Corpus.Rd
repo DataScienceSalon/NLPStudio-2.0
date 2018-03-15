@@ -11,6 +11,8 @@ myCorpus <- Corpus$new(name = "machineLearning", content = mlAdvances)
 \arguments{
 \item{name}{Optional character string containing the name of the object.}
 
+\item{event}{Character string indicating a class associated with an event to be posted to the object's log.}
+
 \item{x}{A Document class object, or a list thereof, to be attached to the Corpus object}
 
 \item{key}{Character string or character vector containing the key or
@@ -49,6 +51,11 @@ selection, analysis and modeling occurs.
   and system metadata, in data frame format. If a character
   string or vector is passed via the key parameter, the value
   or values associated with the keys are returned.}
+  \item{\code{log(event = NULL)}}{Class for posting to and
+  retrieving an object's log. If the event parameter is provided,
+  the event is posted to the object's log and the log is returned
+  invisibly.  If the event parameter is NULL, the existing log
+  is returned.}
 }
 }
 

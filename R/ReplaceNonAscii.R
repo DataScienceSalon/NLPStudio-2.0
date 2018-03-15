@@ -36,7 +36,7 @@ ReplaceNonAscii <- R6::R6Class(
 
     ..removeNonConverted = logical(),
 
-    processText = function(content) {
+    processDocument = function(content) {
       content <- textclean::replace_non_ascii(x = content,
                                               remove.nonconverted = private$..removeNonConverted)
       content <- textclean::mgsub(x = content,
@@ -50,9 +50,9 @@ ReplaceNonAscii <- R6::R6Class(
     initialize = function(x, removeNonConverted = TRUE) {
       private$..className <- "ReplaceNonAscii"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceNonAscii"
+      private$..meta$object$name <-  "ReplaceNonAscii"
       private$..x <- x
-      private$..meta[["name"]] <- names
+      private$..meta$object$name <- names
       private$..removeNonConverted <- removeNonConverted
       private$..logs  <- LogR$new()
       invisible(self)

@@ -44,7 +44,7 @@ ReplaceSymbolCmd <- R6::R6Class(
     initialize = function(dollar = TRUE, percent = TRUE, pound = TRUE,
                           at = TRUE, and = TRUE, with = TRUE) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceSymbolCmd"
+      private$..meta$object$name <- "ReplaceSymbolCmd"
       private$..dollar <- dollar
       private$..percent <- percent
       private$..pound <- pound

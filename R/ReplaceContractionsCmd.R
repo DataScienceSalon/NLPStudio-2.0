@@ -56,7 +56,7 @@ ReplaceContractionsCmd <- R6::R6Class(
                           trailspace = FALSE, fixed = TRUE, trim = FALSE, 
                           orderPattern = fixed) {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceContractionsCmd"
+      private$..meta$object$name <- "ReplaceContractionsCmd"
       private$..contractions <- contractions
       private$..replacement <- replacement
       private$..leadspace <- leadspace

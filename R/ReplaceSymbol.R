@@ -46,7 +46,7 @@ ReplaceSymbol <- R6::R6Class(
     ..and = logical(),
     ..with = logical(),
 
-    processText = function(content) {
+    processDocument = function(content) {
       content <- textclean::replace_symbol(x = content,
                                             dollar = private$..dollar,
                                            percent = private$..percent,
@@ -63,7 +63,7 @@ ReplaceSymbol <- R6::R6Class(
                           at = TRUE, and = TRUE, with = TRUE) {
       private$..className <- "ReplaceSymbol"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceSymbol"
+      private$..meta$object$name <-  "ReplaceSymbol"
       private$..x <- x
       private$..dollar <- dollar
       private$..percent <- percent

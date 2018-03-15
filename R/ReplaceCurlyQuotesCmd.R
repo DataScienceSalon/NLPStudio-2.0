@@ -28,7 +28,7 @@ ReplaceCurlyQuotesCmd <- R6::R6Class(
   public = list(
     initialize = function() {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "ReplaceCurlyQuotesCmd"
+      private$..meta$object$name <- "ReplaceCurlyQuotesCmd"
       private$..logs  <- LogR$new()
       invisible(self)
     },

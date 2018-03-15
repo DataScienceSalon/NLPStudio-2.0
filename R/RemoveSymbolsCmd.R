@@ -29,7 +29,7 @@ RemoveSymbolsCmd <- R6::R6Class(
   public = list(
     initialize = function() {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "RemoveSymbolsCmd"
+      private$..meta$object$name <- "RemoveSymbolsCmd"
       private$..logs  <- LogR$new()
       invisible(self)
     },

@@ -35,7 +35,7 @@ ReplaceEmoticon <- R6::R6Class(
   private = list(
     ..emoticons = data.table(),
 
-    processText = function(content) {
+    processDocument = function(content) {
       if (is.null(private$..emoticons)) {
         content <- textclean::replace_emoticon(x = content)  
       } else {
@@ -50,7 +50,7 @@ ReplaceEmoticon <- R6::R6Class(
     initialize = function(x, emoticons = NULL) {
       private$..className <- "ReplaceEmoticon"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceEmoticon"
+      private$..meta$object$name <-  "ReplaceEmoticon"
       private$..x <- x
       private$..emoticons <- emoticons
       private$..logs  <- LogR$new()

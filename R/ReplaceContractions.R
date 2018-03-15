@@ -56,7 +56,7 @@ ReplaceContractions <- R6::R6Class(
     ..trim = logical(),
     ..orderPattern = character(),
     
-    processText = function(content) {
+    processDocument = function(content) {
       if (is.null(private$..contractions)) {
         content <- textclean::replace_contraction(x = content,
                                                 ignore.case = private$..ignoreCase)
@@ -80,7 +80,7 @@ ReplaceContractions <- R6::R6Class(
                           orderPattern = fixed) {
       private$..className <- "ReplaceContractions"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceContractions"
+      private$..meta$object$name <-  "ReplaceContractions"
       private$..x <- x
       private$..contractions <- contractions
       private$..replacement <- replacement

@@ -31,9 +31,10 @@ LowerCase <- R6::R6Class(
 
   private = list(
 
-    processText = function(content) {
-      content <- tolower(x = content)
-      return(content)
+    processDocument = function(document) {
+      document$content <- tolower(document$content)
+      document$log(event = private$..className)
+      return(document)
     }
   ),
 
@@ -41,9 +42,15 @@ LowerCase <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "LowerCase"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "LowerCase"
-      private$..x <- x
       private$..logs  <- LogR$new()
+
+      # Obtain, validate, then clear parameter list
+      private$..params <- list()
+      private$..params$x <- x
+      if (private$validateParams()$code == FALSE) stop()
+
+      private$..x <- x
+
       invisible(self)
     }
   )

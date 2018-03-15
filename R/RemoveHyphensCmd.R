@@ -28,7 +28,7 @@ RemoveHyphensCmd <- R6::R6Class(
   public = list(
     initialize = function() {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "RemoveHyphensCmd"
+      private$..meta$object$name <- "RemoveHyphensCmd"
       private$..logs  <- LogR$new()
       invisible(self)
     },

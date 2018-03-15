@@ -28,7 +28,7 @@ RemoveTwitterCmd <- R6::R6Class(
   public = list(
     initialize = function() {
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <- "RemoveTwitterCmd"
+      private$..meta$object$name <- "RemoveTwitterCmd"
       private$..logs  <- LogR$new()
       invisible(self)
     },

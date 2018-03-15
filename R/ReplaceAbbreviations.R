@@ -33,7 +33,7 @@ ReplaceAbbreviations <- R6::R6Class(
     ..abbreviations = character(),
     ..ignoreCase = logical(),
 
-    processText = function(content) {
+    processDocument = function(content) {
       if (is.null(private$..abbreviations)) {
         content <- qdap::replace_abbreviation(text.var = content, 
                                               ignore.case = private$..ignoreCase)
@@ -64,7 +64,7 @@ ReplaceAbbreviations <- R6::R6Class(
                           replacement = NULL, ignoreCase = TRUE) {
       private$..className <- "ReplaceAbbreviations"
       private$..methodName <- "initialize"
-      private$..meta[["name"]] <-  "ReplaceAbbreviations"
+      private$..meta$object$name <-  "ReplaceAbbreviations"
       private$..x <- x
       private$..abbreviations <- abbreviations
       private$..replacement <- replacement
