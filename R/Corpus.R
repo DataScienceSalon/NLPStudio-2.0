@@ -73,6 +73,41 @@ Corpus <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
+    #                             IO Methods                                  #
+    #-------------------------------------------------------------------------#
+    read = function() {
+      private$..methodName <- 'read'
+      content <- lapply(private$..attachments, function(a) {
+        a$content
+      })
+      return(content)
+    },
+
+    write = function(path, fileNames = NULL) {
+      private$..methodName <- 'write'
+
+      if (is.null(fileNames)) {
+        path <- file.path(path, paste0(sapply(private$..attachments, function(a) {
+          tools::file_path_sans_ext(a$getName())
+          }),".txt"))
+      } else {
+        if (length(fileNames) != length(private$..attachments)) {
+          private$..action <- paste0("Unable to write the Corpus object. The ",
+                                     "fileNames parameter must be NULL or have",
+                                     "length = ", length(private$..attachments), ".")
+          private$logIt("Error")
+          stop()
+        } else {
+          path <- file.path(path,(paste0(tools::file_path_sans_ext(fileNames), ".txt")))
+        }
+      }
+      lapply(seq_along(private$..attachments), function(x) {
+          private$..attachments[[x]]$write(path = path[x])
+        })
+      invisible(self)
+    },
+
+    #-------------------------------------------------------------------------#
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
