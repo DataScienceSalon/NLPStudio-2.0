@@ -57,8 +57,7 @@ Entity <- R6::R6Class(
       private$..meta$object$id <- toupper(hashid)
       private$..meta$object$class <- class(self)[1]
       private$..meta$object$description <- paste0(private$..meta$object$class,
-                                                  " object, '", private$..meta$object$name,
-                                                  "', created on ",
+                                                  " object created on ",
                                                   format(Sys.Date(), "%a %b %d %Y"),
                                                   " by ", Sys.info()[['user']], ".")
 

@@ -3,15 +3,12 @@
 #==============================================================================#
 #' Clone
 #'
-#' \code{Clone} Abstract factory class that creates a clone of an object.
+#' \code{Clone} Class responsible for cloning primitive and composite objects.
 #'
-#' Given a Corpus or Document object, and an optional name, this class produces
-#' a replica of the object via the appropriate concrete factory class, then
-#' returns the replicant to the calling environment. The clones are actually
-#' quasi clones as the replicants have their own identifiers, names,
-#' and descriptions.
+#' Class clones primitive and composite objects. Currently supports
+#' Document and Corpus objects.
 #'
-#' @section Clone methods:
+#' @section Methods:
 #' \describe{
 #'  \item{\code{new(x, name = NULL)}}{Instantiates the factory.}
 #'  \item{\code{execute()}}{Returns the replicant object.}
@@ -25,7 +22,6 @@
 #'
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @docType class
-#' @family Clone Classes
 #' @export
 Clone <- R6::R6Class(
   "Clone",
@@ -34,66 +30,96 @@ Clone <- R6::R6Class(
   inherit = Base,
 
   private = list(
-    ..in = character(),
-    ..name = character(),
-    ..out = character(),
 
-    cloneMeta = function() {
+    validate = function(x) {
+      private$..params <- list()
+      private$..params$x <- x
+      return(private$validateParams())
+    },
 
-      meta <- private$..in$meta()
+    cloneMeta = function(x, out) {
+      meta <- x$meta()
       keys <- names(meta$object)
       values <- as.character(meta$object)
-      values <- values[!keys %in% c("id", "class")]
-      keys <- keys[!keys %in% c("id", "class")]
-      private$..out$meta(key = keys, value = values)
-      return(private$..out)
+      values <- values[!keys %in% c("id", "name", "class")]
+      keys <- keys[!keys %in% c("id", "name", "class")]
+      out$meta(key = keys, value = values)
+      return(out)
+    },
+
+    cloneDocument = function(x, name = NULL) {
+
+      if (is.null(name)) {
+        name <- x$getName()
+      }
+
+      out <- Document$new(name = name)
+      out <- private$cloneMeta(x, out)
+
+      out$content <- x$content
+      event <- paste0("Created", class(out)[1], " object '",
+                      out$getName(), "' from '",
+                      x$getName(), "'.")
+      out$log(event = event)
+      return(out)
+    },
+
+    cloneCorpus = function(x, name = NULL) {
+
+      if (is.null(name)) {
+        name <- x$getName()
+      }
+
+      out <- Corpus$new(name = name)
+      out <- private$cloneMeta(x, out)
+
+      # Process attachments
+      attachments <- x$get()
+      lapply(attachments, function(a) {
+        attachment <- private$cloneDocument(x = a)
+        out <<- out$attach(attachment)
+      })
+
+      event <- paste0("Created", class(out)[1], " object '",
+                      out$getName(), "' from '",
+                      x$getName(), "'.")
+      out$log(event = event)
+      return(out)
     }
   ),
 
   public = list(
 
     #-------------------------------------------------------------------------#
-    #                             Instantiation                               #
+    #                              Core Methods                               #
     #-------------------------------------------------------------------------#
-    initialize = function(x, name = NULL) {
+    initialize = function() { invisible(self) },
+    document = function(x, name = NULL) {
 
       private$..className <- 'Clone'
-      private$..methodName <- 'initialize'
+      private$..methodName <- 'document'
       private$..logs <- LogR$new()
 
-      # Obtain, validate, then clear parameter list
-      private$..params <- list()
-      private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
+      # Validate parameters
+      if (private$validate(x)$code == FALSE) stop()
 
-      # Initiate private members
-      private$..in <- x
-      private$..name <- name
-
-      invisible(self)
+      out <- private$cloneDocument(x = x, name = name)
+      return(out)
     },
 
-    execute = function() {
+    corpus = function(x, name = NULL) {
 
-      private$..methodName <- 'execute'
+      private$..className <- 'Clone'
+      private$..methodName <- 'corpus'
+      private$..logs <- LogR$new()
 
-      # Invoke appropriate concrete factory object and obtain replicant
-      if (class(private$..in)[1] == "Corpus") {
-        private$..out <- CloneCorpus$new(x = private$..in,
-                                         name = private$..name)$execute()
-      } else {
-        private$..out <- CloneDocument$new(x = private$..in,
-                                         name = private$..name)$execute()
-      }
+      # Validate parameters
+      if (private$validate(x)$code == FALSE) stop()
 
-      event <- paste0("Created", class(private$..out)[1], " object '",
-                      private$..out$getName(), "' from '",
-                      private$..in$getName(), "'.")
-      private$..out$log(event = event)
-
-      return(private$..out)
-
+      out <- private$cloneCorpus(x = x, name = name)
+      return(out)
     },
+
     #-------------------------------------------------------------------------#
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#

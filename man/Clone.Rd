@@ -18,16 +18,13 @@ replicant.}
 A Replicant of the input object
 }
 \description{
-\code{Clone} Abstract factory class that creates a clone of an object.
+\code{Clone} Class responsible for cloning primitive and composite objects.
 }
 \details{
-Given a Corpus or Document object, and an optional name, this class produces
-a replica of the object via the appropriate concrete factory class, then
-returns the replicant to the calling environment. The clones are actually
-quasi clones as the replicants have their own identifiers, names,
-and descriptions.
+Class clones primitive and composite objects. Currently supports
+Document and Corpus objects.
 }
-\section{Clone methods}{
+\section{Methods}{
 
 \describe{
  \item{\code{new(x, name = NULL)}}{Instantiates the factory.}
@@ -35,10 +32,6 @@ and descriptions.
 }
 }
 
-\seealso{
-Other Clone Classes: \code{\link{CloneCorpus}},
-  \code{\link{CloneDocument}}
-}
 \author{
 John James, \email{jjames@datasciencesalon.org}
 }

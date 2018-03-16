@@ -59,7 +59,8 @@ TextStudio <- R6::R6Class(
       private$..params$x <- x
       if (private$validateParams()$code == FALSE) stop()
 
-      private$..x <- x
+      private$..x <- Clone$corpus(x = x, name = name)
+      print(class(private$..x))
 
       # Create log entry
       private$..event <- paste0("TextStudio object instantiated.")
@@ -69,7 +70,7 @@ TextStudio <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
-    #                           Command Management                            #
+    #                        Command Management Methods                       #
     #-------------------------------------------------------------------------#
     addCommand = function(cmd) {
 
@@ -115,7 +116,9 @@ TextStudio <- R6::R6Class(
       invisible(self)
 
     },
-
+    #-------------------------------------------------------------------------#
+    #                       Execute and Get Results                           #
+    #-------------------------------------------------------------------------#
     execute = function() {
 
       private$..methodName <- "execute"

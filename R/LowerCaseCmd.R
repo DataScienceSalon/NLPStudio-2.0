@@ -26,10 +26,9 @@ LowerCaseCmd <- R6::R6Class(
   inherit = TextStudio0,
 
   public = list(
-    initialize = function(keepChars = NULL, removeDigits = TRUE,
-                          removeApostrophe = TRUE, lowerCase = TRUE) {
+    initialize = function() {
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "LowerCase"
+      private$..meta$object$name <- "LowerCaseCmd"
       private$..logs  <- LogR$new()
       invisible(self)
     },
