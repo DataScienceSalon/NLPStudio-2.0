@@ -30,13 +30,6 @@ SplitCorpus <- R6::R6Class(
   lock_class = FALSE,
   inherit = Split0,
 
-  private = list(
-
-    spawn = function() {
-      Corpus$new()
-    }
-  ),
-
   public = list(
 
     initialize = function(x, name = NULL, splits, setNames = NULL, seed = NULL) {

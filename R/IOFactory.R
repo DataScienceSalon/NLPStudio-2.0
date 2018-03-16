@@ -13,14 +13,13 @@
 #'  \item{\code{getFileStrategy(fileName)}}{Instantiates and returns the appropriate File Strategy object.}
 #' }
 #'
-#' @section Validation Class Parameters
-#' @param fileName Character string containing the name of the file
+#' @param path Character string containing the path for file
 #'
-#' @return File class object
+#' @return Concrete IO strategy.
 #'
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @docType class
-#' @family Validation Classes
+#' @family IO Classes
 #' @export
 IOFactory <- R6::R6Class(
   "IOFactory",

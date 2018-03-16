@@ -250,6 +250,21 @@ VVInit <- R6::R6Class(
 
     textStudio = function(object) {
       return(private$validateClass(object, classes = c("Corpus", "Document")))
+    },
+
+    #-------------------------------------------------------------------------#
+    #                             Misc Classes                                #
+    #-------------------------------------------------------------------------#
+    klone = function(object) {
+      return(private$validateClass(object, classes = c("Corpus", "Document")))
+    },
+
+    cloneCorpus = function(object) {
+      return(private$validateClass(object, classes = c("Corpus")))
+    },
+
+    cloneDocument = function(object) {
+      return(private$validateClass(object, classes = c("Document")))
     }
   )
 )

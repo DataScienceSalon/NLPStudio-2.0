@@ -192,9 +192,10 @@ Entity <- R6::R6Class(
       if (missing(key) & missing(value)) {
         metaDataList <- Filter(Negate(is.null), private$..meta)
         metaDataDfs <- lapply(metaDataList, function(m) {
-          df <- as.data.frame(m)
-          if (nrow(df) > 0 )
+          df <- as.data.frame(m, stringsAsFactors = FALSE)
+          if (nrow(df) > 0 ) {
             df
+          }
         })
         metaDataDfs <- Filter(Negate(is.null), metaDataDfs)
         return(metaDataDfs)

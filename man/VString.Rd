@@ -21,8 +21,7 @@ A logical TRUE if class is equal to expected value, FALSE otherwise.
 This class provide a methods for validating character strings.
 }
 \seealso{
-Other Validation Classes: \code{\link{IOFactory}},
-  \code{\link{Validator}}
+Other Validation Classes: \code{\link{Validator}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

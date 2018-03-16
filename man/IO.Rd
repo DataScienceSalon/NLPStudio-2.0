@@ -34,6 +34,9 @@ that converts select ASCII control characters to spaces by default.
  }
 }
 
+\seealso{
+Other IO Classes: \code{\link{IOFactory}}
+}
 \author{
 John James, \email{jjames@datasciencesalon.org}
 }

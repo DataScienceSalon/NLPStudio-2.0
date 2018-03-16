@@ -9,10 +9,10 @@
 IOFactory
 }
 \arguments{
-\item{fileName}{Character string containing the name of the file}
+\item{path}{Character string containing the path for file}
 }
 \value{
-File class object
+Concrete IO strategy.
 }
 \description{
 \code{IOFactory} Factory class that creates the appropriate IO class.
@@ -28,13 +28,8 @@ Class creates IO objects based upon the file type
 }
 }
 
-\section{Validation Class Parameters}{
-NA
-}
-
 \seealso{
-Other Validation Classes: \code{\link{VString}},
-  \code{\link{Validator}}
+Other IO Classes: \code{\link{IO}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

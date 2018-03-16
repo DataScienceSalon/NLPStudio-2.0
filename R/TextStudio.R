@@ -47,7 +47,7 @@ TextStudio <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Core Methods                                  #
     #-------------------------------------------------------------------------#
-    initialize = function(x) {
+    initialize = function(x, name = NULL) {
 
       # Instantiate variables
       private$..className <- 'TextStudio'
