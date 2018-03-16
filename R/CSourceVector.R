@@ -79,15 +79,17 @@ CSourceVector <- R6::R6Class(
         lapply(private$..x, function(x) {
           name <- names(x)
           doc <- Document$new(x = x[x], name = name)
-          doc$state <- 'raw'
           private$..corpus$attach(x = doc)
         })
       } else {
         name <- names(private$..x)
         doc <- Document$new(x = private$..x, name = name)
-        doc$state <- 'raw'
         private$..corpus$attach(x = doc)
       }
+
+      event <- paste0("Corpus sourcing from vector, complete.")
+      private$..corpus$log(event = event)
+
       return(private$..corpus)
     },
     #-------------------------------------------------------------------------#

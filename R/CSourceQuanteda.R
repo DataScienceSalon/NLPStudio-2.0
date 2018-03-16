@@ -82,7 +82,6 @@ CSourceQuanteda <- R6::R6Class(
       for (i in 1:length(texts)) {
 
         doc <- Document$new(x = texts[i], name = n[i])
-        doc$state <- 'raw'
         keys <- names(metaData[i,])
         values <- metaData[i,]
         if (length(keys) > 0) {
@@ -93,6 +92,8 @@ CSourceQuanteda <- R6::R6Class(
         private$..corpus <- private$..corpus$attach(doc)
       }
 
+      event <- paste0("Corpus sourcing from Quanteda corpus object, complete.")
+      private$..corpus$log(event = event)
 
       return(private$..corpus)
     },

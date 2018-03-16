@@ -46,9 +46,9 @@ CSourceDir <- R6::R6Class(
       private$..logs <- LogR$new()
 
       # Obtain, validate, then clear parameter list
+      private$..params <- list()
       private$..params$x <- x
       if (private$validateParams()$code == FALSE) stop()
-      private$..params <- list()
 
       # Save parameter and create Corpus object.
       private$..x <- x
@@ -78,9 +78,11 @@ CSourceDir <- R6::R6Class(
         name <- basename(f)
         content <- IO$new()$read(f, repair = TRUE)
         doc <- Document$new(name = name, x = content)
-        doc$state <- 'raw'
         private$..corpus$attach(x = doc)
       })
+
+      event <- paste0("Corpus sourcing from directory, complete.")
+      private$..corpus$log(event = event)
 
       return(private$..corpus)
     },

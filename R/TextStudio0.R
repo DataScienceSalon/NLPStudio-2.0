@@ -28,11 +28,16 @@ TextStudio0 <- R6::R6Class(
     ..regex = character(),
     ..replacement = character(),
 
+    logEvent = function(x) {
+      event <- paste0(private$..className, " object execution, complete.")
+      return(x$log(event = event))
+    },
+
     processDocument = function(document) {
       document$content <- gsub(private$..regex,
                       private$..replacement,
                       document$content, perl = TRUE)
-      document$log(event = private$..className)
+      document <- private$logEvent(document)
       return(document)
     },
 
@@ -42,7 +47,7 @@ TextStudio0 <- R6::R6Class(
         doc <- private$processDocument(docs[[i]])
         private$..x$attach(doc)
       }
-      private$..x$log(event = private$..className)
+      private$..x <- private$logEvent(private$..x)
       return(TRUE)
     }
   ),

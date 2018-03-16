@@ -109,7 +109,7 @@ Composite <- R6::R6Class(
         # Update date/time metadata and create log entry
         private$modified()
         private$..event <- paste0("Attached ", a$getName(), " object to ", self$getName(), ".")
-        private$logIt(level = "Info")
+        private$logIt()
       }
 
       if ("list" %in% class(x)[1]) {

@@ -33,7 +33,7 @@ LowerCase <- R6::R6Class(
 
     processDocument = function(document) {
       document$content <- tolower(document$content)
-      document$log(event = private$..className)
+      document <- private$logEvent(document)
       return(document)
     }
   ),

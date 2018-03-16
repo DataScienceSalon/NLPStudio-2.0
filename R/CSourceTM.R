@@ -68,7 +68,6 @@ CSourceTM <- R6::R6Class(
         # Create Text and Document Objects
         content <- private$..x[[x]]$content
         doc <- Document$new(x =content, name = docNames[x])
-        doc$state <- 'raw'
 
         # Create metadata
         for (i in 1:length(private$..x[[x]]$meta)) {
@@ -85,6 +84,8 @@ CSourceTM <- R6::R6Class(
         # Attach Document
         private$..corpus$attach(doc)
       })
+      event <- paste0("Corpus sourcing from tm Corpus object, complete.")
+      private$..corpus$log(event = event)
 
       return(private$..corpus)
     },

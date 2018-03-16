@@ -159,25 +159,6 @@ Entity <- R6::R6Class(
     }
   ),
 
-  active = list(
-
-    state = function(value) {
-      if (missing(value)) {
-        s <- data.frame(state = private$..meta$state[["current"]],
-                        date = private$..meta$state[["date"]],
-                        user = private$..meta$state[["user"]])
-        invisible(s)
-      } else {
-        private$..meta$state[["current"]] <- value
-        private$..meta$state[["date"]] <- Sys.time()
-        private$..meta$state[['user']] <- Sys.info()[['user']]
-        private$..event <- paste0("State changed to '", value, "' by ", Sys.info()[['user']])
-        private$logIt()
-      }
-      invisible(self)
-    }
-  ),
-
   public = list(
 
     #-------------------------------------------------------------------------#
@@ -256,11 +237,11 @@ Entity <- R6::R6Class(
         print(paste0("Event Log for ", class(self)[1], " object, '",
                      private$..meta$object$name, "'."))
         print(private$..log)
-        invisible(private$..log)
+        invisible(self)
       } else {
         private$..event <- event
         private$logIt()
-        invisible(private$..log)
+        invisible(self)
       }
     }
   )

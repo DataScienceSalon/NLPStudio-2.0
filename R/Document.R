@@ -144,7 +144,6 @@ Document <- R6::R6Class(
           private$..content <- private$compress(value)
           private$modified()
           private$..event <- "Updated Document content."
-          self$state <- private$..event
           private$logIt()
         }
       }
