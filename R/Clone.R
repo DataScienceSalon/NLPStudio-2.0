@@ -45,7 +45,7 @@ Clone <- R6::R6Class(
       values <- as.character(meta$object)
       values <- values[!keys %in% c("id", "class")]
       keys <- keys[!keys %in% c("id", "class")]
-      private$..out <- private$..out$meta(key = keys, value = values)
+      private$..out$meta(key = keys, value = values)
       return(private$..out)
     }
   ),

@@ -29,7 +29,7 @@ CloneCorpus <- R6::R6Class(
   "CloneCorpus",
   lock_class = FALSE,
   lock_objects = FALSE,
-  inherit = Clone0,
+  inherit = Clone,
 
   public = list(
 
