@@ -36,10 +36,11 @@ ReplaceHTML <- R6::R6Class(
   private = list(
     ..symbol = logical(),
 
-    processDocument = function(content) {
-      content <- textclean::replace_html(x = content,
+    processDocument = function(document) {
+      document$content <- textclean::replace_html(x = document$content,
                                              symbol = private$..symbol)
-      return(content)
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -47,10 +48,11 @@ ReplaceHTML <- R6::R6Class(
     initialize = function(x, symbol = TRUE) {
       private$..className <- "ReplaceHTML"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceHTML"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..symbol <- symbol
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

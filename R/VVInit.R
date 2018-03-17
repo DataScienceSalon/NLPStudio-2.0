@@ -21,6 +21,39 @@ VVInit <- R6::R6Class(
 
   private = list(
 
+    validateReplace = function(object) {
+
+      status <- list()
+      status[['code']] <- TRUE
+
+      p <- object$getParams()
+
+      if (!(class(p$x)[1] %in% c("Corpus", "Document"))) {
+        status$code <- FALSE
+        status$msg <- paste0("Object must be of the Corpus or Document classes. ",
+                             "See ?", class(object)[1], " for further assistance.")
+        return(status)
+      }
+
+      if (length(p$replacement) != 1) {
+        if (length(p$replacement) != length(p$pattern)) {
+          status$code <- FALSE
+          status$msg <- paste0("Length of the replacement parameter must be one or ",
+                               length(p$pattern), " the length of the pattern vector. ",
+                               "See ?", class(object)[1], " for further assistance.")
+          return(status)
+        }
+      }
+
+      if (!is.logical(p$logical)) {
+        status$code <- FALSE
+        status$msg <- paste0("Value provided where TRUE/FALSE expected. ",
+                             "See ?", class(object)[1], " for further assistance.")
+        return(status)
+      }
+      return(status)
+    },
+
     validateSplits = function(object) {
 
       status <- list()
@@ -126,6 +159,10 @@ VVInit <- R6::R6Class(
 
     textStudio = function(object) {
       return(private$validateClass(object, classes = c("Corpus", "Document")))
+    },
+
+    replaceAbbreviations = function(object) {
+      return(private$validateReplace(object))
     },
 
     #-------------------------------------------------------------------------#

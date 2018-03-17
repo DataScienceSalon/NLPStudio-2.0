@@ -33,11 +33,14 @@ ReplaceAbbreviations <- R6::R6Class(
     ..abbreviations = character(),
     ..ignoreCase = logical(),
 
-    processDocument = function(content) {
+    processDocument = function(document) {
+
+      content <- document$content
+
       if (is.null(private$..abbreviations)) {
-        content <- qdap::replace_abbreviation(text.var = content, 
+        document$content <- qdap::replace_abbreviation(text.var = content,
                                               ignore.case = private$..ignoreCase)
-        
+
       } else {
         if ("data.frame" %in% class(private$..abbreviations)) {
           pattern <- as.character(private$..abbreviations[,1])
@@ -50,12 +53,14 @@ ReplaceAbbreviations <- R6::R6Class(
           pattern <- private$..abbreviations
           replacement <- private$..replacement
         }
-          
-        content <- textclean::mgsub(x = content,  pattern = pattern,
+
+        document$content <- textclean::mgsub(x = content,  pattern = pattern,
                                     replacement = replacement,
                                     fixed = TRUE)
       }
-      return(content)
+      document <- private$logEvent(document)
+
+      return(document)
     }
   ),
 
@@ -64,27 +69,23 @@ ReplaceAbbreviations <- R6::R6Class(
                           replacement = NULL, ignoreCase = TRUE) {
       private$..className <- "ReplaceAbbreviations"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceAbbreviations"
+      private$..logs  <- LogR$new()
+
+      private$..params <- list()
+      private$..params$x <- x
+      private$..params$pattern <- abbreviations
+      private$..params$replacement <- replacement
+      private$..params$logical <- ignoreCase
+      if (private$validateParams()$code == FALSE) stop()
+
       private$..x <- x
       private$..abbreviations <- abbreviations
       private$..replacement <- replacement
       private$..ignoreCase <- ignoreCase
-      private$..logs  <- LogR$new()
-      
-      if (private$validateParams()$code == FALSE) stop()
-      
+
       invisible(self)
     },
-    
-    getParams = function() {
-      input <- list(
-        x = private$..x,
-        pattern = private$..abbreviations,
-        replacement = private$..replacement,
-        ignoreCase = private$..ignoreCase
-      )
-      return(input)
-    },
+
     accept = function(visitor)  {
       visitor$replaceAbbreviations(self)
     }

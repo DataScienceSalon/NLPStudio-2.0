@@ -32,10 +32,12 @@ ReplaceCurlyQuotes <- R6::R6Class(
 
   private = list(
 
-    processDocument = function(content) {
-      Encoding(content) <- "latin1"
-      content <- textclean::replace_curly_quote(x = content)
-      return(content)
+    processDocument = function(document) {
+      content <- document$content
+      Encoding(document$content) <- "latin1"
+      document$content <- textclean::replace_curly_quote(x = content)
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -43,9 +45,10 @@ ReplaceCurlyQuotes <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "ReplaceCurlyQuotes"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceCurlyQuotes"
-      private$..x <- x
       private$..logs  <- LogR$new()
+
+      private$..x <- x
+
       invisible(self)
     }
   )

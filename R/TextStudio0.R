@@ -63,7 +63,7 @@ TextStudio0 <- R6::R6Class(
         private$processCorpus()
 
       } else {
-        private$processDocument(private$..x)
+        private$..x <- private$processDocument(private$..x)
       }
 
       # Log it

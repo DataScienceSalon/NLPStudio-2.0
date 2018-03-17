@@ -26,11 +26,12 @@ RemoveWhiteSpace <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveWhiteSpace"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "RemoveWhiteSpace"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..regex <- "\\s+"
       private$..replacement <- " "
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

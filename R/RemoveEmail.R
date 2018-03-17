@@ -26,10 +26,12 @@ RemoveEmail <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveEmail"
       private$..methodName <- "initialize"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..regex <- "[a-zA-Z0-9\\-_~]+(\\.[a-zA-Z0-9\\-_~]+)*@[a-zA-Z0-9\\-_~]+(\\.[a-zA-Z0-9\\-_~]+)*\\.[a-zA-Z]{2,}"
       private$..replacement <- ""
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

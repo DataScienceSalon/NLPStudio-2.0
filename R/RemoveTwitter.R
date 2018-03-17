@@ -28,11 +28,12 @@ RemoveTwitter <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveTwitter"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "RemoveTwitter"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..regex <- '\\B#\\w*[a-zA-Z]+\\w*'
       private$..replacement <- " "
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

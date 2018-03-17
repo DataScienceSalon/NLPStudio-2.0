@@ -51,9 +51,9 @@ ReplaceTokens <- R6::R6Class(
     ..trim = logical(),
     ..orderPattern = character(),
 
-    processDocument = function(content) {
-      
-      content <- textclean::mgsub(x = content,
+    processDocument = function(document) {
+
+      document$content <- textclean::mgsub(x = document$content,
                                   pattern = private$..tokens,
                                   replacement = private$..replacement,
                                   leadspace = private$..leadspace,
@@ -61,7 +61,8 @@ ReplaceTokens <- R6::R6Class(
                                   fixed = private$..fixed,
                                   trim = private$..trim,
                                   order.pattern = private$..orderPattern)
-      return(content)
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -71,7 +72,8 @@ ReplaceTokens <- R6::R6Class(
                           orderPattern = fixed) {
       private$..className <- "ReplaceTokens"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceTokens"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..tokens <- tokens
       private$..replacement <- replacement
@@ -80,13 +82,12 @@ ReplaceTokens <- R6::R6Class(
       private$..fixed <- fixed
       private$..trim <- trim
       private$..orderPattern <- orderPattern
-      private$..logs  <- LogR$new()
-      
+
       if (private$validateParams()$code == FALSE) stop()
-      
+
       invisible(self)
     },
-    
+
     getParams = function() {
       input <- list(
         x = private$..x,
@@ -100,10 +101,10 @@ ReplaceTokens <- R6::R6Class(
       )
       return(input)
     },
-    
+
     accept = function(visitor)  {
       visitor$replaceTokens(self)
     }
-    
+
   )
 )

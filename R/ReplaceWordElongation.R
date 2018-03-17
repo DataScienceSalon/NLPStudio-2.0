@@ -46,10 +46,11 @@ ReplaceWordElongation <- R6::R6Class(
 
     ..impartMeaning = logical(),
 
-    processDocument = function(content) {
-      content <- textclean::replace_word_elongation(x = content,
+    processDocument = function(document) {
+      document$content <- textclean::replace_word_elongation(x = document$content,
                                            impart.meaning = private$..impartMeaning)
-      return(content)
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -57,10 +58,11 @@ ReplaceWordElongation <- R6::R6Class(
     initialize = function(x, impartMeaning = FALSE) {
       private$..className <- "ReplaceWordElongation"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceWordElongation"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..impartMeaning <- impartMeaning
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

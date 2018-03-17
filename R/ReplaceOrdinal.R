@@ -38,11 +38,12 @@ ReplaceOrdinal <- R6::R6Class(
     ..joinOrdinal = logical(),
     ..remove = logical(),
 
-    processDocument = function(content) {
-      content <- textclean::replace_number(x = content,
+    processDocument = function(document) {
+      document$content <- textclean::replace_number(x = document$content,
                                             num.paste = private$..joinOrdinal,
                                             remove = private$..remove)
-      return(content)
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -50,11 +51,12 @@ ReplaceOrdinal <- R6::R6Class(
     initialize = function(x, joinOrdinal = FALSE, remove = FALSE) {
       private$..className <- "ReplaceOrdinal"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceOrdinal"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..joinOrdinal <- joinOrdinal
       private$..remove <- remove
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

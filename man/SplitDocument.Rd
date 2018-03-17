@@ -101,7 +101,8 @@ Other TextStudio Classes: \code{\link{LowerCaseCmd}},
   \code{\link{ReplaceWordElongationCmd}},
   \code{\link{ReplaceWordElongation}},
   \code{\link{SplitCorpusCmd}}, \code{\link{SplitCorpus}},
-  \code{\link{StripTextCmd}}, \code{\link{Tokenize}}
+  \code{\link{StripTextCmd}}, \code{\link{StripText}},
+  \code{\link{Tokenize}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

@@ -26,11 +26,12 @@ RemoveNumbers <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveNumbers"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "RemoveNumbers"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..regex <- '[[:digit:]]'
       private$..replacement <- ""
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

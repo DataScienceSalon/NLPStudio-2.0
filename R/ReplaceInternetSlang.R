@@ -14,7 +14,7 @@
 #' @template textStudioParams
 #' @param slang A vector of slang strings to replace.
 #' @param replacement A vector of strings with which to replace slang
-#' @param ignoreCase Logical. If TRUE the case of slang will be ignored (replacement regardless of case). 
+#' @param ignoreCase Logical. If TRUE the case of slang will be ignored (replacement regardless of case).
 #' Applies to default internet slang only.
 #' @template textStudioMethods
 #' @template textStudioClasses
@@ -38,12 +38,13 @@ ReplaceInternetSlang <- R6::R6Class(
     ..slang = character(),
     ..ignoreCase = logical(),
 
-    processDocument = function(content) {
-      content <- textclean::replace_internet_slang(x = content,
+    processDocument = function(document) {
+      document$content <- textclean::replace_internet_slang(x = document$content,
                                          slang = private$..slang,
                                          replacement = private$..replacement,
                                          ignore.case = private$..ignoreCase)
-      return(content)
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -51,18 +52,18 @@ ReplaceInternetSlang <- R6::R6Class(
     initialize = function(x, slang = NULL, replacement = NULL, ignoreCase = TRUE) {
       private$..className <- "ReplaceInternetSlang"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceInternetSlang"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..slang <- slang
       private$..replacement <- replacement
       private$..ignoreCase <- ignoreCase
-      private$..logs  <- LogR$new()
-      
+
       if (private$validateParams()$code == FALSE) stop()
-      
+
       invisible(self)
     },
-    
+
     getParams = function() {
       input <- list(
         x = private$..x,

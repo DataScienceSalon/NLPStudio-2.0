@@ -35,14 +35,16 @@ ReplaceEmoji <- R6::R6Class(
   private = list(
     ..emojis = data.table(),
 
-    processDocument = function(content) {
+    processDocument = function(document) {
+      content <- document$content
       if (is.null(private$..emojis)) {
-        content <- textclean::replace_emoji(x = content)
+        document$content <- textclean::replace_emoji(x = content)
       } else {
-        content <- textclean::replace_emoji(x = content,
+        document$content <- textclean::replace_emoji(x = content,
                                             emoji_dt = private$..emojis)
       }
-      return(content)
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -50,10 +52,11 @@ ReplaceEmoji <- R6::R6Class(
     initialize = function(x, emojis = NULL) {
       private$..className <- "ReplaceEmoji"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceEmoji"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..emojis <- emojis
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

@@ -36,13 +36,16 @@ ReplaceNonAscii <- R6::R6Class(
 
     ..removeNonConverted = logical(),
 
-    processDocument = function(content) {
+    processDocument = function(document) {
+      content <- document$content
       content <- textclean::replace_non_ascii(x = content,
                                               remove.nonconverted = private$..removeNonConverted)
       content <- textclean::mgsub(x = content,
                                   pattern = NLPStudio:::encodings$pattern,
                                   replacement = NLPStudio:::encodings$replace)
-      return(content)
+      document$content <- content
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -50,11 +53,12 @@ ReplaceNonAscii <- R6::R6Class(
     initialize = function(x, removeNonConverted = TRUE) {
       private$..className <- "ReplaceNonAscii"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceNonAscii"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..meta$object$name <- names
       private$..removeNonConverted <- removeNonConverted
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

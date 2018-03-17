@@ -37,11 +37,12 @@ ReplaceNumbers <- R6::R6Class(
     ..joinNumbers = logical(),
     ..remove = logical(),
 
-    processDocument = function(content) {
-      content <- textclean::replace_number(x = content,
+    processDocument = function(document) {
+      document$content <- textclean::replace_number(x = document$content,
                                             num.paste = private$..joinNumbers,
                                             remove = private$..remove)
-      return(content)
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -49,11 +50,12 @@ ReplaceNumbers <- R6::R6Class(
     initialize = function(x, joinNumbers = FALSE, remove = FALSE) {
       private$..className <- "ReplaceNumbers"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceNumbers"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..joinNumbers <- joinNumbers
       private$..remove <- remove
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

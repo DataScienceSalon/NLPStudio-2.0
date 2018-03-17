@@ -46,15 +46,16 @@ ReplaceSymbol <- R6::R6Class(
     ..and = logical(),
     ..with = logical(),
 
-    processDocument = function(content) {
-      content <- textclean::replace_symbol(x = content,
+    processDocument = function(document) {
+      document$content <- textclean::replace_symbol(x = document$content,
                                             dollar = private$..dollar,
                                            percent = private$..percent,
                                            pound = private$..pound,
                                            at = private$..at,
                                            and = private$..and,
                                            with = private$..with)
-      return(content)
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -63,7 +64,8 @@ ReplaceSymbol <- R6::R6Class(
                           at = TRUE, and = TRUE, with = TRUE) {
       private$..className <- "ReplaceSymbol"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceSymbol"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..dollar <- dollar
       private$..percent <- percent
@@ -71,7 +73,7 @@ ReplaceSymbol <- R6::R6Class(
       private$..at <- at
       private$..and <- and
       private$..with <- with
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

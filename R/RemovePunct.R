@@ -28,7 +28,8 @@ RemovePunct <- R6::R6Class(
     initialize = function(x, endmark = FALSE, apostrophe = FALSE) {
       private$..className <- "RemovePunct"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "RemovePunct"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
 
       if (endmark == FALSE & apostrophe == FALSE) {
@@ -41,7 +42,7 @@ RemovePunct <- R6::R6Class(
         private$..regex <- "[[:punct:]]"
       }
       private$..replacement <- " "
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )

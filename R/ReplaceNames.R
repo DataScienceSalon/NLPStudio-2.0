@@ -36,11 +36,12 @@ ReplaceNames <- R6::R6Class(
 
     ..names = character(),
 
-    processDocument = function(content) {
-      content <- textclean::replace_names(x = content,
+    processDocument = function(document) {
+      document$content <- textclean::replace_names(x = document$content,
                                           names = private$..meta$object$name,
                                           replacement = private$..replacement)
-      return(content)
+      document <- private$logEvent(document)
+      return(document)
     }
   ),
 
@@ -48,11 +49,12 @@ ReplaceNames <- R6::R6Class(
     initialize = function(x, names = NULL, replacement = NULL) {
       private$..className <- "ReplaceNames"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "ReplaceNames"
+      private$..logs  <- LogR$new()
+
       private$..x <- x
       private$..meta$object$name <- names
       private$..replacement <- replacement
-      private$..logs  <- LogR$new()
+
       invisible(self)
     }
   )
