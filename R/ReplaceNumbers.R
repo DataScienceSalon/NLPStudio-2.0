@@ -50,6 +50,7 @@ ReplaceNumbers <- R6::R6Class(
     initialize = function(x, joinNumbers = FALSE, remove = FALSE) {
       private$..className <- "ReplaceNumbers"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x

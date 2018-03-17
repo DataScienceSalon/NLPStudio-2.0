@@ -25,7 +25,7 @@ RemovePunctCmd <- R6::R6Class(
   classname = "RemovePunctCmd",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = TextStudio0,  
+  inherit = TextStudio0,
 
   private = list(
     ..endmark = logical(),
@@ -34,8 +34,9 @@ RemovePunctCmd <- R6::R6Class(
 
   public = list(
     initialize = function(endmark = FALSE, apostrophe = FALSE) {
+      private$..className <- "RemovePunctCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "RemovePunctCmd"
+      private$..meta$object$name <- private$..className
       private$..endmark <- endmark
       private$..apostrophe <- apostrophe
 

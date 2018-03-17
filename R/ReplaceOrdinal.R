@@ -51,6 +51,7 @@ ReplaceOrdinal <- R6::R6Class(
     initialize = function(x, joinOrdinal = FALSE, remove = FALSE) {
       private$..className <- "ReplaceOrdinal"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x

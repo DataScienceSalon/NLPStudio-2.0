@@ -25,7 +25,7 @@ ReplaceNamesCmd <- R6::R6Class(
   classname = "ReplaceNamesCmd",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = TextStudio0,  
+  inherit = TextStudio0,
 
   private = list(
     ..names = character()
@@ -33,9 +33,10 @@ ReplaceNamesCmd <- R6::R6Class(
 
   public = list(
     initialize = function(names = NULL, replacement = NULL) {
+      private$..className <- "ReplaceNamesCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "ReplaceNamesCmd"
-      private$..meta$object$name <- names
+      private$..meta$object$name <- private$..className
+      private$..names <- names
       private$..replacement <- replacement
       private$..logs  <- LogR$new()
       invisible(self)

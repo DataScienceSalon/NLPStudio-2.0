@@ -24,7 +24,7 @@ ReplaceNonAsciiCmd <- R6::R6Class(
   classname = "ReplaceNonAsciiCmd",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = TextStudio0,  
+  inherit = TextStudio0,
 
   private = list(
     ..removeNonConverted = logical()
@@ -32,8 +32,9 @@ ReplaceNonAsciiCmd <- R6::R6Class(
 
   public = list(
     initialize = function(removeNonConverted = TRUE) {
+      private$..className <- "ReplaceNonAsciiCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "ReplaceNonAsciiCmd"
+      private$..meta$object$name <- private$..className
       private$..removeNonConverted <- removeNonConverted
       private$..logs  <- LogR$new()
       invisible(self)

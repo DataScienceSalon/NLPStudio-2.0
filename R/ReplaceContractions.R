@@ -84,6 +84,7 @@ ReplaceContractions <- R6::R6Class(
                           orderPattern = fixed) {
       private$..className <- "ReplaceContractions"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x
@@ -95,24 +96,7 @@ ReplaceContractions <- R6::R6Class(
       private$..trim <- trim
       private$..orderPattern <- orderPattern
 
-
-      if (private$validateParams()$code == FALSE) stop()
-
       invisible(self)
-    },
-
-    getParams = function() {
-      input <- list(
-        x = private$..x,
-        pattern = private$..contractions,
-        replacement = private$..replacement,
-        leadspace = private$..leadspace,
-        trailspace = private$..trailspace,
-        fixed = private$..fixed,
-        trim = private$..trim,
-        orderPattern = private$..orderPattern
-      )
-      return(input)
     },
     accept = function(visitor)  {
       visitor$replaceContractions(self)

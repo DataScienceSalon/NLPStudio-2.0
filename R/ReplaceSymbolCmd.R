@@ -29,7 +29,7 @@ ReplaceSymbolCmd <- R6::R6Class(
   classname = "ReplaceSymbolCmd",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = TextStudio0,  
+  inherit = TextStudio0,
 
   private = list(
     ..dollar = logical(),
@@ -43,8 +43,9 @@ ReplaceSymbolCmd <- R6::R6Class(
   public = list(
     initialize = function(dollar = TRUE, percent = TRUE, pound = TRUE,
                           at = TRUE, and = TRUE, with = TRUE) {
+      private$..className <- "ReplaceSymbolCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "ReplaceSymbolCmd"
+      private$..meta$object$name <- private$..className
       private$..dollar <- dollar
       private$..percent <- percent
       private$..pound <- pound

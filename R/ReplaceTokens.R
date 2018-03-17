@@ -72,6 +72,7 @@ ReplaceTokens <- R6::R6Class(
                           orderPattern = fixed) {
       private$..className <- "ReplaceTokens"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x

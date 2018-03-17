@@ -28,11 +28,12 @@ ReplaceBacktick <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "ReplaceBacktick"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x
-      private$..regex <- "\`"
-      private$..replacement <- "'"
+      private$..regex <- "\\`"
+      private$..replacement <- "\\'"
 
       invisible(self)
     }

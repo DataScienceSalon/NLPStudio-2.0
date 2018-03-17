@@ -24,12 +24,13 @@ RemoveSymbolsCmd <- R6::R6Class(
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = TextStudio0,
-  
+
 
   public = list(
     initialize = function() {
+      private$..className <- "RemoveSymbolsCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "RemoveSymbolsCmd"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
       invisible(self)
     },

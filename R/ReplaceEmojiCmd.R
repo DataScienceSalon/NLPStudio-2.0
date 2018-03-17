@@ -26,15 +26,16 @@ ReplaceEmojiCmd <- R6::R6Class(
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = TextStudio0,
-  
+
   private = list(
     ..emojis = data.table()
   ),
 
   public = list(
     initialize = function(emojis = NULL) {
+      private$..className <- "ReplaceEmojiCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "ReplaceEmojiCmd"
+      private$..meta$object$name <- private$..className
       private$..emojis <- emojis
       private$..logs  <- LogR$new()
       invisible(self)

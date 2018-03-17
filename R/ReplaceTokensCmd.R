@@ -52,8 +52,9 @@ ReplaceTokensCmd <- R6::R6Class(
   public = list(
     initialize = function(tokens, replacement, leadspace = FALSE, trailspace = FALSE,
                           fixed = TRUE, trim = FALSE, orderPattern = fixed) {
+      private$..className <- "ReplaceTokensCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "ReplaceTokensCmd"
+      private$..meta$object$name <- private$..className
       private$..tokens <- tokens
       private$..replacement <- replacement
       private$..leadspace <- leadspace

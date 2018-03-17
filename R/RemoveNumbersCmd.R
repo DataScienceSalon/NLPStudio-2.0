@@ -27,8 +27,9 @@ RemoveNumbersCmd <- R6::R6Class(
 
   public = list(
     initialize = function() {
+      private$..className <- "RemoveNumbersCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "RemoveNumbersCmd"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
       invisible(self)
     },

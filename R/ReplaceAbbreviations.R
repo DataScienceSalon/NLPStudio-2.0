@@ -50,13 +50,13 @@ ReplaceAbbreviations <- R6::R6Class(
             replacement <- as.character(private$..replacement)
           }
         } else {
-          pattern <- private$..abbreviations
+          pattern <- paste("\\b", private$..abbreviations, "(?!\\w)", sep = "")
           replacement <- private$..replacement
         }
 
         document$content <- textclean::mgsub(x = content,  pattern = pattern,
-                                    replacement = replacement,
-                                    fixed = TRUE)
+                                    replacement = replacement,  fixed = FALSE,
+                                    perl = TRUE)
       }
       document <- private$logEvent(document)
 
@@ -69,14 +69,8 @@ ReplaceAbbreviations <- R6::R6Class(
                           replacement = NULL, ignoreCase = TRUE) {
       private$..className <- "ReplaceAbbreviations"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
-
-      private$..params <- list()
-      private$..params$x <- x
-      private$..params$pattern <- abbreviations
-      private$..params$replacement <- replacement
-      private$..params$logical <- ignoreCase
-      if (private$validateParams()$code == FALSE) stop()
 
       private$..x <- x
       private$..abbreviations <- abbreviations

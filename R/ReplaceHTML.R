@@ -48,6 +48,7 @@ ReplaceHTML <- R6::R6Class(
     initialize = function(x, symbol = TRUE) {
       private$..className <- "ReplaceHTML"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x

@@ -23,13 +23,14 @@ ReplaceBacktickCmd <- R6::R6Class(
   classname = "ReplaceBacktickCmd",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = TextStudio0,  
+  inherit = TextStudio0,
 
 
   public = list(
     initialize = function() {
+      private$..className <- "ReplaceBacktickCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "ReplaceBacktickCmd"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
       invisible(self)
     },

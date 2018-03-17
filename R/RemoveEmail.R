@@ -26,6 +26,7 @@ RemoveEmail <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveEmail"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x

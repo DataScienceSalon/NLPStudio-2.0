@@ -27,8 +27,9 @@ RemoveURLCmd <- R6::R6Class(
 
   public = list(
     initialize = function() {
+      private$..className <- "RemoveURLCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "RemoveURLCmd"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
       invisible(self)
     },

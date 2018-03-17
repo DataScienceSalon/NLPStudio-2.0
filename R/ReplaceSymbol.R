@@ -64,6 +64,7 @@ ReplaceSymbol <- R6::R6Class(
                           at = TRUE, and = TRUE, with = TRUE) {
       private$..className <- "ReplaceSymbol"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x

@@ -52,6 +52,7 @@ ReplaceEmoji <- R6::R6Class(
     initialize = function(x, emojis = NULL) {
       private$..className <- "ReplaceEmoji"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x

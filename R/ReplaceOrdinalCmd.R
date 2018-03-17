@@ -25,7 +25,7 @@ ReplaceOrdinalCmd <- R6::R6Class(
   classname = "ReplaceOrdinalCmd",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = TextStudio0,  
+  inherit = TextStudio0,
 
   private = list(
     ..joinOrdinal = logical(),
@@ -34,8 +34,9 @@ ReplaceOrdinalCmd <- R6::R6Class(
 
   public = list(
     initialize = function(joinOrdinal = FALSE, remove = FALSE) {
+      private$..className <- "ReplaceOrdinalCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "ReplaceOrdinalCmd"
+      private$..meta$object$name <- private$..className
       private$..joinOrdinal <- joinOrdinal
       private$..remove <- remove
       private$..logs  <- LogR$new()

@@ -50,8 +50,10 @@ ReplaceInternetSlang <- R6::R6Class(
 
   public = list(
     initialize = function(x, slang = NULL, replacement = NULL, ignoreCase = TRUE) {
+
       private$..className <- "ReplaceInternetSlang"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x
@@ -59,22 +61,7 @@ ReplaceInternetSlang <- R6::R6Class(
       private$..replacement <- replacement
       private$..ignoreCase <- ignoreCase
 
-      if (private$validateParams()$code == FALSE) stop()
-
       invisible(self)
-    },
-
-    getParams = function() {
-      input <- list(
-        x = private$..x,
-        pattern = private$..slang,
-        replacement = private$..replacement,
-        ignoreCase = private$..ignoreCase
-      )
-      return(input)
-    },
-    accept = function(visitor)  {
-      visitor$replaceInternetSlang(self)
     }
   )
 )

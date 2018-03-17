@@ -42,6 +42,7 @@ LowerCase <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "LowerCase"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       # Obtain, validate, then clear parameter list

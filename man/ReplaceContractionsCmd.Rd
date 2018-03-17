@@ -11,27 +11,27 @@ ReplaceContractionsCmd$new(contractions = NULL, ignoreCase = TRUE)
 \arguments{
 \item{x}{Object of to be processed. This can be an object of the Corpus, Document, character classes, or a list of character vectors.}
 
-\item{contractions}{Character string of contractions to be matched in the 
+\item{contractions}{Character string of contractions to be matched in the
 given character vector. If NULL, the default is to use \code{\link[lexicon]{key_contractions}} data set.}
 
 \item{replacement}{Character string equal in length to contractions containing
 the long forms of the contractions.}
 
-\item{leadspace}{logical.  If \code{TRUE} inserts a leading space in the 
+\item{leadspace}{logical.  If \code{TRUE} inserts a leading space in the
 replacements.}
 
-\item{trailspace}{logical.  If \code{TRUE} inserts a trailing space in the 
+\item{trailspace}{logical.  If \code{TRUE} inserts a trailing space in the
 replacements.}
 
-\item{fixed}{logical. If \code{TRUE}, contractions is a string to be matched as is. 
+\item{fixed}{logical. If \code{TRUE}, contractions is a string to be matched as is.
 Overrides all conflicting arguments.}
 
-\item{trim}{logical.  If \code{TRUE} leading and trailing white spaces are 
+\item{trim}{logical.  If \code{TRUE} leading and trailing white spaces are
 removed and multiple white spaces are reduced to a single white space.}
 
-\item{orderPattern}{logical.  If \code{TRUE} and \code{fixed = TRUE}, the 
-\code{contractions} string is sorted by number of characters to prevent substrings 
-replacing meta strings (e.g., \code{contractions = c("the", "then")} resorts to 
+\item{orderPattern}{logical.  If \code{TRUE} and \code{fixed = TRUE}, the
+\code{contractions} string is sorted by number of characters to prevent substrings
+replacing meta strings (e.g., \code{contractions = c("the", "then")} resorts to
 search for "then" first).}
 
 \item{\dots}{ignored.}

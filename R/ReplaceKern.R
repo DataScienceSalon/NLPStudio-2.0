@@ -47,6 +47,7 @@ ReplaceKern <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "ReplaceKern"
       private$..methodName <- "initialize"
+      private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
       private$..x <- x
