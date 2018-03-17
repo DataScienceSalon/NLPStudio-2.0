@@ -40,7 +40,7 @@ object$accept(visitor)
 \seealso{
 Other Validation Visitor Classes: \code{\link{VVAttach}},
   \code{\link{VVDetach}}, \code{\link{VVGet}},
-  \code{\link{VVInit}}
+  \code{\link{VVInit}}, \code{\link{VVSource}}
 }
 \author{
 John James, \email{jjames@DataScienceSalon.org}

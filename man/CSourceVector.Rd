@@ -12,6 +12,9 @@ CSourceVector
 \item{name}{Optional character vector indicating name for Corpus object.}
 
 \item{x}{Character vector or a list of character vectors containing text.}
+
+\item{concatenate}{Logical for the vector method. If TRUE, character vectors are
+concatenated into a single text for the Document object.}
 }
 \description{
 \code{CSourceVector} Sources a Corpus object from a character vector or a list of character vectors.

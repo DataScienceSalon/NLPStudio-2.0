@@ -37,22 +37,13 @@ CSourceQuanteda <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                       Instantiation Method                              #
     #-------------------------------------------------------------------------#
-    initialize = function(x, name = NULL) {
+    initialize = function() {
 
       # Initiate logging variables and system meta data
       private$..className <- 'CSourceQuanteda'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
-
-      # Obtain, validate, then clear parameter list
-      private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
-      private$..params <- list()
-
-      # Save parameter and create Corpus object.
-      private$..x <- x
-      private$..name <- name
-      private$..corpus <- Corpus$new(name = name)
+      private$..corpus <- Corpus$new()
 
       invisible(self)
     },
@@ -60,19 +51,23 @@ CSourceQuanteda <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                          Execute Method                                 #
     #-------------------------------------------------------------------------#
-    execute = function() {
+    source = function(x, name = NULL) {
 
-      private$..methodName <- 'execute'
+      private$..methodName <- 'source'
+
+      if (private$validate(x)$code == FALSE) stop()
+
+      private$..corpus <- private$nameCorpus(name)
 
       # Extract data and metadata
-      texts <- private$..x$documents[["texts"]]
+      texts <- x$documents[["texts"]]
 
-      metaData <- private$..x$documents[-which(names(private$..x$documents) == "texts")]
+      metaData <- x$documents[-which(names(x$documents) == "texts")]
       rownames(metaData) <- NULL
 
       # Extract a name variable
       if (is.null(metaData$doc_id)) {
-        n <- paste0(private$..name, "-document-", seq(1:length(texts)))
+        n <- paste0("document-", seq(1:length(texts)))
       } else {
         n <- metaData$doc_id
         metaData <- metaData %>% select(-doc_id)

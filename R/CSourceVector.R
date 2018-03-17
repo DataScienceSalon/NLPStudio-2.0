@@ -13,6 +13,8 @@
 #'
 #' @param name Optional character vector indicating name for Corpus object.
 #' @param x Character vector or a list of character vectors containing text.
+#' @param concatenate Logical for the vector method. If TRUE, character vectors are
+#' concatenated into a single text for the Document object.
 #'
 #' @examples
 #' text <- c("The firm possesses unparalleled leverage in Washington,
@@ -39,7 +41,15 @@ CSourceVector <- R6::R6Class(
 
   private = list(
     ..x = character(),
-    ..name = character()
+    ..name = character(),
+
+    validate = function(x, name, concatenate) {
+      private$..params <- list()
+      private$..params$x <- x
+      private$..params$name <- name
+      private$..params$concatenate <- concatenate
+      return(private$validateParams(private$..methodName))
+    }
   ),
 
   public = list(
@@ -47,22 +57,13 @@ CSourceVector <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                       Instantiation Method                              #
     #-------------------------------------------------------------------------#
-    initialize = function(x, name = NULL) {
+    initialize = function() {
 
       # Initiate logging variables and system meta data
       private$..className <- 'CSourceVector'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
-
-      # Obtain, validate, then clear parameter list
-      private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
-      private$..params <- list()
-
-      # Save parameter and create Corpus object.
-      private$..x <- x
-      private$..name <- name
-      private$..corpus <- Corpus$new(name = name)
+      private$..corpus <- Corpus$new()
 
       invisible(self)
     },
@@ -71,20 +72,33 @@ CSourceVector <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                          Execute Method                                 #
     #-------------------------------------------------------------------------#
-    execute = function() {
+    source = function(x, name = NULL, concatenate = TRUE) {
 
-      private$..methodName <- 'execute'
+      private$..methodName <- 'source'
 
-      if ("list" %in% class(private$..x)[1]) {
-        lapply(private$..x, function(x) {
-          name <- names(x)
-          doc <- Document$new(x = x[x], name = name)
+      if (private$validate(x, name, concatenate)$code == FALSE) stop()
+
+      private$..corpus <- private$nameCorpus(name)
+
+      if ("list" %in% class(x)[1]) {
+        lapply(x, function(y) {
+          name <- names(y)
+          doc <- Document$new(x = y, name = name)
           private$..corpus$attach(x = doc)
         })
-      } else {
-        name <- names(private$..x)
-        doc <- Document$new(x = private$..x, name = name)
+      } else if (concatenate) {
+        name <- names(x)
+        doc <- Document$new(x = x, name = name)
         private$..corpus$attach(x = doc)
+      } else {
+        for (i in 1:length(x)) {
+          name <- names(x[i])
+          if (is.null(name)) {
+            name <- paste0("Document-",i)
+          }
+          doc <- Document$new(x = x[i], name = name)
+          private$..corpus$attach(x = doc)
+        }
       }
 
       event <- paste0("Corpus sourcing from vector, complete.")

@@ -86,6 +86,13 @@ Base <- R6::R6Class(
           private$..event <- status$msg
           private$logIt("Error")
         }
+      } else if (what == "source") {
+        v <- Validator$new()
+        status <- v$source(self)
+        if (status$code == FALSE) {
+          private$..event <- status$msg
+          private$logIt("Error")
+        }
       }
       return(status)
     },

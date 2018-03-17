@@ -60,6 +60,11 @@ Validator <- R6::R6Class(
     detach = function(object) {
       visitor <- VVDetach$new()
       object$accept(visitor)
+    },
+
+    source = function(object) {
+      visitor <- VVSource$new()
+      object$accept(visitor)
     }
   )
 )

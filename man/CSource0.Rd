@@ -21,7 +21,7 @@ or a corpus object from a supported package.}
 
  \itemize{
   \item{\code{new()}}{Initializes an object of the CSource0 class.}
-  \item{\code{execute()}}{Executes the process of sourcing the Corpus object.}
+  \item{\code{source(x, name = NULL)}}{Executes the process of sourcing the Corpus object.}
  }
 }
 

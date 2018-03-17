@@ -28,32 +28,20 @@ CSourceDir <- R6::R6Class(
   lock_class = FALSE,
   inherit = CSource0,
 
-  private = list(
-    ..x = character(),
-    ..name = character()
-  ),
-
   public = list(
 
     #-------------------------------------------------------------------------#
     #                       Instantiation Method                              #
     #-------------------------------------------------------------------------#
-    initialize = function(x, name = NULL) {
+    initialize = function() {
 
       # Initiate logging variables and system meta data
       private$..className <- 'CSourceDir'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
 
-      # Obtain, validate, then clear parameter list
-      private$..params <- list()
-      private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
-
       # Save parameter and create Corpus object.
-      private$..x <- x
-      private$..name <- name
-      private$..corpus <- Corpus$new(name = name)
+      private$..corpus <- Corpus$new()
 
       invisible(self)
     },
@@ -62,22 +50,26 @@ CSourceDir <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                          Execute Method                                 #
     #-------------------------------------------------------------------------#
-    execute = function() {
+    source = function(x, name = NULL) {
 
-      private$..methodName <- 'execute'
+      private$..methodName <- 'source'
 
-      if (isDirectory(private$..x)) {
-        files <- list.files(private$..x, full.names = TRUE)
+      if (private$validate(x)$code == FALSE) stop()
+
+      private$..corpus <- private$nameCorpus(name)
+
+      if (isDirectory(x)) {
+        files <- list.files(x, full.names = TRUE)
       } else {
-        glob <- basename(private$..x)
-        dir <- dirname(private$..x)
+        glob <- basename(x)
+        dir <- dirname(x)
         files <- list.files(dir, pattern = glob2rx(glob), full.names = TRUE)
       }
 
       lapply(files, function(f) {
         name <- basename(f)
         content <- IO$new()$read(f, repair = TRUE)
-        doc <- Document$new(name = name, x = content)
+        doc <- Document$new(x = content, name = name)
         private$..corpus$attach(x = doc)
       })
 

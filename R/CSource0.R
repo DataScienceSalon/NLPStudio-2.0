@@ -5,7 +5,7 @@
 #' @section Methods:
 #'  \itemize{
 #'   \item{\code{new()}}{Initializes an object of the CSource0 class.}
-#'   \item{\code{execute()}}{Executes the process of sourcing the Corpus object.}
+#'   \item{\code{source(x, name = NULL)}}{Executes the process of sourcing the Corpus object.}
 #'  }
 #'
 #' @param name Optional character vector indicating name for Corpus object.
@@ -24,12 +24,25 @@ CSource0 <- R6::R6Class(
   inherit = Base,
 
   private = list(
-    ..x = character()
+    ..corpus = character(),
+
+    validate = function(x) {
+      private$..params <- list()
+      private$..params$x <- x
+      return(private$validateParams(private$..methodName))
+    },
+
+    nameCorpus = function(name) {
+      if (!is.null(name)) {
+        private$..corpus <- private$..corpus$meta(key = "name", value = name)
+      }
+      return(private$..corpus)
+    }
   ),
 
   public = list(
 
-    initialize = function(x) { stop("This method is not implemented for this abstract class") },
-    execute = function() { stop("This method is not implemented for this abstract class") }
+    initialize = function() { stop("This method is not implemented for this abstract class") },
+    source = function() { stop("This method is not implemented for this abstract class") }
   )
 )

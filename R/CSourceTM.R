@@ -24,59 +24,49 @@ CSourceTM <- R6::R6Class(
   lock_class = FALSE,
   inherit = CSource0,
 
-  private = list(
-    ..x = character(),
-    ..name = character()
-  ),
-
   public = list(
 
     #-------------------------------------------------------------------------#
     #                       Instantiation Method                              #
     #-------------------------------------------------------------------------#
-    initialize = function(x, name = NULL) {
+    initialize = function() {
 
       # Initiate logging variables and system meta data
       private$..className <- 'CSourceTM'
       private$..methodName <- 'initialize'
       private$..logs <- LogR$new()
-
-      # Obtain, validate, then clear parameter list
-      private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
-      private$..params <- list()
-
-      # Save parameter and create Corpus object.
-      private$..x <- x
-      private$..name <- name
-      private$..corpus <- Corpus$new(name = name)
+      private$..corpus <- Corpus$new()
 
       invisible(self)
     },
 
     #-------------------------------------------------------------------------#
-    #                          Execute Method                                 #
+    #                           Source Method                                 #
     #-------------------------------------------------------------------------#
-    execute = function() {
+    source = function(x, name = NULL) {
 
-      private$..methodName <- 'execute'
+      private$..methodName <- 'source'
 
-      docNames <- names(private$..x)
+      if (private$validate(x)$code == FALSE) stop()
 
-      lapply(seq_along(private$..x), function(x) {
+      private$..corpus <- private$nameCorpus(name)
+
+      docNames <- names(x)
+
+      lapply(seq_along(x), function(y) {
 
         # Create Text and Document Objects
-        content <- private$..x[[x]]$content
-        doc <- Document$new(x =content, name = docNames[x])
+        content <- x[[y]]$content
+        doc <- Document$new(x =content, name = docNames[y])
 
         # Create metadata
-        for (i in 1:length(private$..x[[x]]$meta)) {
-          if (length(private$..x[[x]]$meta[[i]]) > 0) {
-            if (names(private$..x[[x]]$meta[i]) == 'datetimestamp') {
-              doc$meta(key = 'tmCreated', value = private$..x[[x]]$meta[[i]])
+        for (i in 1:length(x[[y]]$meta)) {
+          if (length(x[[y]]$meta[[i]]) > 0) {
+            if (names(x[[y]]$meta[i]) == 'datetimestamp') {
+              doc$meta(key = 'tmCreated', value = x[[y]]$meta[[i]])
             } else {
-              doc$meta(key = names(private$..x[[x]]$meta[i]),
-                        value = private$..x[[x]]$meta[[i]])
+              doc$meta(key = names(x[[y]]$meta[i]),
+                        value = x[[y]]$meta[[i]])
             }
           }
         }

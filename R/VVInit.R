@@ -70,110 +70,6 @@ VVInit <- R6::R6Class(
       return(status)
     },
 
-    validateTM = function(object) {
-      status <- list()
-      status[['code']] <- TRUE
-
-      p <- object$getParams()
-      classes <- c("VCorpus", "Corpus", "SimpleCorpus", "PCorpus")
-
-      if (!(class(p$x)[1] %in% classes)) {
-        status$code <- FALSE
-        status$msg <- paste0("Invalid object. Must be a tm package 'VCorpus', ",
-                             "'Corpus','SimpleCorpus' or 'PCorpus' object.")
-      }
-
-      return(status)
-    },
-
-    validateQ = function(object, x) {
-
-      status <- list()
-      status[['code']] <- TRUE
-
-      p <- object$getParams()
-
-      if (!("corpus" %in% class(p$x)[1])) {
-        status$code <- FALSE
-        status$msg <- paste0("Invalid object. Must be a Quanteda 'corpus' object.")
-      }
-
-      return(status)
-    },
-
-    validateDir = function(object) {
-
-      status <- list()
-      status[['code']] <- TRUE
-
-      p <- object$getParams()
-
-      if (class(p$x)[1] == 'character') {
-
-        if (isDirectory(p$x)) {
-          files <- list.files(p$x, full.names = TRUE)
-        } else {
-          glob <- basename(p$x)
-          dir <- dirname(p$x)
-          files <- list.files(dir, pattern = glob2rx(glob), full.names = TRUE)
-        }
-
-        if (is.null(files) | length(files) == 0) {
-          status$code <- FALSE
-          status$msg <- paste0("No files match the criteria entered.")
-        }
-      } else {
-        status$code <- FALSE
-        status$msg <- paste0("Parameter must be class character and indicate ",
-                             "a directory or wildcard string.")
-      }
-      return(status)
-    },
-
-    validateVector = function(object) {
-      status <- list()
-      status[['code']] <- TRUE
-
-      p <- object$getParams()
-
-      if (!("character" %in% class(p$x)[1])) {
-        if ("list" %in% class(p$x)[1]) {
-          classes <- unique(sapply(p$x, function(i) {class(i)[1]}))
-          if (length(classes) > 1) {
-            status$code <- FALSE
-            status$msg <- paste0("List must contain only character vectors.")
-            return(status)
-          } else if (sum("character" %in% classes) != length(classes)) {
-            status$code <- FALSE
-            status$msg <- paste0("List must contain only character vectors.")
-            return(status)
-          }
-        } else {
-          status$code <- FALSE
-          status$msg <- paste0("Parameter must be a character vector ",
-                               "or a list of character vectors.")
-          return(status)
-        }
-      }
-      return(status)
-    },
-
-    validateFile = function(object) {
-
-      status <- list()
-      status[['code']] <- TRUE
-
-      p <- object$getParams()
-
-      if (!(R.utils::isFile(p$x))) {
-        status$code <- FALSE
-        status$msg <- paste0("File ", x, " does not exist.",
-                             "See ?", class(object)[1],
-                             " for further assistance")
-      }
-      return(status)
-    },
-
     validateClass = function(object, classes) {
 
       status <- list()
@@ -215,26 +111,6 @@ VVInit <- R6::R6Class(
     },
     document = function(object) {
       return(private$validateClass(object, classes = "character"))
-    },
-
-    #-------------------------------------------------------------------------#
-    #                   Validate Corpus Source Classes                        #
-    #-------------------------------------------------------------------------#
-
-    csourceVector = function(object) {
-      return(private$validateVector(object))
-    },
-
-    csourceDir = function(object) {
-      return(private$validateDir(object))
-    },
-
-    csourceQuanteda = function(object) {
-      return(private$validateQ(object))
-    },
-
-    csourceTM = function(object) {
-      return(private$validateTM(object))
     },
 
     #-------------------------------------------------------------------------#

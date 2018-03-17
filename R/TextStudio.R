@@ -59,8 +59,7 @@ TextStudio <- R6::R6Class(
       private$..params$x <- x
       if (private$validateParams()$code == FALSE) stop()
 
-      private$..x <- Clone$corpus(x = x, name = name)
-      print(class(private$..x))
+      private$..x <- Clone$new()$corpus(x = x, name = name)
 
       # Create log entry
       private$..event <- paste0("TextStudio object instantiated.")
