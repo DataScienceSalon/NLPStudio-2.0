@@ -1,14 +1,14 @@
 #==============================================================================#
-#                               Composite                                      #
+#                               Collection                                     #
 #==============================================================================#
-#' Composite
+#' Collection
 #'
-#' \code{Composite} Base class for all Composite classes
+#' \code{Collection} Base class for all Collection classes
 #'
-#' This base class defines members and methods common across all the Composite
-#' classes NLPStudio, Pipeline, Corpus and Document.
+#' This base class defines members and methods common across all the Collection
+#' classes, such as Corpus, Data, Analysis, Model and Evaluation classes.
 #'
-#' @section Composite methods:
+#' @section Collection methods:
 #'  \itemize{
 #'   \item{\code{attach(x)}}{Method for attaching objects.}
 #'   \item{\code{detach(key, value)}}{Method for detaching objects.}
@@ -24,9 +24,10 @@
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
+#' @family Collection Classes
 #' @export
-Composite <- R6::R6Class(
-  classname = "Composite",
+Collection <- R6::R6Class(
+  classname = "Collection",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = Entity,

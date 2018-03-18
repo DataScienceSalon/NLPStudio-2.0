@@ -21,6 +21,40 @@ VVInit <- R6::R6Class(
 
   private = list(
 
+    validateTextStudio = function(object, classes) {
+      status <- list()
+      status[['code']] <- TRUE
+
+      p <- object$getParams()
+
+      if (!(class(p$x)[1] %in% classes)) {
+        status[['code']] <- FALSE
+        status[['msg']] <- paste0("Invalid class. Cannot process ",
+                                  class(p$x)[1], " object. ",
+                                  "TextStudio classes operate on ",
+                                  "Corpus and Document classes only. ",
+                                  "See ?", class(object)[1],
+                                  " for further assistance")
+        return(status)
+      }
+
+      for (i in 1:length(p$variables)) {
+        if (!(p$values[i] %in% p$valid[[i]])) {
+          status[['code']] <- FALSE
+          status[['msg']] <- paste0("Invalid '", p$variables[i], "' parameter. ",
+                                    "Valid values are ",
+                                      paste0("c(",gsub(",$", "",
+                                                       paste0("'",p$valid[[i]],
+                                                              "',", collapse = "")),
+                                                                "). "),
+                                    "See ?", class(object)[1],
+                                    " for further assistance.")
+          return(status)
+        }
+      }
+      return(status)
+    },
+
     validateReplace = function(object) {
 
       status <- list()
@@ -161,9 +195,10 @@ VVInit <- R6::R6Class(
       return(private$validateClass(object, classes = c("Corpus", "Document")))
     },
 
-    replaceAbbreviations = function(object) {
-      return(private$validateReplace(object))
+    tokenize = function(object) {
+      return(private$validateTextStudio(object, classes = c("Corpus", "Document")))
     },
+
 
     #-------------------------------------------------------------------------#
     #                             Misc Classes                                #

@@ -26,7 +26,7 @@ This class is a wrapper for the  \code{\link[quanteda]{tokens}} function for
 character, and word, tokenization. Sentence tokenization functionality is
 provided using the openNLP package.
 
-Sources: 
+Sources:
 \url{https://cran.r-project.org/web/packages/quanteda/quanteda.pdf}
 \url{https://cran.r-project.org/web/packages/openNLP/openNLP.pdf}
 }
@@ -104,7 +104,7 @@ Other TextStudio Classes: \code{\link{LowerCaseCmd}},
   \code{\link{ReplaceTokens}},
   \code{\link{ReplaceWordElongationCmd}},
   \code{\link{ReplaceWordElongation}},
-  \code{\link{SplitCorpusCmd}}, \code{\link{SplitCorpus}},
+  \code{\link{Reshape}}, \code{\link{SplitCorpus}},
   \code{\link{SplitDocument}}, \code{\link{StripTextCmd}},
   \code{\link{StripText}}
 }

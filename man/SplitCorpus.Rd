@@ -97,9 +97,9 @@ Other TextStudio Classes: \code{\link{LowerCaseCmd}},
   \code{\link{ReplaceTokens}},
   \code{\link{ReplaceWordElongationCmd}},
   \code{\link{ReplaceWordElongation}},
-  \code{\link{SplitCorpusCmd}},
-  \code{\link{SplitDocument}}, \code{\link{StripTextCmd}},
-  \code{\link{StripText}}, \code{\link{Tokenize}}
+  \code{\link{Reshape}}, \code{\link{SplitDocument}},
+  \code{\link{StripTextCmd}}, \code{\link{StripText}},
+  \code{\link{Tokenize}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

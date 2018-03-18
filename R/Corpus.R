@@ -52,7 +52,7 @@ Corpus <- R6::R6Class(
   classname = "Corpus",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Composite,
+  inherit = Collection,
 
   public = list(
 

@@ -3,13 +3,13 @@
 #------------------------------------------------------------------------------#
 #' Tokenize
 #'
-#' \code{Tokenize}  Tokenizes text into character, word, or sentence tokens. 
-#' 
+#' \code{Tokenize}  Tokenizes text into character, word, or sentence tokens.
+#'
 #' This class is a wrapper for the  \code{\link[quanteda]{tokens}} function for
 #' character, and word, tokenization. Sentence tokenization functionality is
 #' provided using the openNLP package.
-#' 
-#' Sources: 
+#'
+#' Sources:
 #' \url{https://cran.r-project.org/web/packages/quanteda/quanteda.pdf}
 #' \url{https://cran.r-project.org/web/packages/openNLP/openNLP.pdf}
 #'
@@ -35,44 +35,44 @@ Tokenize <- R6::R6Class(
   classname = "Tokenize",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = DataStudio0,
-  
+  inherit = TextStudio0,
+
   private = list(
     ..what = character(),
-    
+
     processDocument = function(document) {
-      
+
       private$..method <- "processDocument"
-      
+
       content <- document$content
-      
+
       # Produce data object content
-      if (private$..what == "sentence") {
-        
+      if (private$..what %n% c("sentence", "s")) {
+
         # Use sentence token from openNLP and NLP packages
         s <- paste(content, collapse = "")
         s <- NLP::as.String(s)
         sa <- openNLP::Maxent_Sent_Token_Annotator()
         a <- NLP::annotate(s, sa)
         tokenized <- s[a]
-        
+
       } else {
         tokenized <- quanteda::tokens(x = content, what = private$..what)
       }
-      
+
       # Create Data Object and add to Document object
       id <- paste0(class(self)[1], "-", private$..what)
       data <- Data$new(id = id, content = tokenized)
       document$addDNA(data)
-      
+
       private$..event <- paste0("Tokenized ", document$getName(), " document.")
       private$logIt()
-      
+
       return(document)
     },
-    
+
     processCorpus = function(corpus) {
-      
+
       private$..method <- "processCorpus"
       docs <- corpus$get()
       lapply(docs, function(d) {
@@ -83,43 +83,42 @@ Tokenize <- R6::R6Class(
       return(corpus)
     }
   ),
-  
+
   public = list(
-    initialize = function(x, what= NULL) {
+    initialize = function(x, what = NULL) {
       private$..className <- "Tokenize"
       private$..methodName <- "initialize"
       private$..meta$object$name <-  "Tokenize"
+      private$..logs  <- LogR$new()
+
+      private$..params <- list()
+      private$..params$x <- x
+      private$..params$variables <- c('what')
+      private$..params$values <- c(what)
+      private$..params$valid <- list(c("word", "w", "sentence", "s", 'NULL'))
+      if (private$validateParams()$code == FALSE) stop()
+
       private$..x <- x
       private$..what <- what
-      private$..logs  <- LogR$new()
-      
-      if (private$validateParams()$code == FALSE) stop()
-      
+
       invisible(self)
     },
-    
+
     execute = function() {
-      
+
       private$..methodName <- "execute"
-      
-      # Update 
+
+      # Update
       corpus <- private$processCorpus(private$..x)
-      
+
       # Log it
       private$..event <- paste0("Executed ", class(self)[1], " on ",
                                 private$..x$getName(), ". ")
       private$logIt()
-      
+
       return(corpus)
     },
-    
-    getParams = function() {
-      input <- list(
-        x = private$..x,
-        what = private$..what
-      )
-      return(input)
-    },
+
     accept = function(visitor)  {
       visitor$tokenize(self)
     }

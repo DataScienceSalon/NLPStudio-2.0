@@ -34,7 +34,7 @@ Split0 <- R6::R6Class(
 
       # Create cross-validation sets and assign metadata from master corpus
       private$..cvSets <- lapply(seq_along(c(1:length(private$..splits))), function(x) {
-        cvSet <- private$spawn()
+        cvSet <- Corpus$new()
         cvSet <- cvSet$meta(key = keys, value = values)
         cvSet <- cvSet$meta(key = "name",
                             value = paste0(private$..x$meta(key = "name"),
