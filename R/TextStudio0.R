@@ -56,7 +56,7 @@ TextStudio0 <- R6::R6Class(
     },
 
     processCorpus = function() {
-      docs <- private$..x$get()
+      docs <- private$..x$getDocument()
       for (i in 1:length(docs)) {
         doc <- private$processDocument(docs[[i]])
         private$..x$attach(doc)

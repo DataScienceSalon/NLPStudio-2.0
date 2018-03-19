@@ -70,7 +70,7 @@ CSourceDir <- R6::R6Class(
         name <- basename(f)
         content <- IO$new()$read(f, repair = TRUE)
         doc <- Document$new(x = content, name = name)
-        private$..corpus$attach(x = doc)
+        private$..corpus$addDocument(x = doc)
       })
 
       event <- paste0("Corpus sourcing from directory, complete.")

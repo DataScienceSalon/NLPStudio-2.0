@@ -73,7 +73,28 @@ Corpus <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
-    #                    Document Metadata Method                             #
+    #                       Document Management Methods                       #
+    #-------------------------------------------------------------------------#
+    getDocument = function(key = NULL, value = NULL) {
+      private$..methodName <- "getDocument"
+      objects <- private$get(cls = "Document", key, value)
+      return(objects)
+    },
+
+    addDocument = function(x) {
+      private$..methodName <- 'addDocument'
+      private$attach(x)
+      invisible(self)
+    },
+
+    removeDocument = function(x) {
+      private$..methodName <- 'removeDocument'
+      private$detach(x)
+      invisible(self)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                        Document Metadata Method                         #
     #-------------------------------------------------------------------------#
     docMeta = function(key, values) {
 
@@ -93,7 +114,7 @@ Corpus <- R6::R6Class(
       }
 
       for (i in 1:length(private$..attachments[['Document']])) {
-        private$..attachments[[Document]][[i]] <-
+        private$..attachments[['Document']][[i]] <-
           private$..attachments[['Document']][[i]]$meta(key = key, value = values[i])
         print(private$..attachments[['Document']][[i]]$meta())
       }
@@ -105,37 +126,79 @@ Corpus <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
+    #                           Summary Method                                #
+    #-------------------------------------------------------------------------#
+    summary = function(meta = TRUE, stats = TRUE, system = TRUE, state = TRUE,
+                       quiet = FALSE, abbreviated = FALSE, attachments = TRUE) {
+      if (abbreviated) {
+        result <- private$summaryShort()
+      } else {
+        result <- list()
+        section <- character()
+
+        if (meta) {
+          result$meta <- private$summaryObjMeta(quiet = quiet)
+          section <- c(section, "Metadata")
+        }
+
+        if (state) {
+          result$app <- private$summaryState(quiet = quiet)
+          section <- c(section, "State Info")
+        }
+
+        if (attachments) {
+          result$attachments <- private$summarizeAttachments(quiet = quiet)
+          section <- c(section, "Attachments")
+        }
+
+        if (system) {
+          result$sys <- private$summarySysInfo(quiet = quiet)
+          section <- c(section, "System Info")
+        }
+
+        names(result) <- section
+      }
+      invisible(result)
+    },
+
+    #-------------------------------------------------------------------------#
     #                             IO Methods                                  #
     #-------------------------------------------------------------------------#
     read = function() {
       private$..methodName <- 'read'
-      content <- lapply(private$..attachments, function(a) {
-        a$content
-      })
+      if (!is.null(private$..attachments[['Document']])) {
+        content <- lapply(private$..attachments[['Document']], function(a) {
+          a$content
+        })
+      }
       return(content)
     },
 
     write = function(path, fileNames = NULL) {
       private$..methodName <- 'write'
 
-      if (is.null(fileNames)) {
-        path <- file.path(path, paste0(sapply(private$..attachments, function(a) {
-          tools::file_path_sans_ext(a$getName())
-          }),".txt"))
-      } else {
-        if (length(fileNames) != length(private$..attachments)) {
-          private$..event <- paste0("Unable to write the Corpus object. The ",
-                                     "fileNames parameter must be NULL or have",
-                                     "length = ", length(private$..attachments), ".")
-          private$logIt("Error")
-          stop()
+      if (!is.null(private$..attachments[['Document']])) {
+
+        if (is.null(fileNames)) {
+          path <- file.path(path, paste0(sapply(private$..attachments[['Document']], function(a) {
+            tools::file_path_sans_ext(a$getName())
+            }),".txt"))
         } else {
-          path <- file.path(path,(paste0(tools::file_path_sans_ext(fileNames), ".txt")))
+          if (length(fileNames) != length(private$..attachments[['Document']])) {
+            private$..event <- paste0("Unable to write the Corpus object. The ",
+                                       "fileNames parameter must be NULL or have",
+                                       "length = ", length(private$..attachments[['Document']]), ".")
+            private$logIt("Error")
+            stop()
+          } else {
+            path <- file.path(path,(paste0(tools::file_path_sans_ext(fileNames), ".txt")))
+          }
         }
+        lapply(seq_along(private$..attachments[['Document']]), function(x) {
+            private$..attachments[['Document']][[x]]$write(path = path[x])
+          })
+
       }
-      lapply(seq_along(private$..attachments), function(x) {
-          private$..attachments[[x]]$write(path = path[x])
-        })
       invisible(self)
     },
 

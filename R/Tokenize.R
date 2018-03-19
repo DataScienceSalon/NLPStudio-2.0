@@ -74,7 +74,7 @@ Tokenize <- R6::R6Class(
     processCorpus = function(corpus) {
 
       private$..method <- "processCorpus"
-      docs <- corpus$get()
+      docs <- corpus$getDocument()
       lapply(docs, function(d) {
         corpus$addDocument(private$processDocument(d))
       })

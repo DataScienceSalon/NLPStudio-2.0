@@ -74,7 +74,7 @@ Clone <- R6::R6Class(
       out <- private$cloneMeta(x, out)
 
       # Process attachments
-      attachments <- x$get()
+      attachments <- x$getDocument()
       lapply(attachments, function(a) {
         attachment <- private$cloneDocument(x = a)
         out <<- out$attach(attachment)

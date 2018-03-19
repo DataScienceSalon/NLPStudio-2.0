@@ -69,26 +69,27 @@ Collection <- R6::R6Class(
       return(listCondition)
     },
 
+    #-------------------------------------------------------------------------#
+    #                            Summary Methods                              #
+    #-------------------------------------------------------------------------#
     summarizeAttachments = function(quiet = FALSE) {
       attachments <- list()
-      lapply(private$..attachments, function(a) {
-        attachment <- a$summary(abbreviated = TRUE)
-        if (is.null(attachments[[attachment$class]])) {
-          attachments[[attachment$class]] <<- attachment
-        } else {
-          attachments[[attachment$class]] <<- rbind(attachments[[attachment$class]],
-                                                    attachment,
-                                                    make.row.names = FALSE)
-        }
-      })
+      sections <- names(private$..attachments)
 
-      if (quiet == FALSE) {
-        sections <- names(attachments)
-        lapply(seq_along(attachments), function(x) {
-          cat("\n\n", paste0(sections[x]), "\n")
-          print(attachments[[x]], row.names = FALSE)
-        })
+      if (!is.null(sections)) {
+        for (i in 1:length(sections)) {
+          attachments[[sections[i]]] <- rbindlist(lapply(private$..attachments[[sections[[i]]]], function(a) {
+            as.data.frame(a$summary(abbreviated = TRUE))
+          }))
+
+          if (quiet == FALSE) {
+            cat("\n\n", paste0(sections[i]), "\n")
+            print(attachments[[sections[i]]], row.names = FALSE)
+          }
+        }
+        names(attachments) <- sections
       }
+
       return(attachments)
     },
 
