@@ -29,6 +29,10 @@ RemoveEmail <- R6::R6Class(
       private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
+      # Validate parameters
+      private$..params$x <- x
+      if (private$validateParams()$code == FALSE) stop()
+
       private$..x <- x
       private$..regex <- "[a-zA-Z0-9\\-_~]+(\\.[a-zA-Z0-9\\-_~]+)*@[a-zA-Z0-9\\-_~]+(\\.[a-zA-Z0-9\\-_~]+)*\\.[a-zA-Z]{2,}"
       private$..replacement <- ""

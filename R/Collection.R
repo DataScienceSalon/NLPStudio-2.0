@@ -49,17 +49,21 @@ Collection <- R6::R6Class(
       # get Params
       k <- private$..params$key
       v <- private$..params$value
+      cls <- private$..params$class
+      listCondition <- NULL
 
-      if (length(k) == length(v)) {
-        listCondition <- sapply(private$..attachments, function(a) {
-          sapply(seq_along(key), function(x) {
-            (a$meta()$object[[k[x]]] == v[x])
+      if (!is.null(private$..attachments[[cls]])) {
+        if (length(k) == length(v)) {
+          listCondition <- sapply(private$..attachments[[cls]], function(a) {
+            sapply(seq_along(key), function(x) {
+              (a$meta()$object[[k[x]]] == v[x])
+            })
           })
-        })
-      } else {
-        listCondition <- sapply(private$..attachments, function(a) {
-          (a$meta()$object[[k]] %in%  v)
-        })
+        } else {
+          listCondition <- sapply(private$..attachments[[cls]], function(a) {
+            (a$meta()$object[[k]] %in%  v)
+          })
+        }
       }
 
       return(listCondition)
@@ -86,10 +90,8 @@ Collection <- R6::R6Class(
         })
       }
       return(attachments)
-    }
-  ),
+    },
 
-  public = list(
     #-------------------------------------------------------------------------#
     #                                 Attach                                  #
     #-------------------------------------------------------------------------#
@@ -103,9 +105,16 @@ Collection <- R6::R6Class(
         private$..params$x <- a
         if (private$validateParams(what = private$..methodName)$code == FALSE) stop()
 
-        # Get document id, then attach.
+        # Get document id and class, then attach.
         id <- a$getId()
-        private$..attachments[[id]] <- a
+        cls <- class(x)[1]
+
+        if (!is.null(private$..attachments[[cls]])) {
+          private$..attachments[[cls]][[id]] <- a
+        } else {
+          private$..attachments[[cls]] <- list()
+          private$..attachments[[cls]][[id]] <- a
+        }
 
         # Update date/time metadata and create log entry
         private$modified()
@@ -127,38 +136,38 @@ Collection <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                                 Detach                                  #
     #-------------------------------------------------------------------------#
-    detach = function(key, value) {
+    detach = function(x) {
 
       private$..methodName <- "detach"
 
-      private$..params <- list()
-      private$..params$key <- key
-      private$..params$value <- value
-      if (private$validateParams(what = private$..methodName)$code == FALSE) stop()
-
-      listCondition <- private$search()
-
-      if (exists(private$..attachments[listCondition])) {
-        object <- private$..attachments[listCondition]
-        private$..attachments[listCondition] <- NULL
-        private$modified()
-        private$..event <- paste0("Detached ", object$getName, " from ",
-                                  self$getName, ".")
-        private$logIt()
+      id <- x$getId()
+      cls <- class(x)[1]
+      if (!is.null(private$..attachments[[cls]])) {
+        if (!is.null(private$..attachments[[cls]][[id]])) {
+          private$..attachments[[cls]][[id]] <- NULL
+          private$modified()
+          private$..event <- paste0("Detached ", x$getName, " from ",
+                                    self$getName, ".")
+          private$logIt()
+        } else {
+          self$access()
+          private$..event <- paste0("Object is not attached to ",
+                                    self$getName(), ". Returning NULL")
+          private$logIt("Warn")
+        }
       } else {
-        object <- NULL
         self$access()
         private$..event <- paste0("Object is not attached to ",
                                   self$getName(), ". Returning NULL")
         private$logIt("Warn")
-        return(object)
       }
+      invisible(self)
     },
 
     #-------------------------------------------------------------------------#
     #                         Get Attachment Method                           #
     #-------------------------------------------------------------------------#
-    get = function(key = NULL, value = NULL) {
+    get = function(cls, key = NULL, value = NULL) {
 
       private$..methodName <- "get"
 
@@ -166,20 +175,30 @@ Collection <- R6::R6Class(
       private$..params <- list()
       private$..params$key <- key
       private$..params$value <- value
+      private$..params$class <- cls
       if (private$validateParams(private$..methodName)$code == FALSE) stop()
 
       # If parameters are null, return all attachments, otherwise search.
+      objects <- NULL
       if (is.null(key)) {
-        objects <- private$..attachments
+        if (!is.null(private$..attachments[[cls]])) {
+          objects <- private$..attachments[[cls]]
+        }
       } else {
         listCondition <- private$search()
-        objects <- private$..attachments[listCondition]
+        if (!is.null(listCondition)) {
+          objects <- private$..attachments[[cls]][listCondition]
+        }
       }
 
       private$accessed()
 
       return(objects)
-    },
+    }
+
+  ),
+
+  public = list(
 
     #-------------------------------------------------------------------------#
     #                           Summary Method                                #

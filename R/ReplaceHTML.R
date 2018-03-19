@@ -51,6 +51,13 @@ ReplaceHTML <- R6::R6Class(
       private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
+      # Validate parameters
+      private$..params$x <- x
+      private$..params$logicals$variables <- c('symbol')
+      private$..params$logicals$values <- c(symbol)
+      if (private$validateParams()$code == FALSE) stop()
+
+
       private$..x <- x
       private$..symbol <- symbol
 

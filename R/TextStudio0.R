@@ -27,6 +27,20 @@ TextStudio0 <- R6::R6Class(
     ..x = character(),
     ..regex = character(),
     ..replacement = character(),
+    ..params = list(
+      x = character(),
+      pattern = character(),
+      replacement = character(),
+      logicals = list(
+        variables = character(),
+        values = character()
+      ),
+      discrete = list(
+        variables = character(),
+        values = character(),
+        valid = character()
+      )
+    ),
 
     logEvent = function(x) {
       event <- paste0(private$..className, " object execution, complete.")
@@ -78,7 +92,7 @@ TextStudio0 <- R6::R6Class(
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$textStudio(self)
+      visitor$textStudio0(self)
     }
   )
 )

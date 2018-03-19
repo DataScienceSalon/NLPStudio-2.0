@@ -55,6 +55,10 @@ ReplaceEmoji <- R6::R6Class(
       private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
+      # Validate parameters
+      private$..params$x <- x
+      if (private$validateParams()$code == FALSE) stop()
+
       private$..x <- x
       private$..emojis <- emojis
 

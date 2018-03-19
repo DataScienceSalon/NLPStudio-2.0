@@ -72,16 +72,20 @@ ReplaceAbbreviations <- R6::R6Class(
       private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
+      # Validate parameters
+      private$..params$x <- x
+      private$..params$pattern <- abbreviations
+      private$..params$replacement <- replacement
+      private$..params$logicals$variables <- c('ignoreCase')
+      private$..params$logicals$values <- c(ignoreCase)
+      if (private$validateParams()$code == FALSE) stop()
+
       private$..x <- x
       private$..abbreviations <- abbreviations
       private$..replacement <- replacement
       private$..ignoreCase <- ignoreCase
 
       invisible(self)
-    },
-
-    accept = function(visitor)  {
-      visitor$replaceAbbreviations(self)
     }
   )
 )

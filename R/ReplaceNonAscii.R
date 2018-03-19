@@ -53,8 +53,13 @@ ReplaceNonAscii <- R6::R6Class(
       private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
+      # Validate parameters
+      private$..params$x <- x
+      private$..params$logicals$variables <- c('removeNonConverted')
+      private$..params$logicals$values <- c(removeNonConverted)
+      if (private$validateParams()$code == FALSE) stop()
+
       private$..x <- x
-      private$..meta$object$name <- names
       private$..removeNonConverted <- removeNonConverted
 
       invisible(self)

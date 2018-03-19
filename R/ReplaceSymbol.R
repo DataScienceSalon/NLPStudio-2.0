@@ -67,6 +67,13 @@ ReplaceSymbol <- R6::R6Class(
       private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
+      # Validate parameters
+      private$..params$x <- x
+      private$..params$logicals$variables <- c('dollar', 'percent', 'pound',
+                                               'at', 'and', 'with')
+      private$..params$logicals$values <- c(dollar, percent, pound, at, and, with)
+      if (private$validateParams()$code == FALSE) stop()
+
       private$..x <- x
       private$..dollar <- dollar
       private$..percent <- percent

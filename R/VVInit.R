@@ -21,69 +21,84 @@ VVInit <- R6::R6Class(
 
   private = list(
 
-    validateTextStudio = function(object, classes) {
+    validateTextStudio0 = function(object, classes) {
       status <- list()
       status[['code']] <- TRUE
 
       p <- object$getParams()
 
+      # Validate class of object
       if (!(class(p$x)[1] %in% classes)) {
         status[['code']] <- FALSE
         status[['msg']] <- paste0("Invalid class. Cannot process ",
                                   class(p$x)[1], " object. ",
-                                  "TextStudio classes operate on ",
+                                  class(object)[1], " class operates on ",
                                   "Corpus and Document classes only. ",
                                   "See ?", class(object)[1],
                                   " for further assistance")
         return(status)
       }
 
-      for (i in 1:length(p$variables)) {
-        if (!(p$values[i] %in% p$valid[[i]])) {
+      # Validate pattern replace
+      replacement <- character()
+      if (length(p$pattern) > 0) {
+        if (is.data.frame(p$pattern)) {
+          if (ncol(p$pattern) == 2) {
+            pattern <- as.character(p$pattern[,1])
+            replacement <- as.character(p$pattern[,2])
+          } else {
+            pattern <- as.character(p$pattern[,1])
+            replacement <- as.character(p$replacement)
+          }
+        } else {
+          pattern <- as.character(p$pattern)
+          replacement <- as.character(p$replacement)
+        }
+      }
+
+      if (length(replacement) > 0) {
+        if ((length(replacement) != 1) &
+            (length(replacement) != length(pattern))) {
           status[['code']] <- FALSE
-          status[['msg']] <- paste0("Invalid '", p$variables[i], "' parameter. ",
-                                    "Valid values are ",
+          status[['msg']] <- paste0("Replacement values must be of length one",
+                                    ifelse(length(pattern) == 1,"",
+                                           paste0(" or of length ", length(pattern))),
+                                    ". See ?", class(object)[1],
+                                    " for further assistance")
+          return(status)
+        }
+      }
+
+      # Validate Logical variables
+      if (length(p$logicals$variables) > 0) {
+        for (i in 1:length(p$logicals$variables)) {
+          if (!(p$logicals$values[i]) %in% (c('TRUE', 'FALSE', 1, 0))) {
+            status[['code']] <- FALSE
+            status[['msg']] <- paste0("TRUE/FALSE expected for the '",
+                                      p$logicals$variables[i],  "' variable. ",
+                                      "See ?", class(object)[1],
+                                      " for further assistance.")
+            return(status)
+          }
+        }
+      }
+
+      # Validate discrete parameters
+      if (length(p$discrete$variables) > 0) {
+        for (i in 1:length(p$discrete$variables)) {
+          if (!(p$discrete$values[i] %in% p$discrete$valid[[i]])) {
+            status[['code']] <- FALSE
+            status[['msg']] <- paste0("Invalid '", p$discrete$variables[i], "' parameter. ",
+                                      "Valid values are ",
                                       paste0("c(",gsub(",$", "",
-                                                       paste0("'",p$valid[[i]],
+                                                       paste0("'",p$discrete$valid[[i]],
                                                               "',", collapse = "")),
-                                                                "). "),
-                                    "See ?", class(object)[1],
-                                    " for further assistance.")
-          return(status)
+                                             "). "),
+                                      "See ?", class(object)[1],
+                                      " for further assistance.")
+            return(status)
+          }
         }
-      }
-      return(status)
-    },
-
-    validateReplace = function(object) {
-
-      status <- list()
-      status[['code']] <- TRUE
-
-      p <- object$getParams()
-
-      if (!(class(p$x)[1] %in% c("Corpus", "Document"))) {
-        status$code <- FALSE
-        status$msg <- paste0("Object must be of the Corpus or Document classes. ",
-                             "See ?", class(object)[1], " for further assistance.")
-        return(status)
-      }
-
-      if (length(p$replacement) != 1) {
-        if (length(p$replacement) != length(p$pattern)) {
-          status$code <- FALSE
-          status$msg <- paste0("Length of the replacement parameter must be one or ",
-                               length(p$pattern), " the length of the pattern vector. ",
-                               "See ?", class(object)[1], " for further assistance.")
-          return(status)
-        }
-      }
-
-      if (!is.logical(p$logical)) {
-        status$code <- FALSE
-        status$msg <- paste0("Value provided where TRUE/FALSE expected. ",
-                             "See ?", class(object)[1], " for further assistance.")
-        return(status)
       }
       return(status)
     },
@@ -195,8 +210,8 @@ VVInit <- R6::R6Class(
       return(private$validateClass(object, classes = c("Corpus", "Document")))
     },
 
-    tokenize = function(object) {
-      return(private$validateTextStudio(object, classes = c("Corpus", "Document")))
+    textStudio0 = function(object) {
+      return(private$validateTextStudio0(object, classes = c("Corpus", "Document")))
     },
 
 

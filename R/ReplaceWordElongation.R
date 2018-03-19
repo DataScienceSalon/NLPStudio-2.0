@@ -61,6 +61,12 @@ ReplaceWordElongation <- R6::R6Class(
       private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
+      # Validate parameters
+      private$..params$x <- x
+      private$..params$logicals$variables <- c('impartMeaning')
+      private$..params$logicals$values <- c(impartMeaning)
+      if (private$validateParams()$code == FALSE) stop()
+
       private$..x <- x
       private$..impartMeaning <- impartMeaning
 

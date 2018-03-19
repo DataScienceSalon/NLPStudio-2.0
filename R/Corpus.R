@@ -80,7 +80,7 @@ Corpus <- R6::R6Class(
       private$..methodName <- 'docMeta'
 
       if (length(values) != 1) {
-        if (length(values) != length(private$..attachments)) {
+        if (length(values) != length(private$..attachments[['Document']])) {
           private$..event <- paste0("Unable to add metadata. The values ",
                                      "parameter must be of length one or ",
                                      "length equal to that number of documents ",
@@ -89,13 +89,13 @@ Corpus <- R6::R6Class(
           stop()
         }
       } else {
-        values <- rep(values, length(private$..attachments))
+        values <- rep(values, length(private$..attachments[['Document']]))
       }
 
-      for (i in 1:length(private$..attachments)) {
-        private$..attachments[[i]] <-
-          private$..attachments[[i]]$meta(key = key, value = values[i])
-        print(private$..attachments[[i]]$meta())
+      for (i in 1:length(private$..attachments[['Document']])) {
+        private$..attachments[[Document]][[i]] <-
+          private$..attachments[['Document']][[i]]$meta(key = key, value = values[i])
+        print(private$..attachments[['Document']][[i]]$meta())
       }
 
       private$..event <- paste0("Updated document metadata")

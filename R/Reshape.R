@@ -41,26 +41,36 @@ Reshape <- R6::R6Class(
 
       if (private$..to %in% c("document", "d")) {
         document$content <- paste(document$content, collapse = "")
-      } else {
-        reshaped <- Tokenize$new(t1, what = "sentence")
+      } else if (private$..to %in% c("sentence", "s")) {
+        document$content <- Tokenize$new(document$content, what = "sentence")
       }
-      document$content <- textclean::replace_number(x = document$content,
-                                            num.paste = private$..joinNumbers,
-                                            remove = private$..remove)
       document <- private$logEvent(document)
       return(document)
+    },
+
+    processCorpus = function() {
+      if (private$..to %in% c("corpus", "c")) {
+
+      }
     }
   ),
 
   public = list(
-    initialize = function(x, joinNumbers = FALSE, remove = FALSE) {
+    initialize = function(x, to = "sentence") {
       private$..className <- "Reshape"
       private$..methodName <- "initialize"
       private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
+      # Validate parameters
+      private$..params$x <- x
+      private$..params$discrete$variables <- c('to')
+      private$..params$discrete$values <- c(to)
+      private$..params$discrete$valid <- list(c("corpus", "document", "sentence", "c", "d", "s"))
+      if (private$validateParams()$code == FALSE) stop()
+
       private$..x <- x
-      private$..joinNumbers <- joinNumbers
+      private$..to <- to
       private$..remove <- remove
 
       invisible(self)

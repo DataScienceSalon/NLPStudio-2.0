@@ -56,6 +56,14 @@ ReplaceInternetSlang <- R6::R6Class(
       private$..meta$object$name <- private$..className
       private$..logs  <- LogR$new()
 
+      # Validate parameters
+      private$..params$x <- x
+      private$..params$pattern <- slang
+      private$..params$replacement <- replacement
+      private$..params$logicals$variables <- c('ignoreCase')
+      private$..params$logicals$values <- c(ignoreCase)
+      if (private$validateParams()$code == FALSE) stop()
+
       private$..x <- x
       private$..slang <- slang
       private$..replacement <- replacement
