@@ -79,8 +79,8 @@ ConverterQuanteda <- R6::R6Class(
       private$..methodName <- "initialize"
       private$..logs <- LogR$new()
 
-      private$..state <- paste0("Initiated ", private$..classname)
-      self$logIt()
+      private$..event <- paste0("Initiated ", private$..classname)
+      private$logIt()
 
       invisible(self)
 
@@ -94,9 +94,9 @@ ConverterQuanteda <- R6::R6Class(
       private$..methodName <- 'convert'
 
       if (class(x)[1] == "Corpus") {
-        return(private$..to(x))
+        return(private$to(x))
       } else if (class(x)[1] == "corpus") {
-        return(private$..from(x))
+        return(private$from(x))
       } else {
         private$..event <- paste0("This class operates on Corpus and quanteda ",
                                   "corpus objects only.")

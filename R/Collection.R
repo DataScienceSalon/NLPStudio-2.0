@@ -108,13 +108,16 @@ Collection <- R6::R6Class(
 
         # Get document id and class, then attach.
         id <- a$getId()
+        attachment <- list(a)
+        names(attachment) <- id
         cls <- class(x)[1]
 
         if (!is.null(private$..attachments[[cls]])) {
-          private$..attachments[[cls]][[id]] <- a
+          private$..attachments[[cls]] <- attachment
         } else {
+
           private$..attachments[[cls]] <- list()
-          private$..attachments[[cls]][[id]] <- a
+          private$..attachments[[cls]] <- attachment
         }
 
         # Update date/time metadata and create log entry

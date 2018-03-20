@@ -164,6 +164,7 @@ Entity <- R6::R6Class(
     #                           Basic Get  Methods                            #
     #-------------------------------------------------------------------------#
     getId = function() private$..meta$object$id,
+    getName = function() private$..meta$object$name,
 
     #-------------------------------------------------------------------------#
     #                           Metadata Method                               #

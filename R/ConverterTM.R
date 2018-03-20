@@ -25,22 +25,25 @@ ConverterTM <- R6::R6Class(
 
       # Extract metadata
       cMeta <- as.list(x$meta()$object)
-      dMeta <- as.list(x$docMeta())
+      cMetaNames <- names(cMeta)
+      dMeta <- as.data.frame(x$docMeta())
+      dMetaNames <- colnames(dMeta)
 
-      # Create named corpus vectors, one document per vector element
+      # Create named corpus vectors, one document per vector
       docs <- x$getDocument()
       content <- unlist(lapply(docs, function(d) {
         paste(d$content, collapse = "")
       }))
-      names(content) <- dMeta$name
+      names(content) <- dMeta$id
 
       # Create tm corpus object
-      tmCorpus <- tm::VectorSource(x = content)
+      tmCorpus <- tm::Corpus(tm::VectorSource(content))
 
-      # Create corpus level metadata
-      varNames <- names(cMeta)
-      for (i in 1:length(varNames)) {
-        meta(tmCorpus, tag = varNames[i], type = "corpus") <- cMeta[[i]]
+      # Create corpus level meta data
+      if (length(cMeta) > 0) {
+        for (i in 1:length(cMeta)) {
+          NLP::meta(tmCorpus, tag = cMetaNames[i], type = "corpus") <- cMeta[[i]]
+        }
       }
 
       return(tmCorpus)
@@ -49,21 +52,24 @@ ConverterTM <- R6::R6Class(
     from = function(x) {
 
       # Obtain metadata
-      cMeta <- quanteda::metacorpus(x)
-      dMeta <- as.data.frame(quanteda::docvars(x))
+      cMeta <- NLP::meta(x, type = "corpus")
+      dMeta <- lapply(seq_along(x), function(m) {
+        NLP::meta(x[[m]], type = "local")
+      })
 
       # Create corpus object and meta data
       corpus <- Corpus$new()
       keys <- names(cMeta)
       values <- cMeta
-      corpus <- corpus$meta(key = keys, value = values)
+      corpus$meta(key = keys, value = values)
+
+      print(length(x))
 
       # Add documents
-      lapply(seq_along(x$documents$texts), function(t) {
-        d <- Document$new(name = as.character(x$documents$name[t]),
-                          x = as.character(x$documents$texts[t]))
+      for (i in 1:length(x)) {
+        d <- Document$new(x[[i]]$content)
         corpus$addDocument(d)
-      })
+      }
 
       # Add document metadata
       keys <- names(dMeta)
@@ -85,8 +91,8 @@ ConverterTM <- R6::R6Class(
       private$..methodName <- "initialize"
       private$..logs <- LogR$new()
 
-      private$..state <- paste0("Initiated ", private$..classname)
-      self$logIt()
+      private$..event <- paste0("Initiated ", private$..classname)
+      private$logIt()
 
       invisible(self)
 
@@ -100,12 +106,14 @@ ConverterTM <- R6::R6Class(
       private$..methodName <- 'convert'
 
       if (class(x)[1] == "Corpus") {
-        return(private$..to(x))
-      } else if (class(x)[1] == "corpus") {
-        return(private$..from(x))
+        return(private$to(x))
+      } else if (class(x)[1] %in% c('VCorpus', 'SimpleCorpus', 'PCorpus')) {
+        return(private$from(x))
       } else {
-        private$..event <- paste0("This class operates on Corpus and quanteda ",
-                                  "corpus objects only.")
+        private$..event <- paste0("Invalid class.  The class operates on ",
+                                  "'Corpus', 'VCorpus', 'PCorpus', and ",
+                                  "'SimpleCorpus' objects only.  See ?",
+                                  class(self)[1], " for further assistance.")
         private$logIt("Error")
         stop()
       }
