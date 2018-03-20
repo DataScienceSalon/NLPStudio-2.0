@@ -47,9 +47,9 @@ on the text, and the command class group which instructs the TextStudio
 class to perform an a text processing function on a text.
 }
 
-\section{TextStudio Design}{
+\section{DataStudio Design}{
 
-This TextStudio family of classes is an implementation of the Strategy
+This DataStudio family of classes is an implementation of the Strategy
 design pattern, as described in the book "Design Patterns: Elements of Reusable
 Object-Oriented Software" by Erich Gamma, Richard Helm, Ralph Johnson
 and John Vlissides (hence Gang of Four). The Strategy pattern defines

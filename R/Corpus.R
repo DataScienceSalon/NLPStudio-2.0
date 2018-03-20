@@ -93,14 +93,41 @@ Corpus <- R6::R6Class(
       invisible(self)
     },
 
+
+    #-------------------------------------------------------------------------#
+    #                        Data Retrieval Methods                           #
+    #-------------------------------------------------------------------------#
+    getDFM = function() {
+      private$..methodName <- "getDFM"
+      objects <- private$get(cls = "DFM")
+      return(objects)
+    },
+
+    removeDFM = function(x) {
+      private$..methodName <- 'removeDFM'
+      private$detach(x)
+      invisible(self)
+    },
+
     #-------------------------------------------------------------------------#
     #                        Document Metadata Method                         #
     #-------------------------------------------------------------------------#
-    docMeta = function(key, values) {
+    docMeta = function(key = NULL, values = NULL) {
 
       private$..methodName <- 'docMeta'
 
-      if (length(values) != 1) {
+      if (is.null(key)) {
+        dm <- rbindlist(lapply(private$..attachments[['Document']], function(a) {
+            a$meta()$object
+          }))
+        return(dm)
+      } else if (length(key) != 1) {
+        private$..event <- paste0("Key parameter must be of length one. ",
+                                  "See ?", class(self)[1], " for further ",
+                                  "assistance.")
+        private$logIt("Error")
+        stop()
+      } else  if (length(values) != 1) {
         if (length(values) != length(private$..attachments[['Document']])) {
           private$..event <- paste0("Unable to add metadata. The values ",
                                      "parameter must be of length one or ",
@@ -113,10 +140,10 @@ Corpus <- R6::R6Class(
         values <- rep(values, length(private$..attachments[['Document']]))
       }
 
+
       for (i in 1:length(private$..attachments[['Document']])) {
         private$..attachments[['Document']][[i]] <-
           private$..attachments[['Document']][[i]]$meta(key = key, value = values[i])
-        print(private$..attachments[['Document']][[i]]$meta())
       }
 
       private$..event <- paste0("Updated document metadata")

@@ -31,15 +31,9 @@ class to perform an a text processing function on a text.
  \itemize{
   \item{\code{new()}}{Method for instantiating a TextStudio.}
   \item{\code{addCommand()}}{Method that adds a text processing command to the queue. }
-  \item{\code{removeCommand()}}{Method that for removing a command from the queue.}
+  \item{\code{removeCommand()}}{Method that removes a command from the queue.}
   \item{\code{execute()}}{Method that executes the job queue. }
   \item{\code{getResult()}}{Method that returns the object following execution of the job queue. }
- }
-
-\strong{Other Methods:}
- \itemize{
-  \item{\code{accept(visitor)}}{Accepts a visitor object. Not implemented for this abstract class}
-  \item{\code{logIt(level = 'Info')}}{Logs events relating to the TextStudio.}
  }
 }
 

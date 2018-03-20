@@ -14,30 +14,31 @@ DataStudio
 \item{queue}{The job queue containing text processing commands.}
 }
 \description{
-\code{DataStudio} Class for creating data from text
+\code{DataStudio} Class converts text to data.
 }
 \details{
-The NLPStudio pipeline starts with the TextStudio, a collection of classes
-that performs preprocessing on text. This class is the second step in the
-pipeline and is responsible for converting text to data for downstream
-analysis.
+Class automates the process of converting to text to data via stemming,
+POS tagging, and the creation of document frequency matrices, ngrams, tokens.
 }
+\section{DataStudio Family of Classes Overview}{
+
+The DataStudio family of classes include the DataStudio class, which is
+responsible for executing one or more data processing commands on a
+Corpus or Document resource, the core class group that performs the
+data processing functions on the objects, and the command class
+group which instructs the DataStudio class to perform the
+data processing function on the Corpus or Document object.
+}
+
 \section{DataStudio methods}{
 
 \strong{Core Methods:}
  \itemize{
   \item{\code{new()}}{Method for instantiating a DataStudio.}
-  \item{\code{token(x, what = c("char", "word", "sentence"))}}{Method for tokenizing an object.}
-  \item{\code{stem()}}{Method that for removing a command from the queue.}
-  \item{\code{ngram()}}{Method that executes the job queue. }
-  \item{\code{dfm()}}{Method that returns the object following execution of the job queue. }
-  \item{\code{pos()}}{Method that returns the object following execution of the job queue. }
- }
-
-\strong{Other Methods:}
- \itemize{
-  \item{\code{accept(visitor)}}{Accepts a visitor object. Not implemented for this abstract class}
-  \item{\code{logIt(level = 'Info')}}{Logs events relating to the DataStudio.}
+  \item{\code{addCommand()}}{Method which adds a data processing command to the queue. }
+  \item{\code{removeCommand()}}{Method that removes a data processing command from the queue.}
+  \item{\code{execute()}}{Method that executes the job queue. }
+  \item{\code{getResult()}}{Method that returns the object following execution of the job queue. }
  }
 }
 
@@ -45,6 +46,9 @@ analysis.
 
 }
 
+\seealso{
+Other DataStudio classes: \code{\link{DataStudio0}}
+}
 \author{
 John James, \email{jjames@datasciencesalon.org}
 }

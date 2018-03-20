@@ -21,7 +21,7 @@ VVInit <- R6::R6Class(
 
   private = list(
 
-    validateTextStudio0 = function(object, classes) {
+    validateStudio = function(object, classes) {
       status <- list()
       status[['code']] <- TRUE
 
@@ -40,64 +40,26 @@ VVInit <- R6::R6Class(
       }
 
       # Validate pattern replace
-      replacement <- character()
-      if (length(p$pattern) > 0) {
-        if (is.data.frame(p$pattern)) {
-          if (ncol(p$pattern) == 2) {
-            pattern <- as.character(p$pattern[,1])
-            replacement <- as.character(p$pattern[,2])
-          } else {
-            pattern <- as.character(p$pattern[,1])
-            replacement <- as.character(p$replacement)
-          }
-        } else {
-          pattern <- as.character(p$pattern)
-          replacement <- as.character(p$replacement)
-        }
-      }
-
-      if (length(replacement) > 0) {
-        if ((length(replacement) != 1) &
-            (length(replacement) != length(pattern))) {
-          status[['code']] <- FALSE
-          status[['msg']] <- paste0("Replacement values must be of length one",
-                                    ifelse(length(pattern) == 1,"",
-                                           paste0(" or of length ", length(pattern))),
-                                    ". See ?", class(object)[1],
-                                    " for further assistance")
+      if (!is.null(p$pattern)) {
+        status <- validatePatternReplace(object)
+        if (status$code == FALSE) {
           return(status)
         }
       }
 
-      # Validate Logical variables
-      if (length(p$logicals$variables) > 0) {
-        for (i in 1:length(p$logicals$variables)) {
-          if (!(p$logicals$values[i]) %in% (c('TRUE', 'FALSE', 1, 0))) {
-            status[['code']] <- FALSE
-            status[['msg']] <- paste0("TRUE/FALSE expected for the '",
-                                      p$logicals$variables[i],  "' variable. ",
-                                      "See ?", class(object)[1],
-                                      " for further assistance.")
-            return(status)
-          }
+      # Validate Logicals
+      if (!is.null(p$logicals)) {
+        status <- validateLogical(object)
+        if (status$code == FALSE) {
+          return(status)
         }
       }
 
       # Validate discrete parameters
-      if (length(p$discrete$variables) > 0) {
-        for (i in 1:length(p$discrete$variables)) {
-          if (!(p$discrete$values[i] %in% p$discrete$valid[[i]])) {
-            status[['code']] <- FALSE
-            status[['msg']] <- paste0("Invalid '", p$discrete$variables[i], "' parameter. ",
-                                      "Valid values are ",
-                                      paste0("c(",gsub(",$", "",
-                                                       paste0("'",p$discrete$valid[[i]],
-                                                              "',", collapse = "")),
-                                             "). "),
-                                      "See ?", class(object)[1],
-                                      " for further assistance.")
-            return(status)
-          }
+      if (!is.null(p$discrete)) {
+        status <- validateDiscrete(object)
+        if (status$code == FALSE) {
+          return(status)
         }
       }
       return(status)
@@ -206,12 +168,23 @@ VVInit <- R6::R6Class(
       return(private$validateSplits(object))
     },
 
+    #-------------------------------------------------------------------------#
+    #                           NLPStudio Classes                             #
+    #-------------------------------------------------------------------------#
     textStudio = function(object) {
       return(private$validateClass(object, classes = c("Corpus", "Document")))
     },
 
     textStudio0 = function(object) {
-      return(private$validateTextStudio0(object, classes = c("Corpus", "Document")))
+      return(private$validateStudio(object, classes = c("Corpus", "Document")))
+    },
+
+    dataStudio = function(object) {
+      return(private$validateClass(object, classes = c("Corpus", "Document")))
+    },
+
+    dataStudio0 = function(object) {
+      return(private$validateStudio(object, classes = c("Corpus", "Document")))
     },
 
 

@@ -12,15 +12,9 @@
 #'  \itemize{
 #'   \item{\code{new()}}{Method for instantiating a TextStudio.}
 #'   \item{\code{addCommand()}}{Method that adds a text processing command to the queue. }
-#'   \item{\code{removeCommand()}}{Method that for removing a command from the queue.}
+#'   \item{\code{removeCommand()}}{Method that removes a command from the queue.}
 #'   \item{\code{execute()}}{Method that executes the job queue. }
 #'   \item{\code{getResult()}}{Method that returns the object following execution of the job queue. }
-#'  }
-#'
-#' \strong{Other Methods:}
-#'  \itemize{
-#'   \item{\code{accept(visitor)}}{Accepts a visitor object. Not implemented for this abstract class}
-#'   \item{\code{logIt(level = 'Info')}}{Logs events relating to the TextStudio.}
 #'  }
 #'
 #' @section Parameters:
@@ -35,12 +29,7 @@ TextStudio <- R6::R6Class(
   classname = "TextStudio",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Base,
-
-  private = list(
-    ..x = character(),
-    ..jobQueue = list()
-  ),
+  inherit = NLPStudio0,
 
   public = list(
 
@@ -69,53 +58,6 @@ TextStudio <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
-    #                        Command Management Methods                       #
-    #-------------------------------------------------------------------------#
-    addCommand = function(cmd) {
-
-      private$..methodName <- "addCommand"
-
-      if (!c("TextStudio0") %in% class(cmd)) {
-        private$..event <- paste0("Invalid text command object. Object must be ",
-                                  "of the TextStudio0 classes.  See ?", class(self)[1],
-                                  " for further assistance.")
-        private$logIt("Error")
-        stop()
-      }
-
-      name <- cmd$getName()
-      private$..jobQueue[[name]] <- cmd
-
-      private$..event <- paste0("Added ", cmd$getName(), " to ", private$..x$getName(),
-                                " job queue." )
-      private$logIt()
-
-      invisible(self)
-    },
-
-    removeCommand = function(cmd) {
-
-      private$..methodName <- "removeCommand"
-
-      if (!c("TextStudio0") %in% class(cmd)) {
-        private$..event <- paste0("Invalid text command object. Object must be ",
-                                  "of the TextStudio0 classes.  See ?", class(self)[1],
-                                  " for further assistance.")
-        private$logIt("Error")
-        stop()
-      }
-
-      name <- cmd$getName()
-      private$..jobQueue[[name]] <- NULL
-
-      private$..event <- paste0("Removed ", cmd$getName(), " from ", private$..x$getName(),
-                                " job queue." )
-      private$logIt()
-
-      invisible(self)
-
-    },
-    #-------------------------------------------------------------------------#
     #                       Execute and Get Results                           #
     #-------------------------------------------------------------------------#
     execute = function() {
@@ -132,10 +74,6 @@ TextStudio <- R6::R6Class(
 
       invisible(self)
 
-    },
-
-    getResult = function() {
-      return(private$..x)
     },
 
     #-------------------------------------------------------------------------#
