@@ -37,7 +37,8 @@ ConverterTM <- R6::R6Class(
       names(content) <- dMeta$id
 
       # Create tm corpus object
-      tmCorpus <- tm::Corpus(tm::VectorSource(content))
+      tmSource <- tm::VectorSource(content)
+      tmCorpus <- tm::Corpus(tmSource)
 
       # Create corpus level meta data
       if (length(cMeta) > 0) {
