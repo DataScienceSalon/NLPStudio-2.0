@@ -5,6 +5,10 @@
 #'
 #' \code{ConverterTM} Converts NLPStudio Corpus objects to and from tm corpus objects.
 #'
+#' Given an NLPStudio Corpus object, this object returns a tm SimpleCorpus object.
+#' Alternatively, a SimpleCorpus, VCorpus, or PCorpus produces a NLPStudio
+#' Corpus object.
+#'
 #' @usage ConverterTM$new()$convert(x)
 #'
 #' @param x Object to be converted
@@ -58,24 +62,26 @@ ConverterTM <- R6::R6Class(
         NLP::meta(x[[m]], type = "local")
       })
 
+      # Create Documents and Metadata
+      docs <- lapply(x, function(d) { Document$new(d[[1]]) })
+      for (i in 1:length(dMeta)) {
+        varnames <- names(dMeta[[i]])
+        for (j in 1:length(varnames)) {
+          if (length(dMeta[[i]][[j]]) > 0) {
+            docs[[i]]$meta(key = varnames[j], value = dMeta[[i]][[j]])
+          }
+        }
+      }
+
       # Create corpus object and meta data
       corpus <- Corpus$new()
       keys <- names(cMeta)
       values <- cMeta
       corpus$meta(key = keys, value = values)
 
-      print(length(x))
-
       # Add documents
-      for (i in 1:length(x)) {
-        d <- Document$new(x[[i]]$content)
-        corpus$addDocument(d)
-      }
-
-      # Add document metadata
-      keys <- names(dMeta)
-      for (i in 1:ncol(dMeta)) {
-        corpus$docMeta(key = keys[i], value = dMeta[,i])
+      for (i in 1:length(docs)) {
+        corpus$addDocument(docs[[i]])
       }
       return(corpus)
     }
