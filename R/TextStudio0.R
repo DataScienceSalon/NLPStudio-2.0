@@ -21,7 +21,6 @@ TextStudio0 <- R6::R6Class(
   classname = "TextStudio0",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Base,
 
   private = list(
     ..x = character(),
@@ -44,7 +43,7 @@ TextStudio0 <- R6::R6Class(
 
     logEvent = function(x) {
       event <- paste0(private$..className, " object execution, complete.")
-      return(x$log(event = event))
+      return(x$log(cls = class(self)[1], event = event))
     },
 
     processDocument = function(document) {
@@ -81,9 +80,9 @@ TextStudio0 <- R6::R6Class(
       }
 
       # Log it
-      private$..event <- paste0("Executed ", class(self)[1], " on ",
+      event <- paste0("Executed ", class(self)[1], " on ",
                                 private$..x$getName(), ". ")
-      private$logIt()
+      private$logR$log(cls = class(self)[1], event = event)
 
       return(private$..x)
     },

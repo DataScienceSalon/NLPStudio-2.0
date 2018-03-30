@@ -64,15 +64,15 @@ ReplaceSymbol <- R6::R6Class(
                           at = TRUE, and = TRUE, with = TRUE) {
       private$..className <- "ReplaceSymbol"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
-      private$..logs  <- LogR$new()
+      private$..meta$core$name <- private$..className
+      private$logR  <- LogR$new()
 
       # Validate parameters
       private$..params$x <- x
       private$..params$logicals$variables <- c('dollar', 'percent', 'pound',
                                                'at', 'and', 'with')
       private$..params$logicals$values <- c(dollar, percent, pound, at, and, with)
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..dollar <- dollar

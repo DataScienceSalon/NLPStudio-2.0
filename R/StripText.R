@@ -61,7 +61,7 @@ StripText <- R6::R6Class(
                           removeApostrophe = TRUE, lowerCase = TRUE) {
       private$..className <- "StripText"
       private$..methodName <- "initialize"
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
 
       private$..x <- x
       private$..keepChar <- keepChar

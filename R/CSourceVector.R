@@ -39,19 +39,6 @@ CSourceVector <- R6::R6Class(
   lock_class = FALSE,
   inherit = CSource0,
 
-  private = list(
-    ..x = character(),
-    ..name = character(),
-
-    validate = function(x, name, concatenate) {
-      private$..params <- list()
-      private$..params$x <- x
-      private$..params$name <- name
-      private$..params$concatenate <- concatenate
-      return(private$validateParams(private$..methodName))
-    }
-  ),
-
   public = list(
 
     #-------------------------------------------------------------------------#
@@ -59,10 +46,8 @@ CSourceVector <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function() {
 
-      # Initiate logging variables and system meta data
-      private$..className <- 'CSourceVector'
-      private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
+      private$loadDependencies()
+
       private$..corpus <- Corpus$new()
 
       invisible(self)
@@ -74,22 +59,22 @@ CSourceVector <- R6::R6Class(
     #-------------------------------------------------------------------------#
     source = function(x, name = NULL, concatenate = TRUE) {
 
-      private$..methodName <- 'source'
+      private$..params <- list()
+      private$..params$x <- x
+      private$..params$name <- name
 
-      if (private$validate(x, name, concatenate)$code == FALSE) stop()
-
-      private$..corpus <- private$nameCorpus(name)
+      if (private$validate("source")$code == FALSE) stop()
 
       if ("list" %in% class(x)[1]) {
         lapply(x, function(y) {
           name <- names(y)
           doc <- Document$new(x = y, name = name)
-          private$..corpus$attach(x = doc)
+          private$..corpus$addDocument(x = doc)
         })
       } else if (concatenate) {
         name <- names(x)
         doc <- Document$new(x = x, name = name)
-        private$..corpus$attach(x = doc)
+        private$..corpus$addDocument(x = doc)
       } else {
         for (i in 1:length(x)) {
           name <- names(x[i])
@@ -97,12 +82,9 @@ CSourceVector <- R6::R6Class(
             name <- paste0("Document-",i)
           }
           doc <- Document$new(x = x[i], name = name)
-          private$..corpus$attach(x = doc)
+          private$..corpus <- private$..corpus$addDocument(x = doc)
         }
       }
-
-      event <- paste0("Corpus sourcing from vector, complete.")
-      private$..corpus$log(event = event)
 
       return(private$..corpus)
     },

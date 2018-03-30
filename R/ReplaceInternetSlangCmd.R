@@ -38,11 +38,11 @@ ReplaceInternetSlangCmd <- R6::R6Class(
 
       private$..className <- "ReplaceInternetSlangCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
+      private$..meta$core$name <- private$..className
       private$..slang <- slang
       private$..replacement <- replacement
       private$..ignoreCase <- ignoreCase
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
 
       invisible(self)
     },

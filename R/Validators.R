@@ -33,7 +33,7 @@ validateDiscrete <- function(object) {
 
   if (length(params$discrete$values) > 0) {
     for (i in 1:length(params$discrete$values)) {
-      if (!(params$discrete$values[i] %in% params$discete$valid[[i]])) {
+      if (!(params$discrete$values[[i]] %in% params$discrete$valid[[i]])) {
         status[['code']] <- FALSE
         status[['msg']] <- paste0("Invalid '", params$discrete$variables[i], "' parameter. ",
                                   "Valid values are ",
@@ -47,7 +47,7 @@ validateDiscrete <- function(object) {
       }
     }
   }
-    return(status)
+  return(status)
 }
 
 #==============================================================================#
@@ -92,30 +92,22 @@ validateLogical <- function(object) {
 }
 
 #==============================================================================#
-#' validatePatternReplace
+#' validateKeyValue
 #'
-#' \code{validatePatternReplace} Validates a parameters that contain pattern and replacements
+#' \code{validateKeyValue} Validates a parameters that contain key/value pairs
 #'
 #' Function accepts an object with a public parameters member. The parameters
 #' member has one of two formats.
 #'
-#' Single Element Format: This must be a data frame containing both patterns
-#' and their replacements.
 #'
-#' Two Element Format: The first element is a vector containing the patterns
-#' to replace.  The second element must be the replacement vector. This second
-#' vector  may be of length one, in which case, every pattern will replaced with this
-#' single element. Alternatively the replacement vector must be the same
-#' length of the pattern vector.
-#'
-#' @usage validatePatternReplace(object)
+#' @usage validateKeyValue(object)
 #'
 #' @param object The object to be validated
 #'
 #' @author John James, \email{jjames@@DataScienceSalon.org}
 #' @family Validation Functions
 #' @export
-validatePatternReplace <- function(object) {
+validateKeyValue <- function(object) {
 
   status <- list()
   status$code <- TRUE
@@ -123,31 +115,32 @@ validatePatternReplace <- function(object) {
 
   params <- object$getParams()
 
-  # Validate pattern replace
-  replacement <- character()
-  pattern <- character()
-  if (length(params$pattern) > 0) {
-    if (is.data.frame(params$pattern)) {
-      if (ncol(params$pattern) == 2) {
-        pattern <- as.character(params$pattern[,1])
-        replacement <- as.character(params$pattern[,2])
+  # Validate key replace
+  value <- character()
+  key <- character()
+  if (length(params$key) > 0) {
+    if (is.data.frame(params$key)) {
+      if (ncol(params$key) == 2) {
+        key <- as.character(params$key[,1])
+        value <- as.character(params$key[,2])
       } else {
-        pattern <- as.character(params$pattern[,1])
-        replacement <- as.character(params$replacement)
+        key <- as.character(params$key[,1])
+        value <- as.character(params$value)
       }
     } else {
-      pattern <- as.character(params$pattern)
-      replacement <- as.character(params$replacement)
+      key <- as.character(params$key)
+      value <- as.character(params$value)
     }
   }
 
-  if (length(replacement) > 0 | length(pattern) > 0) {
-    if ((length(replacement) != 1) &
-        (length(replacement) != length(pattern))) {
+  if (length(value) > 0 | length(key) > 0) {
+    if ((length(value) != 1) &
+        (length(value) != length(key))) {
       status[['code']] <- FALSE
-      status[['msg']] <- paste0("Replacement values must be of length one",
-                                ifelse(length(pattern) == 1,"",
-                                       paste0(" or of length ", length(pattern))),
+      status[['msg']] <- paste0("Values must be of length one",
+                                ifelse(length(key) == 1,"",
+                                       paste0(" or of a length equal to that ",
+                                              "of the key vector, ", length(key))),
                                 ". See ?", class(object)[1],
                                 " for further assistance")
     }

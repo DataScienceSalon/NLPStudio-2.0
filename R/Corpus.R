@@ -57,18 +57,12 @@ Corpus <- R6::R6Class(
   public = list(
 
     #-------------------------------------------------------------------------#
-    #                           Core Methods                                  #
+    #                         Constructor Method                              #
     #-------------------------------------------------------------------------#
     initialize = function(name = NULL) {
-
-      # Initiate logging variables and system meta data
-      private$..className <- 'Corpus'
-      private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
-
-      # Complete Initialization
-      private$init(name)
-
+      private$loadDependencies(name = name)
+      private$initMeta(name = name)
+      private$logR$log(cls = class(self)[1], event = "Initialized.")
       invisible(self)
     },
 
@@ -76,35 +70,30 @@ Corpus <- R6::R6Class(
     #                       Document Management Methods                       #
     #-------------------------------------------------------------------------#
     getDocument = function(key = NULL, value = NULL) {
-      private$..methodName <- "getDocument"
       objects <- private$get(cls = "Document", key, value)
       return(objects)
     },
 
     addDocument = function(x) {
-      private$..methodName <- 'addDocument'
       private$attach(x)
       invisible(self)
     },
 
     removeDocument = function(x) {
-      private$..methodName <- 'removeDocument'
       private$detach(x)
-      invisible(self)
+      return(self)
     },
 
 
     #-------------------------------------------------------------------------#
-    #                        Data Retrieval Methods                           #
+    #                              Data Methods                               #
     #-------------------------------------------------------------------------#
-    getDFM = function() {
-      private$..methodName <- "getDFM"
-      objects <- private$get(cls = "DFM")
+    dfm = function() {
+      dfm <- private$get(cls = "DFM")
       return(objects)
     },
 
     removeDFM = function(x) {
-      private$..methodName <- 'removeDFM'
       private$detach(x)
       invisible(self)
     },
@@ -114,26 +103,24 @@ Corpus <- R6::R6Class(
     #-------------------------------------------------------------------------#
     docMeta = function(key = NULL, values = NULL) {
 
-      private$..methodName <- 'docMeta'
-
       if (is.null(key)) {
         dm <- rbindlist(lapply(private$..attachments[['Document']], function(a) {
             a$meta()$object
           }))
         return(dm)
       } else if (length(key) != 1) {
-        private$..event <- paste0("Key parameter must be of length one. ",
-                                  "See ?", class(self)[1], " for further ",
-                                  "assistance.")
-        private$logIt("Error")
+        event <- paste0("Key parameter must be of length one. ",
+                        "See ?", class(self)[1], " for further ",
+                        "assistance.")
+        private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       } else  if (length(values) != 1) {
         if (length(values) != length(private$..attachments[['Document']])) {
-          private$..event <- paste0("Unable to add metadata. The values ",
-                                     "parameter must be of length one or ",
-                                     "length equal to that number of documents ",
-                                     "in the Corpus object.")
-          private$logIt("Error")
+          event <- paste0("Unable to add metadata. The values ",
+                          "parameter must be of length one or ",
+                          "length equal to that number of documents ",
+                          "in the Corpus object.")
+          private$logR$log(cls = class(self)[1], event = event, level = "Error")
           stop()
         }
       } else {
@@ -143,11 +130,11 @@ Corpus <- R6::R6Class(
 
       for (i in 1:length(private$..attachments[['Document']])) {
         private$..attachments[['Document']][[i]] <-
-          private$..attachments[['Document']][[i]]$meta(key = key, value = values[i])
+          private$..attachments[['Document']][[i]]$metadata(key = key, value = values[i])
       }
 
-      private$..event <- paste0("Updated document metadata")
-      private$logIt()
+      event <- paste0("Updated document metadata.")
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     },
@@ -155,32 +142,35 @@ Corpus <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Summary Method                                #
     #-------------------------------------------------------------------------#
-    summary = function(meta = TRUE, stats = TRUE, system = TRUE, state = TRUE,
+    summary = function(core = TRUE, stats = TRUE, system = TRUE, state = TRUE,
                        quiet = FALSE, abbreviated = FALSE, attachments = TRUE) {
+
+      meta <- private$meta$get()
+
       if (abbreviated) {
-        result <- private$summaryShort()
+        result <- private$oneLiner(meta = meta, quiet = quiet)
       } else {
         result <- list()
         section <- character()
 
-        if (meta) {
-          result$meta <- private$summaryObjMeta(quiet = quiet)
-          section <- c(section, "Metadata")
-        }
-
-        if (state) {
-          result$app <- private$summaryState(quiet = quiet)
-          section <- c(section, "State Info")
+        if (core) {
+          result$meta <- private$core(meta = meta, quiet = quiet)
+          section <- c("Additional Core Metadata")
         }
 
         if (attachments) {
-          result$attachments <- private$summarizeAttachments(quiet = quiet)
+          result$attachments <- private$attachments(quiet = quiet)
           section <- c(section, "Attachments")
         }
 
+        if (state) {
+          result$app <- private$state(meta = meta, quiet = quiet)
+          section <- c(section, "State Information")
+        }
+
         if (system) {
-          result$sys <- private$summarySysInfo(quiet = quiet)
-          section <- c(section, "System Info")
+          result$sys <- private$system(meta = meta, quiet = quiet)
+          section <- c(section, "System Information")
         }
 
         names(result) <- section
@@ -212,10 +202,10 @@ Corpus <- R6::R6Class(
             }),".txt"))
         } else {
           if (length(fileNames) != length(private$..attachments[['Document']])) {
-            private$..event <- paste0("Unable to write the Corpus object. The ",
+            event <- paste0("Unable to write the Corpus object. The ",
                                        "fileNames parameter must be NULL or have",
                                        "length = ", length(private$..attachments[['Document']]), ".")
-            private$logIt("Error")
+            private$logR$log(cls = class(self)[1], event = event, level = "Error")
             stop()
           } else {
             path <- file.path(path,(paste0(tools::file_path_sans_ext(fileNames), ".txt")))

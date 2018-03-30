@@ -7,7 +7,9 @@
 #'
 #' Given an NLPStudio Corpus object, this object returns a tm SimpleCorpus object.
 #' Alternatively, a SimpleCorpus, VCorpus, or PCorpus produces a NLPStudio
-#' Corpus object.
+#' Corpus object. Note: Document level metadata is not maintained when
+#' converting from NLPStudio Document objects to tm Corpus objects. Document
+#' level metadata must be added separately to the tm Corpus object.
 #'
 #' @usage ConverterTM$new()$convert(x)
 #'
@@ -96,10 +98,10 @@ ConverterTM <- R6::R6Class(
 
       private$..className <- "ConverterTM"
       private$..methodName <- "initialize"
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
-      private$..event <- paste0("Initiated ", private$..classname)
-      private$logIt()
+      event <- paste0("Initiated ", private$..classname)
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
 
@@ -117,11 +119,11 @@ ConverterTM <- R6::R6Class(
       } else if (class(x)[1] %in% c('VCorpus', 'SimpleCorpus', 'PCorpus')) {
         return(private$from(x))
       } else {
-        private$..event <- paste0("Invalid class.  The class operates on ",
+        event <- paste0("Invalid class.  The class operates on ",
                                   "'Corpus', 'VCorpus', 'PCorpus', and ",
                                   "'SimpleCorpus' objects only.  See ?",
                                   class(self)[1], " for further assistance.")
-        private$logIt("Error")
+        private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       }
     },

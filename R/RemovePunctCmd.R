@@ -36,11 +36,11 @@ RemovePunctCmd <- R6::R6Class(
     initialize = function(endmark = FALSE, apostrophe = FALSE) {
       private$..className <- "RemovePunctCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
+      private$..meta$core$name <- private$..className
       private$..endmark <- endmark
       private$..apostrophe <- apostrophe
 
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

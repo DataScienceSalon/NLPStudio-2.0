@@ -26,12 +26,12 @@ RemoveHyphens <- R6::R6Class(
     initialize = function(x) {
       private$..className <- "RemoveHyphens"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
-      private$..logs  <- LogR$new()
+      private$..meta$core$name <- private$..className
+      private$logR  <- LogR$new()
 
       # Validate parameters
       private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..regex <- '[-]'

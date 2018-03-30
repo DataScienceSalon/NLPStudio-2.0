@@ -54,7 +54,7 @@ ReplaceTokensCmd <- R6::R6Class(
                           fixed = TRUE, trim = FALSE, orderPattern = fixed) {
       private$..className <- "ReplaceTokensCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
+      private$..meta$core$name <- private$..className
       private$..tokens <- tokens
       private$..replacement <- replacement
       private$..leadspace <- leadspace
@@ -62,7 +62,7 @@ ReplaceTokensCmd <- R6::R6Class(
       private$..fixed <- fixed
       private$..trim <- trim
       private$..orderPattern <- orderPattern
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

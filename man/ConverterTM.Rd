@@ -14,6 +14,13 @@ ConverterTM$new()$convert(x)
 \description{
 \code{ConverterTM} Converts NLPStudio Corpus objects to and from tm corpus objects.
 }
+\details{
+Given an NLPStudio Corpus object, this object returns a tm SimpleCorpus object.
+Alternatively, a SimpleCorpus, VCorpus, or PCorpus produces a NLPStudio
+Corpus object. Note: Document level metadata is not maintained when
+converting from NLPStudio Document objects to tm Corpus objects. Document
+level metadata must be added separately to the tm Corpus object.
+}
 \seealso{
 Other Converter Classes: \code{\link{ConverterQuanteda}}
 }

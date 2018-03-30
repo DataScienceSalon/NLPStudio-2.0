@@ -27,11 +27,6 @@ CSourceQuanteda <- R6::R6Class(
   lock_class = FALSE,
   inherit = CSource0,
 
-  private = list(
-    ..x = character(),
-    ..name = character()
-  ),
-
   public = list(
 
     #-------------------------------------------------------------------------#
@@ -40,9 +35,7 @@ CSourceQuanteda <- R6::R6Class(
     initialize = function() {
 
       # Initiate logging variables and system meta data
-      private$..className <- 'CSourceQuanteda'
-      private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
+      private$loadDependencies()
       private$..corpus <- Corpus$new()
 
       invisible(self)
@@ -53,19 +46,19 @@ CSourceQuanteda <- R6::R6Class(
     #-------------------------------------------------------------------------#
     source = function(x, name = NULL) {
 
-      private$..methodName <- 'source'
+      private$..params <- list()
+      private$..params$x <- x
+      if (private$validate("source")$code == FALSE) stop()
 
-      if (private$validate(x)$code == FALSE) stop()
-
-      private$..corpus <- private$nameCorpus(name)
+      # Name corpus
+      if (!is.null(name)) private$..corpus$metadata(key = 'name', value = name)
 
       # Extract data and metadata
       texts <- x$documents[["texts"]]
-
       metaData <- x$documents[-which(names(x$documents) == "texts")]
       rownames(metaData) <- NULL
 
-      # Extract a name variable
+      # Extract a document name variables
       if (is.null(metaData$doc_id)) {
         n <- paste0("document-", seq(1:length(texts)))
       } else {
@@ -84,11 +77,11 @@ CSourceQuanteda <- R6::R6Class(
             doc <- doc$meta(key = keys[j], value = values[j])
           }
         }
-        private$..corpus <- private$..corpus$attach(doc)
+        private$..corpus <- private$..corpus$addDocument(doc)
       }
 
       event <- paste0("Corpus sourcing from Quanteda corpus object, complete.")
-      private$..corpus$log(event = event)
+      private$..corpus$log(cls = class(self)[1], event = event)
 
       return(private$..corpus)
     },

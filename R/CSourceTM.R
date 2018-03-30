@@ -32,9 +32,7 @@ CSourceTM <- R6::R6Class(
     initialize = function() {
 
       # Initiate logging variables and system meta data
-      private$..className <- 'CSourceTM'
-      private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
+      private$loadDependencies()
       private$..corpus <- Corpus$new()
 
       invisible(self)
@@ -45,11 +43,11 @@ CSourceTM <- R6::R6Class(
     #-------------------------------------------------------------------------#
     source = function(x, name = NULL) {
 
-      private$..methodName <- 'source'
+      private$..params <- list()
+      private$..params$x <- x
+      if (private$validate("source")$code == FALSE) stop()
 
-      if (private$validate(x)$code == FALSE) stop()
-
-      private$..corpus <- private$nameCorpus(name)
+      if (!is.null(name)) private$..corpus$metadata(key = 'name', value = name)
 
       docNames <- names(x)
 
@@ -63,19 +61,19 @@ CSourceTM <- R6::R6Class(
         for (i in 1:length(x[[y]]$meta)) {
           if (length(x[[y]]$meta[[i]]) > 0) {
             if (names(x[[y]]$meta[i]) == 'datetimestamp') {
-              doc$meta(key = 'tmCreated', value = x[[y]]$meta[[i]])
+              doc$metadata(key = 'tmCreated', value = x[[y]]$meta[[i]])
             } else {
-              doc$meta(key = names(x[[y]]$meta[i]),
+              doc$metadata(key = names(x[[y]]$meta[i]),
                         value = x[[y]]$meta[[i]])
             }
           }
         }
 
         # Attach Document
-        private$..corpus$attach(doc)
+        private$..corpus$addDocument(doc)
       })
       event <- paste0("Corpus sourcing from tm Corpus object, complete.")
-      private$..corpus$log(event = event)
+      private$..corpus$log(cls = class(self)[1], event = event)
 
       return(private$..corpus)
     },

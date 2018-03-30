@@ -45,14 +45,14 @@ ReplaceSymbolCmd <- R6::R6Class(
                           at = TRUE, and = TRUE, with = TRUE) {
       private$..className <- "ReplaceSymbolCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
+      private$..meta$core$name <- private$..className
       private$..dollar <- dollar
       private$..percent <- percent
       private$..pound <- pound
       private$..at <- at
       private$..and <- and
       private$..with <- with
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

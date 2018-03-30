@@ -72,8 +72,8 @@ ReplaceTokens <- R6::R6Class(
                           orderPattern = fixed) {
       private$..className <- "ReplaceTokens"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
-      private$..logs  <- LogR$new()
+      private$..meta$core$name <- private$..className
+      private$logR  <- LogR$new()
 
       # Validate parameters
       private$..params$x <- x
@@ -81,7 +81,7 @@ ReplaceTokens <- R6::R6Class(
       private$..params$replacement <- replacement
       private$..params$logicals$variables <- c('leadspace', 'trailspace', 'fixed', 'trim', 'orderPattern')
       private$..params$logicals$values <- c(leadspace, trailspace, fixed, trim, orderPattern)
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..tokens <- tokens
@@ -92,7 +92,7 @@ ReplaceTokens <- R6::R6Class(
       private$..trim <- trim
       private$..orderPattern <- orderPattern
 
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       invisible(self)
     }

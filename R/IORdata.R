@@ -23,7 +23,10 @@ IORdata <- R6::R6Class(
   classname = "IORdata",
   lock_objects = TRUE,
   lock_class = FALSE,
-  inherit = Base,
+
+  private = list(
+    logR = character()
+  ),
   public = list(
 
     #-------------------------------------------------------------------------#
@@ -31,7 +34,7 @@ IORdata <- R6::R6Class(
     #-------------------------------------------------------------------------#
     read = function(path) {
 
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       fileName <- basename(path)
 
@@ -39,12 +42,12 @@ IORdata <- R6::R6Class(
         env <- new.env()
         content <- load(path, envir = env)
         content <- env[[content]]
-        private$..event <- paste0("Successfully read ", fileName, ".")
-        private$logIt()
+        event <- paste0("Successfully read ", fileName, ".")
+        private$logR$log(cls = class(self)[1], event = event)
       } else {
-        private$..event <- paste0('Unable to read ', fileName, '. ',
+        event <- paste0('Unable to read ', fileName, '. ',
                                   'File does not exist.')
-        private$logIt("Error")
+        private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       }
       return(content)
@@ -52,7 +55,7 @@ IORdata <- R6::R6Class(
 
     write = function(path, content) {
 
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       fileName <- basename(path)
       dirName <- dirname(path)
@@ -62,8 +65,8 @@ IORdata <- R6::R6Class(
 
       save(object = content, file = path, compression_level = 9)
 
-      private$..event <- paste0("Successfully wrote ", fileName, ".")
-      private$logIt()
+      event <- paste0("Successfully wrote ", fileName, ".")
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     }

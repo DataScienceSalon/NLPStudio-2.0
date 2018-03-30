@@ -21,7 +21,11 @@ IOCSV <- R6::R6Class(
   classname = "IOCSV",
   lock_objects = TRUE,
   lock_class = FALSE,
-  inherit = Base,
+
+  private = list(
+    logR = character()
+  ),
+
   public = list(
 
     #-------------------------------------------------------------------------#
@@ -29,7 +33,7 @@ IOCSV <- R6::R6Class(
     #-------------------------------------------------------------------------#
     read = function(path, header = TRUE) {
 
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       fileName <- basename(path)
 
@@ -37,12 +41,12 @@ IOCSV <- R6::R6Class(
         content <- read.csv(file = path, header = header,
                             stringsAsFactors = FALSE,
                             sep = ",", quote = "\"'")
-        private$..event <- paste0("Successfully read ", fileName, ".")
-        private$logIt()
+        event <- paste0("Successfully read ", fileName, ".")
+        private$logR$log(cls = class(self)[1], event = event)
       } else {
-        private$..event <- paste0('Unable to read ', fileName, '. ',
+        event <- paste0('Unable to read ', fileName, '. ',
                                   'File does not exist.')
-        private$logIt("Error")
+        private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       }
       return(content)
@@ -50,7 +54,7 @@ IOCSV <- R6::R6Class(
 
     write = function(path, content) {
 
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       fileName <- basename(path)
       dirName <- dirname(path)
@@ -60,8 +64,8 @@ IOCSV <- R6::R6Class(
 
       write.csv(content, file = path, row.names = FALSE)
 
-      private$..event <- paste0("Successfully wrote ", fileName, ".")
-      private$logIt()
+      event <- paste0("Successfully wrote ", fileName, ".")
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     }

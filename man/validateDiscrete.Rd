@@ -26,8 +26,8 @@ the values of the variables, and (3) a list of vectors, where each vector
 contains the valid values for each of the variables.
 }
 \seealso{
-Other Validation Functions: \code{\link{validateLogical}},
-  \code{\link{validatePatternReplace}}
+Other Validation Functions: \code{\link{validateKeyValue}},
+  \code{\link{validateLogical}}
 }
 \author{
 John James, \email{jjames@DataScienceSalon.org}

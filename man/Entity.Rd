@@ -9,17 +9,17 @@
 Entity
 }
 \description{
-\code{Entity} Base class for all entity related classes
+\code{Entity} Abstract including methods common to all Entity classes.
 }
 \details{
-This base class defines members and methods common across all entity related
-classes, including Studio, Corpus, Set, and Document classes.
+Class provides methods common to entity classes, such as Corpus Document, DFM,
+POS, and NGram.
 }
 \section{Entity methods}{
 
  \itemize{
-  \item{\code{getId()}}{Returns the identifier for the object.}
-  \item{\code{getParams()}}{Returns the parameters passed to the constructor.}
+  \item{\code{new()}}{Not implemented for this abstract class.}
+  \item{\code{summary()}}{Summarizes an object in terms of its meta data.}
  }
 }
 

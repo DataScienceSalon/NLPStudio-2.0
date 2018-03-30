@@ -41,18 +41,18 @@ TextStudio <- R6::R6Class(
       # Instantiate variables
       private$..className <- 'TextStudio'
       private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       # Validation
       private$..params <- list()
       private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- Clone$new()$corpus(x = x, name = name)
 
       # Create log entry
-      private$..event <- paste0("TextStudio object instantiated.")
-      private$logIt()
+      event <- paste0("TextStudio object instantiated.")
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     },
@@ -68,9 +68,9 @@ TextStudio <- R6::R6Class(
         private$..x <- private$..jobQueue[[i]]$execute(private$..x)
       }
 
-      private$..event <- paste0("Processed text processing commands on ",
+      event <- paste0("Processed text processing commands on ",
                                 private$..x$getName(), "." )
-      private$logIt()
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
 

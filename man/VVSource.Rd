@@ -28,8 +28,8 @@ The VVSource methods are as follows:
 }
 \seealso{
 Other Validation Visitor Classes: \code{\link{VVAttach}},
-  \code{\link{VVDetach}}, \code{\link{VVGet}},
-  \code{\link{VVInit}}, \code{\link{VVRead}}
+  \code{\link{VVDetach}}, \code{\link{VVInit}},
+  \code{\link{VVMetadata}}, \code{\link{VVRead}}
 }
 \author{
 John James, \email{jjames@DataScienceSalon.org}

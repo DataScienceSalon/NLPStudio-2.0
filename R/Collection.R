@@ -34,6 +34,7 @@ Collection <- R6::R6Class(
 
   private = list(
     ..attachments = list(),
+
     #-------------------------------------------------------------------------#
     #                             Search Method                               #
     #-------------------------------------------------------------------------#
@@ -44,25 +45,26 @@ Collection <- R6::R6Class(
     # a boolean vector, indexing into the list of attachments, the element
     # or elements that match the search criteria.
     #
-    search = function() {
+    search = function(cls, k, v) {
 
-      # get Params
-      k <- private$..params$key
-      v <- private$..params$value
-      cls <- private$..params$class
-      listCondition <- NULL
+      listCondition <- rep(FALSE, length(private$..attachments[[cls]]))
 
       if (!is.null(private$..attachments[[cls]])) {
         if (length(k) == length(v)) {
           listCondition <- sapply(private$..attachments[[cls]], function(a) {
-            sapply(seq_along(key), function(x) {
-              (a$meta()$object[[k[x]]] == v[x])
-            })
+            found <- FALSE
+            for (i in 1:length(k)) {
+              if (a$query(cls = cls, key = k[i], value = v[i])) found <- TRUE
+              return(found)
+          }})
+        } else if (length(k) == 1) {
+          listCondition <- sapply(private$..attachments[[cls]], function(a) {
+            if (a$query(cls = cls, key = k, value = v)) return(TRUE)
           })
         } else {
-          listCondition <- sapply(private$..attachments[[cls]], function(a) {
-            (a$meta()$object[[k]] %in%  v)
-          })
+          event <- paste0("Invalid search criteria.  Key, must be of length ",
+                          "one and/or length of the value vector.")
+          private$logR$log(cls = class(self)[1], event = event, level = "Warn")
         }
       }
 
@@ -72,13 +74,15 @@ Collection <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                            Summary Methods                              #
     #-------------------------------------------------------------------------#
-    summarizeAttachments = function(quiet = FALSE) {
+    attachments = function(quiet = FALSE) {
       attachments <- list()
       sections <- names(private$..attachments)
 
+      #TODO: fix the as.data.frame function.
+
       if (!is.null(sections)) {
         for (i in 1:length(sections)) {
-          attachments[[sections[i]]] <- rbindlist(lapply(private$..attachments[[sections[[i]]]], function(a) {
+          attachments[[sections[i]]] <- rbindlist(lapply(private$..attachments[[sections[i]]], function(a) {
             as.data.frame(a$summary(abbreviated = TRUE))
           }))
 
@@ -98,41 +102,30 @@ Collection <- R6::R6Class(
     #-------------------------------------------------------------------------#
     attach = function(x) {
 
-      private$..methodName <- "attach"
+      private$..params <- list()
+      private$..params$x <- x
+      if (private$validate("attach")$code == FALSE) stop()
 
-      doAttach = function(a) {
-        # Obtain and validate parameters
-        private$..params <- list()
-        private$..params$x <- a
-        if (private$validateParams(what = private$..methodName)$code == FALSE) stop()
+      # Get document id and class, then attach.
+      id <- x$getId()
+      cls <- class(x)[1]
+      attachment <- list()
+      attachment[[id]] <- x
 
-        # Get document id and class, then attach.
-        id <- a$getId()
-        cls <- class(x)[1]
+      if (!is.null(private$..attachments[[cls]])) {
 
-        if (!is.null(private$..attachments[[cls]])) {
-          private$..attachments[[cls]][[id]] <- a
-        } else {
-
-          private$..attachments[[cls]] <- list()
-          private$..attachments[[cls]][[id]] <- a
-        }
-
-        # Update date/time metadata and create log entry
-        private$modified()
-        private$..event <- paste0("Attached ", a$getName(), " object to ", self$getName(), ".")
-        private$logIt()
-      }
-
-      if ("list" %in% class(x)[1]) {
-        lapply(x, function(a) {
-          doAttach(a)
-        })
+        private$..attachments[[cls]] <- c(private$..attachments[[cls]], attachment)
       } else {
-        doAttach(x)
+        private$..attachments[[cls]] <- list()
+        private$..attachments[[cls]] <- c(private$..attachments[[cls]], attachment)
       }
 
-      invisible(self)
+      # Update date/time metadata and create log entry
+      private$meta$modified()
+      event <- paste0("Attached ", x$getName(), " object to ", self$getName(), ".")
+      private$logR$log(cls = class(self)[1], event = event)
+
+      return(self)
 
     },
     #-------------------------------------------------------------------------#
@@ -140,26 +133,24 @@ Collection <- R6::R6Class(
     #-------------------------------------------------------------------------#
     detach = function(x) {
 
-      private$..methodName <- "detach"
-
       id <- x$getId()
       cls <- class(x)[1]
       if (!is.null(private$..attachments[[cls]])) {
         if (!is.null(private$..attachments[[cls]][[id]])) {
           private$..attachments[[cls]][[id]] <- NULL
-          private$modified()
-          private$..event <- paste0("Detached ", x$getName, " from ",
+          private$meta$modified()
+          event <- paste0("Detached ", x$getName, " from ",
                                     self$getName, ".")
-          private$logIt()
+          private$logR$log(cls = class(self)[1], event = event)
         } else {
           self$access()
-          private$..event <- paste0("Object is not attached to ",
+          event <- paste0("Object is not attached to ",
                                     self$getName(), ". Returning NULL")
           private$logIt("Warn")
         }
       } else {
         self$access()
-        private$..event <- paste0("Object is not attached to ",
+        event <- paste0("Object is not attached to ",
                                   self$getName(), ". Returning NULL")
         private$logIt("Warn")
       }
@@ -171,15 +162,6 @@ Collection <- R6::R6Class(
     #-------------------------------------------------------------------------#
     get = function(cls, key = NULL, value = NULL) {
 
-      private$..methodName <- "get"
-
-      # Obtain and validate parameters
-      private$..params <- list()
-      private$..params$key <- key
-      private$..params$value <- value
-      private$..params$class <- cls
-      if (private$validateParams(private$..methodName)$code == FALSE) stop()
-
       # If parameters are null, return all attachments, otherwise search.
       objects <- NULL
       if (is.null(key)) {
@@ -187,13 +169,13 @@ Collection <- R6::R6Class(
           objects <- private$..attachments[[cls]]
         }
       } else {
-        listCondition <- private$search()
+        listCondition <- private$search(cls, key, value)
         if (!is.null(listCondition)) {
           objects <- private$..attachments[[cls]][listCondition]
         }
       }
 
-      private$accessed()
+      private$meta$accessed()
 
       return(objects)
     }
@@ -205,32 +187,35 @@ Collection <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Summary Method                                #
     #-------------------------------------------------------------------------#
-    summary = function(meta = TRUE, stats = TRUE, system = TRUE, state = TRUE,
-                       quiet = FALSE, abbreviated = FALSE, attachments = TRUE) {
+    summary = function(core = TRUE, state = TRUE, system = TRUE,
+                       attachments = TRUE, quiet = FALSE, abbreviated = FALSE) {
+
+      meta <- private$meta$get()
+
       if (abbreviated) {
-        result <- private$summaryShort()
+        result <- private$oneLiner(meta = meta, quiet = quiet)
       } else {
         result <- list()
         section <- character()
 
-        if (meta) {
-          result$meta <- private$summaryObjMeta(quiet = quiet)
-          section <- c(section, "Metadata")
-        }
-
-        if (state) {
-          result$app <- private$summaryState(quiet = quiet)
-          section <- c(section, "State Info")
+        if (core) {
+          result$meta <- private$core(meta,  quiet = quiet)
+          section <- c("Additional Core Metadata")
         }
 
         if (attachments) {
-          result$attachments <- private$summarizeAttachments(quiet = quiet)
+          result$attachments <- private$attachments(meta, quiet = quiet)
           section <- c(section, "Attachments")
         }
 
+        if (state) {
+          result$state <- private$state(meta, quiet = quiet)
+          section <- c(section, "State Information")
+        }
+
         if (system) {
-          result$sys <- private$summarySysInfo(quiet = quiet)
-          section <- c(section, "System Info")
+          result$sys <- private$system(meta, quiet = quiet)
+          section <- c(section, "System Information")
         }
 
         names(result) <- section

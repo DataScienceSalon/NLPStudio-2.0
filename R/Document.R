@@ -112,10 +112,10 @@ Document <- R6::R6Class(
 
       private$stats()
 
-      short <- data.frame(class = private$..meta$object$class,
-                          id = private$..meta$object$id,
-                          name = private$..meta$object$name,
-                          desc = private$..meta$object$desc,
+      short <- data.frame(class = private$..meta$core$class,
+                          id = private$..meta$core$id,
+                          name = private$..meta$core$name,
+                          description = private$..meta$core$description,
                           sentences = private$..meta$stats$sentences,
                           tokens = private$..meta$stats$tokens,
                           types = private$..meta$stats$types,
@@ -131,20 +131,20 @@ Document <- R6::R6Class(
     content = function(value) {
 
       if (missing(value)) {
-        private$accessed()
+        private$meta$accessed()
         return(private$decompress(private$..content))
 
       } else {
         if (!("character" %in% class(value))) {
-          private$..event <- "Document must be of the 'character' class."
-          private$logIt("Error")
+          event <- "Document must be of the 'character' class."
+          private$logR$log(cls = class(self)[1], event = event, level = "Error")
           stop()
         } else {
 
           private$..content <- private$compress(value)
-          private$modified()
-          private$..event <- "Updated Document content."
-          private$logIt()
+          private$meta$modified()
+          event <- "Updated Document content."
+          private$logR$log(cls = class(self)[1], event = event)
         }
       }
       invisible(self)
@@ -158,23 +158,22 @@ Document <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function(x = NULL, name = NULL) {
 
-      # Initiate logging
-      private$..className <- 'Document'
-      private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
+      private$loadDependencies(name = name)
 
       # Obtain, validate, then clear parameter list
-      private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
       private$..params <- list()
+      private$..params$x <- x
+      if (private$validate()$code == FALSE) stop()
+
 
       # Compress and store content
       if (!is.null(x)) {
         private$..content <- private$compress(x)
       }
 
-      # Complete standard initiation tasks
-      private$init(name)
+      # Initialize metadata and log instantiation
+      private$initMeta(name = name)
+      private$logR$log(cls = class(self)[1], event = "Initialized.")
 
       invisible(self)
     },
@@ -182,17 +181,20 @@ Document <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Summary Method                                #
     #-------------------------------------------------------------------------#
-    summary = function(meta = TRUE, stats = TRUE, state = TRUE, system = TRUE,
+    summary = function(core = TRUE, stats = TRUE, state = TRUE, system = TRUE,
                        quiet = FALSE, abbreviated = FALSE) {
+
+      meta <- private$meta$get()
+
       if (abbreviated) {
-        result <- private$summaryShort()
+        result <- private$oneLiner(meta = meta, quiet = quiet)
       } else {
         result <- list()
         section <- character()
 
-        if (meta) {
-          result$meta <- private$summaryObjMeta(quiet = quiet)
-          section <- c(section, "Metadata")
+        if (core) {
+          result$meta <- private$core(meta,  quiet = quiet)
+          section <- c(section, "Core Metadata")
         }
 
         if (stats) {
@@ -201,19 +203,19 @@ Document <- R6::R6Class(
         }
 
         if (state) {
-          result$state <- private$summaryState(quiet = quiet)
-          section <- c(section, "State Info")
+          result$state <- private$state(meta, quiet = quiet)
+          section <- c(section, "State Information")
         }
 
         if (system) {
-          result$sys <- private$summarySysInfo(quiet = quiet)
-          section <- c(section, "System Info")
+          result$sys <- private$system(meta, quiet = quiet)
+          section <- c(section, "System Information")
         }
 
         names(result) <- section
       }
 
-      private$accessed()
+      private$meta$accessed()
 
       invisible(result)
     },
@@ -229,11 +231,11 @@ Document <- R6::R6Class(
       # Validate parameter
       private$..params <- list()
       private$..params$path <- path
-      if (private$validateParams(what = "read")$code == FALSE) stop()
+      if (private$validate(what = "read")$code == FALSE) stop()
 
       content <- IO$new()$read(path = path, repair = repair)
       private$..content <- private$compress(content)
-      private$modified()
+      private$meta$modified()
 
       return(content)
     },
@@ -246,7 +248,7 @@ Document <- R6::R6Class(
       content <- private$decompress(private$..content)
       IO$new()$write(path = path, content = content)
 
-      private$accessed
+      private$meta$accessed
 
       invisible(self)
     },

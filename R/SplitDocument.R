@@ -44,14 +44,14 @@ SplitDocument <- R6::R6Class(
 
       private$..className <- "SplitDocument"
       private$..methodName <- "initialize"
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       private$..params <- list()
       private$..params$x <- x
       private$..params$splits <- splits
       private$..params$setNames <- setNames
 
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..splits <- splits
@@ -62,8 +62,8 @@ SplitDocument <- R6::R6Class(
       private$initCvSets()
 
       # log
-      private$..event <- paste0("Successfully initialized SplitDocument class object.")
-      private$logIt()
+      event <- paste0("Successfully initialized SplitDocument class object.")
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     },
@@ -87,8 +87,8 @@ SplitDocument <- R6::R6Class(
         private$..cvSets[[i]]$content <- content[ss == i]
       }
       # log
-      private$..event <- paste0("Successfully split Document")
-      private$logIt()
+      event <- paste0("Successfully split Document")
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(private$..cvSets)
     },

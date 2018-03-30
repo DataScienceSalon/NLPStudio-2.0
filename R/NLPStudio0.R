@@ -54,19 +54,19 @@ NLPStudio0 <- R6::R6Class(
       private$..methodName <- "addCommand"
 
       if (!c("NLPStudio00") %in% class(cmd)) {
-        private$..event <- paste0("Invalid text command object. Object must be ",
+        event <- paste0("Invalid text command object. Object must be ",
                                   "of the NLPStudio00 classes.  See ?", class(self)[1],
                                   " for further assistance.")
-        private$logIt("Error")
+        private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       }
 
       name <- cmd$getName()
       private$..jobQueue[[name]] <- cmd
 
-      private$..event <- paste0("Added ", cmd$getName(), " to ", private$..x$getName(),
+      event <- paste0("Added ", cmd$getName(), " to ", private$..x$getName(),
                                 " job queue." )
-      private$logIt()
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     },
@@ -76,19 +76,19 @@ NLPStudio0 <- R6::R6Class(
       private$..methodName <- "removeCommand"
 
       if (!c("NLPStudio00") %in% class(cmd)) {
-        private$..event <- paste0("Invalid text command object. Object must be ",
+        event <- paste0("Invalid text command object. Object must be ",
                                   "of the NLPStudio00 classes.  See ?", class(self)[1],
                                   " for further assistance.")
-        private$logIt("Error")
+        private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       }
 
       name <- cmd$getName()
       private$..jobQueue[[name]] <- NULL
 
-      private$..event <- paste0("Removed ", cmd$getName(), " from ", private$..x$getName(),
+      event <- paste0("Removed ", cmd$getName(), " from ", private$..x$getName(),
                                 " job queue." )
-      private$logIt()
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
 

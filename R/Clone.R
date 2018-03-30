@@ -34,7 +34,7 @@ Clone <- R6::R6Class(
     validate = function(x) {
       private$..params <- list()
       private$..params$x <- x
-      return(private$validateParams())
+      return(private$validate())
     },
 
     cloneMeta = function(x, out) {
@@ -60,7 +60,7 @@ Clone <- R6::R6Class(
       event <- paste0("Created", class(out)[1], " object '",
                       out$getName(), "' from '",
                       x$getName(), "'.")
-      out$log(event = event)
+      out$log(cls = class(self)[1], event = event)
       return(out)
     },
 
@@ -83,7 +83,7 @@ Clone <- R6::R6Class(
       event <- paste0("Created", class(out)[1], " object '",
                       out$getName(), "' from '",
                       x$getName(), "'.")
-      out$log(event = event)
+      out$log(cls = class(self)[1], event = event)
       return(out)
     }
   ),
@@ -98,7 +98,7 @@ Clone <- R6::R6Class(
 
       private$..className <- 'Clone'
       private$..methodName <- 'document'
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       # Validate parameters
       if (private$validate(x)$code == FALSE) stop()
@@ -111,7 +111,7 @@ Clone <- R6::R6Class(
 
       private$..className <- 'Clone'
       private$..methodName <- 'corpus'
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       # Validate parameters
       if (private$validate(x)$code == FALSE) stop()

@@ -31,7 +31,7 @@ See \code{\link[quanteda]{dfm}} for details.}
 
 \item{valuetype}{A character string containing the type of pattern matching:
 "glob" for "glob"-style wildcard expressions; "regex" for regular expressions; or
-"fixed" for exact matching. See \code{\link[quanteda]{dfm}} for details.}
+"fixed" for exact matching. Defaults to 'fixed'. See \code{\link[quanteda]{dfm}} for details.}
 
 \item{groups}{Either: a character vector containing the names of document variables to
 be used for grouping; or a factor or object that can be coerced into a factor

@@ -3,15 +3,15 @@
 #==============================================================================#
 #' Entity
 #'
-#' \code{Entity} Base class for all entity related classes
+#' \code{Entity} Abstract including methods common to all Entity classes.
 #'
-#' This base class defines members and methods common across all entity related
-#' classes, including Studio, Corpus, Set, and Document classes.
+#' Class provides methods common to entity classes, such as Corpus Document, DFM,
+#' POS, and NGram.
 #'
 #' @section Entity methods:
 #'  \itemize{
-#'   \item{\code{getId()}}{Returns the identifier for the object.}
-#'   \item{\code{getParams()}}{Returns the parameters passed to the constructor.}
+#'   \item{\code{new()}}{Not implemented for this abstract class.}
+#'   \item{\code{summary()}}{Summarizes an object in terms of its meta data.}
 #'  }
 #'
 #' @docType class
@@ -21,228 +21,249 @@ Entity <- R6::R6Class(
   classname = "Entity",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Base,
 
   private = list(
-    ..meta = list(
-      object = list(),
-      app = list(),
-      stats = list(),
-      system = list()
-    ),
+
+    ..params = list(),
+
+    logR =  character(),
+    validator = character(),
+    meta = character(),
+
+    loadDependencies = function(name = NULL) {
+      private$logR <- LogR$new()
+      private$validator <- Validator$new()
+      private$meta <- Meta$new()
+      return(TRUE)
+    },
+
     #-------------------------------------------------------------------------#
-    #                                 Init                                    #
+    #                      Initialize Metadata Method                         #
     #-------------------------------------------------------------------------#
-    # init
-    #
-    #  Method that standardizes the instantiation of domain objects
-    #
-    # This method is called by constructors once the parameters have been
-    # validated.  It assigns a unique identifier to the object, adds the
-    # identifier, name and the object's class to its metadata, logs the
-    # creation and returns control to the constructor.
+    initMeta = function(name = NULL) {
 
-    init = function(name = NULL, state = "instantiated") {
-
-      # Set datetime stamps
-      private$created()
-
-      # Creates unique identifier and update metadata as appropriate
+      # Creates unique identifier and create object metadata
       settings <- hashids::hashid_settings(salt = 'this is my salt', min_length = 8)
       hashid <- hashids::encode(as.integer(Sys.time()) * 1000000 +
                                   sample(1:1000, 1, replace = TRUE), settings)
-      private$..meta$object$name <- ifelse(is.null(name),
-                                           paste0(class(self)[1]," (", toupper(hashid),
-                                                  ")"), name)
-      private$..meta$object$id <- toupper(hashid)
-      private$..meta$object$class <- class(self)[1]
-      private$..meta$object$description <- paste0(private$..meta$object$class,
-                                                  " object created on ",
-                                                  format(Sys.Date(), "%a %b %d %Y"),
-                                                  " by ", Sys.info()[['user']], ".")
+      name <-  ifelse(is.null(name), paste0(class(self)[1]," (", toupper(hashid),
+                                           ")"), name)
+      id <-  toupper(hashid)
+      cls <- class(self)[1]
+      description <- paste0(cls, " object '", name, "' created on ",
+                            format(Sys.Date(), "%a %b %d %Y"),
+                            " by ", Sys.info()[['user']], ".")
 
-      # Log the entry
-      private$..event <- paste0(private$..className, " object, ", private$..meta$object$name,
-                                ", ", state, ".")
-      private$..meta$state[["current"]] <- state
-      private$..meta$state[["date"]] <- Sys.time()
-      private$..meta$state[["user"]] <- Sys.info()[['user']]
-      private$logIt()
+
+      private$meta$created(id = id, name = name, cls = cls, description = description)
+
+      invisible(self)
     },
-
 
     #-------------------------------------------------------------------------#
-    #                   Object Date/Time Management                           #
+    #                          Validation Method                              #
     #-------------------------------------------------------------------------#
-    # Updates system metadata when object has been accessed
-    accessed = function() {
-      private$..meta$system$user <- Sys.info()[["user"]]
-      private$..meta$system$machine <- Sys.info()[["machine"]]
-      private$..meta$system$os <- Sys.info()[["sysname"]]
-      private$..meta$system$release <- Sys.info()[["release"]]
-      private$..meta$system$version <- Sys.info()[["version"]]
-      private$..meta$state$accessed <- Sys.time()
-    },
+    validate = function(what = "initialize") {
 
-    # Updates system metadata when object has been modified
-    modified = function() {
-      private$..meta$system$user <- Sys.info()[["user"]]
-      private$..meta$system$machine <- Sys.info()[["machine"]]
-      private$..meta$system$os <- Sys.info()[["sysname"]]
-      private$..meta$system$release <- Sys.info()[["release"]]
-      private$..meta$system$version <- Sys.info()[["version"]]
-      private$..meta$state$accessed <- Sys.time()
-      private$..meta$state$modified <- Sys.time()
-    },
-
-    # Updates system metadata when object has been created
-    created = function() {
-      private$..meta$system$user <- Sys.info()[["user"]]
-      private$..meta$system$machine <- Sys.info()[["machine"]]
-      private$..meta$system$os <- Sys.info()[["sysname"]]
-      private$..meta$system$release <- Sys.info()[["release"]]
-      private$..meta$system$version <- Sys.info()[["version"]]
-      private$..meta$state$created <- Sys.time()
-      private$..meta$state$accessed <- Sys.time()
-      private$..meta$state$modified <- Sys.time()
+      if (what == "initialize") {
+        status <- private$validator$init(self)
+        if (status$code == FALSE) {
+          private$logR$log(cls = class(self)[1], event = status$msg, level = "Error")
+        }
+      } else if (what == "attach") {
+        status <- private$validator$attach(self)
+        if (status$code == FALSE) {
+          private$logR$log(cls = class(self)[1], event = status$msg, level = "Error")
+        }
+      }  else if (what == "detach") {
+        status <- private$validator$detach(self)
+        if (status$code == FALSE) {
+          private$logR$log(cls = class(self)[1], event = status$msg, level = "Error")
+        }
+      } else if (what == "read") {
+        status <- private$validator$read(self)
+        if (status$code == FALSE) {
+          private$logR$log(cls = class(self)[1], event = status$msg, level = "Error")
+        }
+      } else if (what == "source") {
+        status <- private$validator$source(self)
+        if (status$code == FALSE) {
+          private$logR$log(cls = class(self)[1], event = status$msg, level = "Error")
+        }
+      } else if (what == "metadata") {
+        status <- private$validator$metadata(self)
+        if (status$code == FALSE) {
+          private$logR$log(cls = class(self)[1], event = status$msg, level = "Error")
+        }
+      }
+      return(status)
     },
 
     #-------------------------------------------------------------------------#
     #                           Summary Methods                               #
     #-------------------------------------------------------------------------#
-    summaryObjMeta = function(quiet = FALSE) {
+    oneLiner = function(meta, quiet = FALSE) {
 
-      meta <- as.data.frame(private$..meta$object, stringsAsFactors = FALSE,
-                            row.names = NULL)
+      df <- data.frame(class = meta$core$class,
+                       id = meta$core$id,
+                       name = meta$core$name,
+                       description = meta$core$description,
+                       created = meta$state$created,
+                       user = meta$system$user,
+                       stringsAsFactors = FALSE,
+                       row.names = NULL)
+      return(df)
+    },
+
+    core = function(meta, quiet = FALSE) {
+
+      df <- as.data.frame(meta$core, stringsAsFactors = FALSE,
+                          row.names = NULL)
 
       if (quiet == FALSE)  {
-        cat(paste0("\n\nObject Id    : ", private$..meta$object$id))
-        cat(paste0("\nObject Class : ", private$..meta$object$class))
-        cat(paste0("\nObject Name  : ", private$..meta$object$name))
-        cat(paste0("\nDescription  : ", private$..meta$object$description))
+        cat(paste0("\n\nObject Id    : ", meta$core$id))
+        cat(paste0("\nObject Class : ", meta$core$class))
+        cat(paste0("\nObject Name  : ", meta$core$name))
+        cat(paste0("\nDescription  : ", meta$core$description))
 
-        otherMeta <- meta %>% select(-id, -class, -name, -description)
+        otherMeta <- df %>% select(-id, -class, -name, -description)
         if (ncol(otherMeta) > 0) {
-          cat("\n\nObject Metadata:\n")
+          cat("\n\nAdditional Core Metadata:\n")
           print(otherMeta, row.names = FALSE)
         }
       }
-      return(meta)
+      return(df)
     },
 
-    summaryState = function(quiet = FALSE) {
+    state = function(meta, quiet = FALSE) {
 
-      state <- as.data.frame(private$..meta$state, stringsAsFactors = FALSE,
-                           row.names = NULL)
-      state <- state %>% select(user, current, date, created, accessed, modified)
+      df <- as.data.frame(meta$state, stringsAsFactors = FALSE,
+                          row.names = NULL)
       if (quiet == FALSE) {
-        if (ncol(state) > 0) {
+        if (ncol(df) > 0) {
           cat("\n\nState Information: \n")
-          print(state, row.names = FALSE)
+          print(df, row.names = FALSE)
         }
       }
-      return(state)
+      return(df)
     },
 
-    summarySysInfo = function(quiet = FALSE) {
-
-      sys <- as.data.frame(private$..meta$system, stringsAsFactors = FALSE,
-                           row.names = NULL)
+    system = function(meta, quiet = FALSE) {
+      df <- as.data.frame(meta$system, stringsAsFactors = FALSE,
+                          row.names = NULL)
       if (quiet == FALSE) {
-        if (ncol(sys) > 0) {
+        if (ncol(df) > 0) {
           cat("\nSystem Information: \n")
-          print(sys, row.names = FALSE)
+          print(df, row.names = FALSE)
         }
       }
-      return(sys)
+      return(df)
     }
   ),
 
   public = list(
+    #-------------------------------------------------------------------------#
+    #                           Constructor                                   #
+    #-------------------------------------------------------------------------#
+    initialize = function() { stop("This method is not implemented for this base class.")},
 
     #-------------------------------------------------------------------------#
-    #                           Basic Get  Methods                            #
+    #                         Basic Get Methods                               #
     #-------------------------------------------------------------------------#
-    getId = function() private$..meta$object$id,
-    getName = function() private$..meta$object$name,
+    getId = function() { unlist(private$meta$get(key = "id")) },
+    getName = function() { unlist(private$meta$get(key = "name")) },
+    getParams = function() { private$..params },
 
     #-------------------------------------------------------------------------#
-    #                           Metadata Method                               #
+    #                           Query Method                                  #
     #-------------------------------------------------------------------------#
-    meta = function(key = NULL, value = NULL) {
+    query = function(cls, key, value) {
 
-      # Validate
-      if (!is.null(key)) {
-        if ('class' %in% key) {
-          private$..event <- "Unable to change the 'class' of an object."
-          private$logIt("Warn")
-        }
-      }
-      if (!is.null(key) & !is.null(value) & (length(key) != length(value))) {
-        private$..event <- "Non-null key/value pairs must be of equal length"
-        private$logIt("Error")
-        stop()
-      } else if (is.null(key) & (!(is.null(value)))) {
-        private$..event <- "Unable to change meta data. No key provided for value."
-        private$logIt("Error")
-        stop()
+      if (!(cls %in% class(self))) {
+        return(FALSE)
       }
 
-      # Return all metadata
-      if (missing(key) & missing(value)) {
-        metaDataList <- Filter(Negate(is.null), private$..meta)
-        metaDataDfs <- lapply(metaDataList, function(m) {
-          df <- as.data.frame(m, stringsAsFactors = FALSE)
-          if (nrow(df) > 0 ) {
-            df
-          }
-        })
-        metaDataDfs <- Filter(Negate(is.null), metaDataDfs)
-        return(metaDataDfs)
+      if (is.null(key) | is.null(value)) {
+        return(FALSE)
+      }
 
-      # Return selected metadata
-      } else if (!is.null(key) & missing(value)) {
-
-        # Check object level metadata
-        keys <- intersect(names(private$..meta$object), key)
-        if (length(keys) > 0) {
-          return(as.data.frame(private$..meta$object[names(private$..meta$object) %in% keys]))
-        } else {
-
-          # Check application level metadata
-          keys <- intersect(names(private$..meta$state), key)
-          if (length(keys) > 0) {
-            return(as.data.frame(private$..meta$state[names(private$..meta$state) %in% keys]))
-          } else {
-            private$..event <- "Non existent metadata variable"
-            private$logIt("Warn")
-            return(NULL)
+      md <- private$meta$get()
+      for (i in 1:length(md)) {
+        mdl <- as.list(md[[i]])
+        n <- names(mdl)
+        for (j in 1:length(mdl)) {
+          if ((n[j]  == key) & (sum(mdl[[j]]  %in% value) > 0)) {
+            return(TRUE)
           }
         }
+      }
+      return(FALSE)
+    },
 
-      # Assign / add key value pairs
+    #-------------------------------------------------------------------------#
+    #                        Generic Summary Method                           #
+    #-------------------------------------------------------------------------#
+    summary = function(core = TRUE, state = TRUE, system = TRUE,
+                       quiet = FALSE, abbreviated = FALSE) {
+
+      meta <- private$meta$get()
+
+      if (abbreviated) {
+        result <- private$oneLiner(meta = meta, quiet = quiet)
       } else {
-        for (i in 1:length(key)) {
-          private$..meta$object[[key[i]]] <- value[i]
+        result <- list()
+        section <- character()
+
+        if (core) {
+          result$meta <- private$core(meta,  quiet = quiet)
+          section <- c(section, "Core Metadata")
         }
+
+        if (state) {
+          result$state <- private$state(meta, quiet = quiet)
+          section <- c(section, "State Information")
+        }
+
+        if (system) {
+          result$sys <- private$system(meta, quiet = quiet)
+          section <- c(section, "System Information")
+        }
+
+        names(result) <- section
+      }
+
+      private$meta$accessed()
+
+      invisible(result)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                             Metadata Method                             #
+    #-------------------------------------------------------------------------#
+    metadata = function(key = NULL, value = NULL) {
+
+      private$..params <- list()
+      private$..params$key <- key
+      private$..params$value <- value
+      v <- private$validate("metadata")
+      if (v$code == FALSE) stop()
+
+      if (is.null(key)) {
+        print(private$meta$get())
+      } else {
+        private$meta$set(key = key, value = value)
       }
       invisible(self)
     },
 
     #-------------------------------------------------------------------------#
-    #                           Log Methods                                   #
+    #                             Log Method                                  #
     #-------------------------------------------------------------------------#
-    log = function(event = NULL) {
+    log = function(event = NULL, cls = NULL, method = NULL) {
       if (is.null(event)) {
-        cat("\n\n")
-        print(paste0("Event Log for ", class(self)[1], " object, '",
-                     private$..meta$object$name, "'."))
         print(private$..log)
-        invisible(self)
       } else {
-        private$..event <- event
-        private$logIt()
-        invisible(self)
+        private$logR$log(cls = cls, event = event)
       }
     }
   )

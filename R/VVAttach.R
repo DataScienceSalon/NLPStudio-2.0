@@ -59,8 +59,8 @@ VVAttach <- R6::R6Class(
         status[['msg']] <- paste0("Unable to attach ", class(p$x)[1],
                                   " class object to an object of class ",
                                   class(object)[1], ".",
-                                 "See ?", class(object)[1],
-                                 " for further assistance.")
+                                  "See ?", class(object)[1],
+                                  " for further assistance.")
       }
       return(status)
     }

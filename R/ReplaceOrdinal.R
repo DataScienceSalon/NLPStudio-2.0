@@ -51,14 +51,14 @@ ReplaceOrdinal <- R6::R6Class(
     initialize = function(x, joinOrdinal = FALSE, remove = FALSE) {
       private$..className <- "ReplaceOrdinal"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
-      private$..logs  <- LogR$new()
+      private$..meta$core$name <- private$..className
+      private$logR  <- LogR$new()
 
       # Validate parameters
       private$..params$x <- x
       private$..params$logicals$variables <- c('joinOrdinal', 'remove')
       private$..params$logicals$values <- c(joinOrdinal, remove)
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..joinOrdinal <- joinOrdinal

@@ -35,12 +35,8 @@ CSourceDir <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function() {
 
-      # Initiate logging variables and system meta data
-      private$..className <- 'CSourceDir'
-      private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
+      private$loadDependencies()
 
-      # Save parameter and create Corpus object.
       private$..corpus <- Corpus$new()
 
       invisible(self)
@@ -54,9 +50,9 @@ CSourceDir <- R6::R6Class(
 
       private$..methodName <- 'source'
 
-      if (private$validate(x)$code == FALSE) stop()
-
-      private$..corpus <- private$nameCorpus(name)
+      private$..params <- list()
+      private$..params$x <- x
+      if (private$validate("source")$code == FALSE) stop()
 
       if (isDirectory(x)) {
         files <- list.files(x, full.names = TRUE)
@@ -72,9 +68,6 @@ CSourceDir <- R6::R6Class(
         doc <- Document$new(x = content, name = name)
         private$..corpus$addDocument(x = doc)
       })
-
-      event <- paste0("Corpus sourcing from directory, complete.")
-      private$..corpus$log(event = event)
 
       return(private$..corpus)
     },

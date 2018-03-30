@@ -36,14 +36,14 @@ SplitCorpus <- R6::R6Class(
 
       private$..className <- "SplitCorpus"
       private$..methodName <- "initialize"
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       private$..params <- list()
       private$..params$x <- x
       private$..params$splits <- splits
       private$..params$setNames <- setNames
 
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..splits <- splits
@@ -57,8 +57,8 @@ SplitCorpus <- R6::R6Class(
       private$initCvSets()
 
       # log
-      private$..event <- paste0("Successfully initialized SplitCorpus class object.")
-      private$logIt()
+      event <- paste0("Successfully initialized SplitCorpus class object.")
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     },
@@ -86,8 +86,8 @@ SplitCorpus <- R6::R6Class(
       }
 
       # log
-      private$..event <- paste0("Successfully performed SplitCorpus.")
-      private$logIt()
+      event <- paste0("Successfully performed SplitCorpus.")
+      private$logR$log(cls = class(self)[1], event = event)
 
       return(private$..cvCorpora)
     },

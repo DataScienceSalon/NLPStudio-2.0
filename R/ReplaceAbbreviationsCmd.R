@@ -38,11 +38,11 @@ ReplaceAbbreviationsCmd <- R6::R6Class(
     initialize = function(abbreviations = NULL, replacement = NULL, ignoreCase = TRUE) {
       private$..className <- "ReplaceAbbreviations"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
+      private$..meta$core$name <- private$..className
       private$..abbreviations <- abbreviations
       private$..replacement <- replacement
       private$..ignoreCase <- ignoreCase
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

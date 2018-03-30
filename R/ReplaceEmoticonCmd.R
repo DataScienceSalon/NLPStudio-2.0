@@ -35,9 +35,9 @@ ReplaceEmoticonCmd <- R6::R6Class(
     initialize = function(emoticons = NULL) {
       private$..className <- "ReplaceEmoticonCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
+      private$..meta$core$name <- private$..className
       private$..emoticons <- emoticons
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

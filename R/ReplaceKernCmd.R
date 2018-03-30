@@ -29,8 +29,8 @@ ReplaceKernCmd <- R6::R6Class(
     initialize = function() {
       private$..className <- "ReplaceKernCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
-      private$..logs  <- LogR$new()
+      private$..meta$core$name <- private$..className
+      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

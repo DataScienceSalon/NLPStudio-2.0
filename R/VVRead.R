@@ -53,28 +53,6 @@ VVRead <- R6::R6Class(
         return(status)
       }
       return(status)
-    },
-
-    validateDir = function(object) {
-      status <- list()
-      status[['code']] <- TRUE
-
-      p <- object$getParams()
-      path <- p$path
-
-      if (isDirectory(path)) {
-        files <- list.files(path, full.names = TRUE)
-      } else {
-        glob <- basename(path)
-        dir <- dirname(path)
-        files <- list.files(dir, pattern = glob2rx(glob), full.names = TRUE)
-      }
-
-      if (is.null(files)) {
-        status$code <- FALSE
-        status$msg <- paste0("No files found in ", path, ".")
-      }
-      return(status)
     }
   ),
   public = list(

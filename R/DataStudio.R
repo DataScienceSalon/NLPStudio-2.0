@@ -44,18 +44,18 @@ DataStudio <- R6::R6Class(
       # Instantiate variables
       private$..className <- 'DataStudio'
       private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       # Validation
       private$..params <- list()
       private$..params$x <- x
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
 
       # Create log entry
-      private$..event <- paste0("DataStudio object instantiated.")
-      private$logIt()
+      event <- paste0("DataStudio object instantiated.")
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     },
@@ -72,9 +72,9 @@ DataStudio <- R6::R6Class(
         private$..x$addData(data)
       }
 
-      private$..event <- paste0("Processed data processing commands for ",
+      event <- paste0("Processed data processing commands for ",
                                 private$..x$getName(), "." )
-      private$logIt()
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
 

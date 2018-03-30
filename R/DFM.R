@@ -31,7 +31,7 @@
 #' See \code{\link[quanteda]{dfm}} for details.
 #' @param valuetype A character string containing the type of pattern matching:
 #' "glob" for "glob"-style wildcard expressions; "regex" for regular expressions; or
-#' "fixed" for exact matching. See \code{\link[quanteda]{dfm}} for details.
+#' "fixed" for exact matching. Defaults to 'fixed'. See \code{\link[quanteda]{dfm}} for details.
 #' @param groups Either: a character vector containing the names of document variables to
 #' be used for grouping; or a factor or object that can be coerced into a factor
 #' equal in length or rows to the number of documents. See \code{\link[quanteda]{dfm}}
@@ -64,46 +64,47 @@ DFM <- R6::R6Class(
     ),
     ..data = character(),
 
-    processDocument = function(document) {
-      dfm <- document$getDFM()
+    processCorpus = function() {
+      dfm <- private$..x$getDFM()
 
       if (is.null(dfm) |
           (document$meta(key == 'modified') > dfm$meta(key == "created") |
            dfm$settings() != private$..settings)) {
-            private$..data <- quanteda::dfm(document$content,
-                                       tolower = private$..settings$tolower,
-                                       stem = private$..settings$stem,
-                                       select = private$..settings$select,
-                                       remove = private$..settings$remove,
-                                       dictionary = private$..settings$dictionary,
-                                       thesaurus = private$..settings$thesaurus,
-                                       valuetype = private$..settings$valuetype,
-                                       groups = private$..settings$groups,
-                                       verbose = private$..settings$verbose)
+        q <- ConverterQuanteda$new()$convert(private$..x)
+        private$..data <- quanteda::dfm(q,
+                                        tolower = private$..settings$tolower,
+                                        stem = private$..settings$stem,
+                                        select = private$..settings$select,
+                                        remove = private$..settings$remove,
+                                        dictionary = private$..settings$dictionary,
+                                        thesaurus = private$..settings$thesaurus,
+                                        valuetype = private$..settings$valuetype,
+                                        groups = private$..settings$groups,
+                                        verbose = private$..settings$verbose)
 
       }
-      return(dfm)
+      return(TRUE)
     }
   ),
 
   public = list(
     initialize = function(x, tolower = TRUE, stem = FALSE, select = NULL,
                           remove = NULL,  dictionary = NULL, thesaurus = NULL,
-                          valuetype = c("glob", "regex","fixed"),
-                          groups = NULL, verbose = quanteda_options("verbose"), ...) {
+                          valuetype = "fixed", groups = NULL,
+                          verbose = quanteda::quanteda_options("verbose")) {
       private$..className <- "DFM"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
-      private$..logs  <- LogR$new()
+      private$..meta$core$name <- private$..className
+      private$logR  <- LogR$new()
 
       # Validate parameters
       private$..params$x <- x
       private$..params$logicals$variables <- c("tolower", "stem")
       private$..params$logicals$values <- c(tolower, stem)
-      private$..params$discrete$variables <- c("valuetype")
-      private$..params$discrete$values <- c(valuetype)
-      private$..params$discrete$valid <- c("glob", "regex","fixed")
-      if (private$validateParams()$code == FALSE) stop()
+      private$..params$discrete$variables <- list(c("valuetype"))
+      private$..params$discrete$values <- list(c(valuetype))
+      private$..params$discrete$valid <- list(c("glob", "regex","fixed"))
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..settings$tolower <- tolower

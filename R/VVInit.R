@@ -41,7 +41,7 @@ VVInit <- R6::R6Class(
 
       # Validate pattern replace
       if (!is.null(p$pattern)) {
-        status <- validatePatternReplace(object)
+        status <- validateKeyValue(object)
         if (status$code == FALSE) {
           return(status)
         }

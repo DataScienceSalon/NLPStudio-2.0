@@ -21,23 +21,10 @@ CSource0 <- R6::R6Class(
   classname = "CSource0",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Base,
+  inherit = Entity,
 
   private = list(
-    ..corpus = character(),
-
-    validate = function(x) {
-      private$..params <- list()
-      private$..params$x <- x
-      return(private$validateParams(private$..methodName))
-    },
-
-    nameCorpus = function(name) {
-      if (!is.null(name)) {
-        private$..corpus <- private$..corpus$meta(key = "name", value = name)
-      }
-      return(private$..corpus)
-    }
+    ..corpus = character()
   ),
 
   public = list(

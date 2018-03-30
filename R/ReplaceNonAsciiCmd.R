@@ -34,9 +34,9 @@ ReplaceNonAsciiCmd <- R6::R6Class(
     initialize = function(removeNonConverted = TRUE) {
       private$..className <- "ReplaceNonAsciiCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
+      private$..meta$core$name <- private$..className
       private$..removeNonConverted <- removeNonConverted
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

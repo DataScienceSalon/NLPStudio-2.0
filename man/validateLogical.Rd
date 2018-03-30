@@ -21,7 +21,7 @@ names, and (2) a vector containing the values.
 }
 \seealso{
 Other Validation Functions: \code{\link{validateDiscrete}},
-  \code{\link{validatePatternReplace}}
+  \code{\link{validateKeyValue}}
 }
 \author{
 John James, \email{jjames@DataScienceSalon.org}

@@ -45,12 +45,12 @@ StripTextCmd <- R6::R6Class(
     initialize = function(keepChars = NULL, removeDigits = TRUE,
                           removeApostrophe = TRUE, lowerCase = TRUE) {
       private$..methodName <- "initialize"
-      private$..meta$object$name <- "StripTextCmd"
+      private$..meta$core$name <- "StripTextCmd"
       private$..keepChars <- keepChars
       private$..removeDigits <- removeDigits
       private$..removeApostrophe <- removeApostrophe
       private$..lowerCase = lowerCase
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

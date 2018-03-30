@@ -31,7 +31,7 @@ RepairFile <- R6::R6Class(
   inherit = TextStudio0,
 
   private = list(
-    ..path = logical(),
+    ..path = character(),
     ..io = list(),
     ..codes = list(
       null = 0,
@@ -101,9 +101,7 @@ RepairFile <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function(path) {
 
-      private$..className <- 'RepairFile'
-      private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       # Validate path
       if (!R.utils::isFile(path)) stop(paste("File", path, "does not exist."))
@@ -114,8 +112,8 @@ RepairFile <- R6::R6Class(
       private$..io$text <- IOText$new()
 
       # Create log entry
-      private$..event <- paste0("Instantiated RepairFile for ", path, ".")
-      private$logIt()
+      event <- paste0("Instantiated RepairFile for ", path, ".")
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     },

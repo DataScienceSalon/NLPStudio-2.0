@@ -35,9 +35,9 @@ ReplaceHTMLCmd <- R6::R6Class(
     initialize = function(symbol = TRUE) {
       private$..className <- "ReplaceHTMLCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
+      private$..meta$core$name <- private$..className
       private$..symbol <- symbol
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

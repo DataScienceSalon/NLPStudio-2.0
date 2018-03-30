@@ -59,15 +59,15 @@ Reshape <- R6::R6Class(
     initialize = function(x, to = "sentence") {
       private$..className <- "Reshape"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
-      private$..logs  <- LogR$new()
+      private$..meta$core$name <- private$..className
+      private$logR  <- LogR$new()
 
       # Validate parameters
       private$..params$x <- x
       private$..params$discrete$variables <- c('to')
       private$..params$discrete$values <- c(to)
       private$..params$discrete$valid <- list(c("corpus", "document", "sentence", "c", "d", "s"))
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..to <- to

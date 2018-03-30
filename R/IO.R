@@ -29,7 +29,10 @@ IO <- R6::R6Class(
   classname = "IO",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Base,
+
+  private = list(
+    logR = character()
+  ),
 
   public = list(
     #-------------------------------------------------------------------------#
@@ -37,11 +40,7 @@ IO <- R6::R6Class(
     #-------------------------------------------------------------------------#
 
     initialize = function() {
-
-      # Initiate logging variables
-      private$..className <- 'IO'
-      private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
       invisible(self)
     },
 
@@ -54,12 +53,12 @@ IO <- R6::R6Class(
 
       # Validate path
       if (!R.utils::isFile(path)) {
-        private$..event <- paste0("File path ", path, " not found.")
-        private$logIt("Error")
+        event <- paste0("File path ", path, " not found.")
+        private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       } else if (is.null(IOFactory$new(path)$getIOStrategy())) {
-        private$..event <- paste0("File ", path, " is an unsupported file type.")
-        private$logIt("Error")
+        event <- paste0("File ", path, " is an unsupported file type.")
+        private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       }
 
@@ -71,8 +70,8 @@ IO <- R6::R6Class(
       }
 
       # Update log and system metadata
-      private$..event <- paste0("Read file from ", path, ". ")
-      private$logIt()
+      event <- paste0("Read file from ", path, ". ")
+      private$logR$log(cls = class(self)[1], event = event)
 
       return(content)
     },
@@ -88,9 +87,9 @@ IO <- R6::R6Class(
       io$write(path = path, content = content)
 
       # Update log
-      private$..event <- paste0("Saved content to ", path, ". ")
-      private$accessed
-      private$logIt()
+      event <- paste0("Saved content to ", path, ". ")
+      private$meta$accessed
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     },

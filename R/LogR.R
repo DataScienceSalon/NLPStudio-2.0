@@ -25,7 +25,7 @@ LogR <- R6::R6Class(
   lock_class = TRUE,
 
   private = list(
-    ..entries = list(),
+    ..log = data.frame(),
     ..logPath = './NLPStudio/logs',
     notifyInfo  = function(note) futile.logger::flog.info(note, name = "green"),
     notifyWarn  = function(note) futile.logger::flog.warn(note, name = "yellow"),
@@ -57,38 +57,35 @@ LogR <- R6::R6Class(
       invisible(self)
     },
 
-    writeLog  = function() {
+    log  = function(cls, event, level = "Info",
+                    fieldName = NULL, method = NULL) {
 
-      if (is.null(self$entry$className) | is.null(self$entry$methodName) |
-          is.null(self$entry$level) | is.null(self$entry$msg)) {
+      if (is.null(method)) method <- sys.call(which = -2)[1]
 
-        note <- paste("The usage for the LogR class is",
-                      "writeLog(className, methodName,
-                      path, level, msg, fieldName = NULL)")
-        private$notifyError(note)
-      } else {
-        level <- gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
-                      self$entry$level, perl = TRUE)
+      level <- gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
+                    level, perl = TRUE)
 
-        note <- paste0(level, " in class '",
-                       self$entry$className, "', method '", self$entry$methodName, ". ",
-                       ifelse(is.na(self$entry$fieldName), "",
-                              paste0("with variable '",
-                              self$entry$fieldName, "'. ")), self$entry$msg)
+      note <- paste0(level, " in class '", cls, "', method '",
+                     method, "'. ", ifelse(is.null(fieldName), "",
+                                           paste0("with variable '",
+                                          fieldName, "'. ")), event)
+      #Write to log
+      switch(level,
+             Info  = private$notifyInfo(note),
+             Warn  = private$notifyWarn(note),
+             Error = private$notifyError(note)
+      )
 
-        switch(level,
-               Info  = private$notifyInfo(note),
-               Warn  = private$notifyWarn(note),
-               Error = private$notifyError(note)
-        )
-
-        # Append to list
-        if (is.null(private$..entries)) {
-          private$..entries <- self$entry
-        }  else {
-          private$..entries <- c(private$..entries, self$entry)
-        }
+      # Append information log to log for object.
+      if (level == "Info") {
+        log <- data.frame(user = Sys.info()[['user']],
+                          date = Sys.time(),
+                          class = cls,
+                          event = event)
+        private$..log <- rbind(private$..log, log)
       }
-    }
+    },
+
+    getLog = function() { private$..log }
   )
 )

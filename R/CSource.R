@@ -50,72 +50,52 @@ CSource <- R6::R6Class(
   classname = "CSource",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Base,
-
-  private = list(
-    ..x = character()
-  ),
+  inherit = Entity,
 
   public = list(
 
     #-------------------------------------------------------------------------#
     #                       Instantiation Method                              #
     #-------------------------------------------------------------------------#
-    initialize = function() {
-
-      # Initiate logging variables and system meta data
-      private$..className <- 'CSource'
-      private$..methodName <- 'initialize'
-      private$..logs <- LogR$new()
-
-      invisible(self)
-    },
+    initialize = function() { invisible(self) },
 
     #-------------------------------------------------------------------------#
     #                            Source Methods                               #
     #-------------------------------------------------------------------------#
     vector = function(x, name = NULL, concatenate = TRUE) {
-      private$..methodName = 'vector'
       corpus <- CSourceVector$new()$source(x = x, name = name, concatenate)
       return(corpus)
     },
 
     dir = function(x, name = NULL) {
-      private$..methodName = 'dir'
       corpus <- CSourceDir$new()$source(x = x, name = name)
       return(corpus)
     },
 
     json = function(x, name = NULL) {
-      private$..methodName = 'json'
       stop("This method is currently unsupported")
     },
 
     xml = function(x, name = NULL) {
-      private$..methodName = 'xml'
       stop("This method is currently unsupported")
     },
 
     quanteda = function(x, name = NULL) {
-      private$..methodName = 'quanteda'
       corpus <- CSourceQuanteda$new()$source(x = x, name = name)
       return(corpus)
     },
 
     tm = function(x, name = NULL) {
-      private$..methodName = 'tm'
       corpus <- CSourceTM$new()$source(x = x, name = name)
       return(corpus)
     },
 
     korpus = function(x, name = NULL) {
-      private$..methodName = 'korpus'
       corpus <- CSourceKorpus$new()$source(x = x, name = name)
       return(corpus)
     },
 
     qdap = function(x, name = NULL) {
-      private$..methodName = 'qdap'
       corpus <- CSourceQdap$new()$source(x = x, name = name)
       return(corpus)
     },

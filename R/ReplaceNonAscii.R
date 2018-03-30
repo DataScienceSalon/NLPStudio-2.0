@@ -50,14 +50,14 @@ ReplaceNonAscii <- R6::R6Class(
     initialize = function(x, removeNonConverted = TRUE) {
       private$..className <- "ReplaceNonAscii"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
-      private$..logs  <- LogR$new()
+      private$..meta$core$name <- private$..className
+      private$logR  <- LogR$new()
 
       # Validate parameters
       private$..params$x <- x
       private$..params$logicals$variables <- c('removeNonConverted')
       private$..params$logicals$values <- c(removeNonConverted)
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..removeNonConverted <- removeNonConverted

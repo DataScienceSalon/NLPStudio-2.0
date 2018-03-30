@@ -65,8 +65,8 @@ Tokenize <- R6::R6Class(
       data <- Data$new(id = id, content = tokenized)
       document$addDNA(data)
 
-      private$..event <- paste0("Tokenized ", document$getName(), " document.")
-      private$logIt()
+      event <- paste0("Tokenized ", document$getName(), " document.")
+      private$logR$log(cls = class(self)[1], event = event)
 
       return(document)
     },
@@ -78,8 +78,8 @@ Tokenize <- R6::R6Class(
       lapply(docs, function(d) {
         corpus$addDocument(private$processDocument(d))
       })
-      private$..event <- paste0("Tokenized ", corpus$getName(), " corpus. ")
-      private$logIt()
+      event <- paste0("Tokenized ", corpus$getName(), " corpus. ")
+      private$logR$log(cls = class(self)[1], event = event)
       return(corpus)
     }
   ),
@@ -88,15 +88,15 @@ Tokenize <- R6::R6Class(
     initialize = function(x, what = NULL) {
       private$..className <- "Tokenize"
       private$..methodName <- "initialize"
-      private$..meta$object$name <-  "Tokenize"
-      private$..logs  <- LogR$new()
+      private$..meta$core$name <-  "Tokenize"
+      private$logR  <- LogR$new()
 
       private$..params <- list()
       private$..params$x <- x
       private$..params$variables <- c('what')
       private$..params$values <- c(what)
       private$..params$valid <- list(c("word", "w", "sentence", "s", 'NULL'))
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..what <- what
@@ -112,9 +112,9 @@ Tokenize <- R6::R6Class(
       corpus <- private$processCorpus(private$..x)
 
       # Log it
-      private$..event <- paste0("Executed ", class(self)[1], " on ",
+      event <- paste0("Executed ", class(self)[1], " on ",
                                 private$..x$getName(), ". ")
-      private$logIt()
+      private$logR$log(cls = class(self)[1], event = event)
 
       return(corpus)
     },

@@ -40,9 +40,6 @@ This section summarizes the methods in the Validator class.
  }
 }
 
-\seealso{
-Other Validation Classes: \code{\link{VString}}
-}
 \author{
 John James, \email{jjames@datasciencesalon.org}
 }

@@ -27,7 +27,11 @@ IOText <- R6::R6Class(
   classname = "IOText",
   lock_objects = TRUE,
   lock_class = FALSE,
-  inherit = Base,
+
+  private = list(
+    logR = character()
+  ),
+
   public = list(
 
     #-------------------------------------------------------------------------#
@@ -35,7 +39,7 @@ IOText <- R6::R6Class(
     #-------------------------------------------------------------------------#
     read = function(path) {
 
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       fileName <- basename(path)
 
@@ -43,12 +47,12 @@ IOText <- R6::R6Class(
         con <- file(path)
         on.exit(close(con))
         content <- readLines(con)
-        private$..event <- paste0("Successfully read ", fileName, ".")
-        private$logIt()
+        event <- paste0("Successfully read ", fileName, ".")
+        private$logR$log(cls = class(self)[1], event = event)
       } else {
-        private$..event <- paste0('Unable to read ', path, '. ',
+        event <- paste0('Unable to read ', path, '. ',
                                   'File does not exist.')
-        private$logIt("Error")
+        private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       }
       return(content)
@@ -56,7 +60,7 @@ IOText <- R6::R6Class(
 
     write = function(path, content) {
 
-      private$..logs <- LogR$new()
+      private$logR <- LogR$new()
 
       fileName <- basename(path)
       dirName <- dirname(path)
@@ -68,8 +72,8 @@ IOText <- R6::R6Class(
       on.exit(close(con))
       writeLines(content, con)
 
-      private$..event <- paste0("Successfully wrote ", fileName, ".")
-      private$logIt()
+      event <- paste0("Successfully wrote ", fileName, ".")
+      private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)
     }

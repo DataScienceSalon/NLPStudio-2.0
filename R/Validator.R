@@ -65,6 +65,11 @@ Validator <- R6::R6Class(
     source = function(object) {
       visitor <- VVSource$new()
       object$accept(visitor)
+    },
+
+    metadata = function(object) {
+      visitor <- VVMetadata$new()
+      object$accept(visitor)
     }
   )
 )

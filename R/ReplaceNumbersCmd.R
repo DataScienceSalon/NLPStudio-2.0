@@ -36,10 +36,10 @@ ReplaceNumbersCmd <- R6::R6Class(
     initialize = function(joinNumbers = FALSE, remove = FALSE) {
       private$..className <- "ReplaceNumbersCmd"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
+      private$..meta$core$name <- private$..className
       private$..joinNumbers <- joinNumbers
       private$..remove <- remove
-      private$..logs  <- LogR$new()
+      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

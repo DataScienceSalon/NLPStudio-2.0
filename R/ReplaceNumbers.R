@@ -50,14 +50,14 @@ ReplaceNumbers <- R6::R6Class(
     initialize = function(x, joinNumbers = FALSE, remove = FALSE) {
       private$..className <- "ReplaceNumbers"
       private$..methodName <- "initialize"
-      private$..meta$object$name <- private$..className
-      private$..logs  <- LogR$new()
+      private$..meta$core$name <- private$..className
+      private$logR  <- LogR$new()
 
       # Validate parameters
       private$..params$x <- x
       private$..params$logicals$variables <- c('joinNumbers', 'remove')
       private$..params$logicals$values <- c(joinNumbers, remove)
-      if (private$validateParams()$code == FALSE) stop()
+      if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
       private$..joinNumbers <- joinNumbers
