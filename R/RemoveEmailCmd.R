@@ -27,10 +27,7 @@ RemoveEmailCmd <- R6::R6Class(
 
   public = list(
     initialize = function() {
-      private$..className <- "RemoveEmailCmd"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+      private$loadDependencies()
       invisible(self)
     },
     execute = function(x) {

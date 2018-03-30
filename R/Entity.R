@@ -248,9 +248,7 @@ Entity <- R6::R6Class(
       v <- private$validate("metadata")
       if (v$code == FALSE) stop()
 
-      if (is.null(key)) {
-        print(private$meta$get())
-      } else {
+      if (!is.null(key)) {
         private$meta$set(key = key, value = value)
       }
       invisible(self)

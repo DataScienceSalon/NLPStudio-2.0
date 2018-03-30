@@ -27,23 +27,17 @@ Clone <- R6::R6Class(
   "Clone",
   lock_class = FALSE,
   lock_objects = FALSE,
-  inherit = Base,
+  inherit = Entity,
 
   private = list(
 
-    validate = function(x) {
-      private$..params <- list()
-      private$..params$x <- x
-      return(private$validate())
-    },
-
     cloneMeta = function(x, out) {
-      meta <- x$meta()
+      meta <- x$metadata()
       keys <- names(meta$object)
       values <- as.character(meta$object)
       values <- values[!keys %in% c("id", "name", "class")]
       keys <- keys[!keys %in% c("id", "name", "class")]
-      out$meta(key = keys, value = values)
+      out <- out$metadata(key = keys, value = values)
       return(out)
     },
 
@@ -77,7 +71,7 @@ Clone <- R6::R6Class(
       attachments <- x$getDocument()
       lapply(attachments, function(a) {
         attachment <- private$cloneDocument(x = a)
-        out <<- out$attach(attachment)
+        out <<- out$addDocument(attachment)
       })
 
       event <- paste0("Created", class(out)[1], " object '",
@@ -93,15 +87,16 @@ Clone <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                              Core Methods                               #
     #-------------------------------------------------------------------------#
-    initialize = function() { invisible(self) },
+    initialize = function() {
+      private$loadDependencies()
+      invisible(self)
+    },
     document = function(x, name = NULL) {
 
-      private$..className <- 'Clone'
-      private$..methodName <- 'document'
-      private$logR <- LogR$new()
-
       # Validate parameters
-      if (private$validate(x)$code == FALSE) stop()
+      private$..params <- list()
+      private$..params$x <- x
+      if (private$validate()$code == FALSE) stop()
 
       out <- private$cloneDocument(x = x, name = name)
       return(out)
@@ -109,12 +104,10 @@ Clone <- R6::R6Class(
 
     corpus = function(x, name = NULL) {
 
-      private$..className <- 'Clone'
-      private$..methodName <- 'corpus'
-      private$logR <- LogR$new()
-
       # Validate parameters
-      if (private$validate(x)$code == FALSE) stop()
+      private$..params <- list()
+      private$..params$x <- x
+      if (private$validate()$code == FALSE) stop()
 
       out <- private$cloneCorpus(x = x, name = name)
       return(out)

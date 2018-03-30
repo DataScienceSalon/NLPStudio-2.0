@@ -24,7 +24,7 @@ Converter <- R6::R6Class(
   classname = "Converter",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Base,
+  inherit = Entity,
 
   public = list(
 

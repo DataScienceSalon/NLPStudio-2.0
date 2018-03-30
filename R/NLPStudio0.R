@@ -31,7 +31,7 @@ NLPStudio0 <- R6::R6Class(
   classname = "NLPStudio0",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Base,
+  inherit = Entity,
 
   private = list(
     ..x = character(),
@@ -53,9 +53,9 @@ NLPStudio0 <- R6::R6Class(
 
       private$..methodName <- "addCommand"
 
-      if (!c("NLPStudio00") %in% class(cmd)) {
+      if (!c("NLPStudio0") %in% class(cmd)) {
         event <- paste0("Invalid text command object. Object must be ",
-                                  "of the NLPStudio00 classes.  See ?", class(self)[1],
+                                  "of the NLPStudio0 classes.  See ?", class(self)[1],
                                   " for further assistance.")
         private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()

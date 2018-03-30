@@ -62,6 +62,9 @@ CSourceTM <- R6::R6Class(
           if (length(x[[y]]$meta[[i]]) > 0) {
             if (names(x[[y]]$meta[i]) == 'datetimestamp') {
               doc$metadata(key = 'tmCreated', value = x[[y]]$meta[[i]])
+            } else if (names(x[[y]]$meta[i]) == 'id') {
+              doc$metadata(key = 'name',
+                           value = x[[y]]$meta[[i]])
             } else {
               doc$metadata(key = names(x[[y]]$meta[i]),
                         value = x[[y]]$meta[[i]])

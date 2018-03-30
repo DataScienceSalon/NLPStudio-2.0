@@ -21,6 +21,7 @@ TextStudio0 <- R6::R6Class(
   classname = "TextStudio0",
   lock_objects = FALSE,
   lock_class = FALSE,
+  inherit = NLPStudio0,
 
   private = list(
     ..x = character(),

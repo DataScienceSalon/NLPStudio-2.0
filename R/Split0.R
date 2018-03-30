@@ -13,7 +13,7 @@ Split0 <- R6::R6Class(
   classname = "Split0",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Base,
+  inherit = Entity,
 
   private = list(
     ..cvSets = list(),

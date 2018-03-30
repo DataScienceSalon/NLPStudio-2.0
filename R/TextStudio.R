@@ -38,10 +38,7 @@ TextStudio <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function(x, name = NULL) {
 
-      # Instantiate variables
-      private$..className <- 'TextStudio'
-      private$..methodName <- 'initialize'
-      private$logR <- LogR$new()
+      private$loadDependencies()
 
       # Validation
       private$..params <- list()

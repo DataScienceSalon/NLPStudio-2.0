@@ -75,26 +75,24 @@ Collection <- R6::R6Class(
     #                            Summary Methods                              #
     #-------------------------------------------------------------------------#
     attachments = function(quiet = FALSE) {
-      attachments <- list()
+      attachmentz <- list()
       sections <- names(private$..attachments)
-
-      #TODO: fix the as.data.frame function.
 
       if (!is.null(sections)) {
         for (i in 1:length(sections)) {
-          attachments[[sections[i]]] <- rbindlist(lapply(private$..attachments[[sections[i]]], function(a) {
+          attachmentz[[sections[i]]] <- rbindlist(lapply(private$..attachments[[sections[i]]], function(a) {
             as.data.frame(a$summary(abbreviated = TRUE))
           }))
 
           if (quiet == FALSE) {
             cat("\n\n", paste0(sections[i]), "\n")
-            print(attachments[[sections[i]]], row.names = FALSE)
+            print(attachmentz[[sections[i]]], row.names = FALSE)
           }
         }
-        names(attachments) <- sections
+        names(attachmentz) <- sections
       }
 
-      return(attachments)
+      return(attachmentz)
     },
 
     #-------------------------------------------------------------------------#
