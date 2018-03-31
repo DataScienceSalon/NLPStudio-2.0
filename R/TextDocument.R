@@ -73,59 +73,57 @@ TextDocument <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Summary Methods                               #
     #-------------------------------------------------------------------------#
-    stats = function() {
+    oneLiner = function(meta, quiet = FALSE) {
 
-      getStats = function() {
-        content <- private$decompress(private$..content)
-        private$..meta$stats <- list()
-        private$..meta$stats$sentences <- sum(quanteda::nsentence(content))
-        private$..meta$stats$tokens <- sum(quanteda::ntoken(content))
-        private$..meta$stats$types <- sum(quanteda::ntype(tolower(content)))
-        private$..meta$stats$created <- Sys.time()
-      }
-
-      if (is.null(private$..meta$stats)) {
-        return(getStats())
-      } else if (is.null(private$..meta$stats$created)) {
-        return(getStats())
-      } else if (private$..meta$stats$created <
-                 private$..meta$state$modified) {
-        return(getStats())
-      }
+      df <- data.frame(class = meta$core$class,
+                       id = meta$core$id,
+                       name = meta$core$name,
+                       description = meta$core$description,
+                       created = meta$state$created,
+                       user = meta$system$user,
+                       stringsAsFactors = FALSE,
+                       row.names = NULL)
+      return(df)
     },
 
-    summaryStats = function(quiet = FALSE) {
+    core = function(meta, quiet = FALSE) {
 
-      private$stats()
+      df <- as.data.frame(meta$core, stringsAsFactors = FALSE,
+                          row.names = NULL)
 
-      stats <- as.data.frame(private$..meta$stats, stringsAsFactors = FALSE,
-                             row.names = NULL)
-      stats <- stats %>% select(-created)
-      if (quiet == FALSE) {
-        if (ncol(stats) > 0) {
-          cat("\n\nDescriptive Statistics:\n")
-          print(stats, row.names = FALSE)
+      if (quiet == FALSE)  {
+        cat(paste0("\n\nObject Id    : ", meta$core$id))
+        cat(paste0("\nObject Class : ", meta$core$class))
+        cat(paste0("\nObject Name  : ", meta$core$name))
+        cat(paste0("\nDescription  : ", meta$core$description))
+
+        otherMeta <- df %>% select(-id, -class, -name, -description)
+        if (ncol(otherMeta) > 0) {
+          cat("\n\nAdditional Core Metadata:\n")
+          print(otherMeta, row.names = FALSE)
         }
       }
-      return(stats)
+      return(df)
     },
 
-    summaryShort = function() {
+    #-------------------------------------------------------------------------#
+    #                           Statistics Metadata                           #
+    #-------------------------------------------------------------------------#
+    statsMeta = function() {
 
-      private$stats()
+      stats <- list()
+      content <- private$decompress(private$..content)
+      stats$sentences <- sum(quanteda::nsentence(content))
+      stats$tokens <- sum(quanteda::ntoken(content))
+      stats$types <- sum(quanteda::ntype(tolower(content)))
+      stats$created <- Sys.time()
 
-      short <- data.frame(class = private$..meta$core$class,
-                          id = private$..meta$core$id,
-                          name = private$..meta$core$name,
-                          description = private$..meta$core$description,
-                          sentences = private$..meta$stats$sentences,
-                          tokens = private$..meta$stats$tokens,
-                          types = private$..meta$stats$types,
-                          created = private$..meta$state$created,
-                          user = private$..meta$system$user,
-                          stringsAsFactors = FALSE,
-                          row.names = NULL)
-      return(short)
+      keys <- names(stats)
+      for (i in 1:length(stats)) {
+        private$meta$setStats(key = keys[i], value = stats[[i]])
+      }
+
+      invisible(self)
     }
   ),
 
@@ -138,12 +136,13 @@ TextDocument <- R6::R6Class(
 
       } else {
         if (!("character" %in% class(value))) {
-          event <- "TextDocument must be of the 'character' class."
+          event <- "TextDocument content must be of the 'character' class."
           private$logR$log(cls = class(self)[1], event = event, level = "Error")
           stop()
         } else {
 
           private$..content <- private$compress(value)
+          private$statsMeta()
           private$meta$modified()
           event <- "Updated TextDocument content."
           private$logR$log(cls = class(self)[1], event = event)
@@ -174,7 +173,8 @@ TextDocument <- R6::R6Class(
       }
 
       # Initialize metadata and log instantiation
-      private$initMeta(name = name)
+      private$coreMeta(name = name)
+      if (!is.null(x)) private$statsMeta()
       private$logR$log(cls = class(self)[1], event = "Initialized.")
 
       invisible(self)

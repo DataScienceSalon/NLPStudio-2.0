@@ -61,7 +61,7 @@ Corpus <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function(name = NULL) {
       private$loadDependencies(name = name)
-      private$initMeta(name = name)
+      private$coreMeta(name = name)
       private$logR$log(cls = class(self)[1], event = "Initialized.")
       invisible(self)
     },
@@ -88,7 +88,10 @@ Corpus <- R6::R6Class(
           event <- paste0("Unable to add metadata. The values ",
                           "parameter must be of length one or ",
                           "length equal to that number of documents ",
-                          "in the Corpus object.")
+                          "in the Corpus object. ",
+                          "See ?", class(self)[1], " for further ",
+                          "assistance.")
+
           private$logR$log(cls = class(self)[1], event = event, level = "Error")
           stop()
         }
@@ -97,9 +100,9 @@ Corpus <- R6::R6Class(
       }
 
 
-      for (i in 1:length(private$..attachments[['Document']])) {
-        private$..attachments[['Document']][[i]] <-
-          private$..attachments[['Document']][[i]]$metadata(key = key, value = values[i])
+      for (i in 1:length(private$..attachments[['TextDocument']])) {
+        private$..attachments[['TextDocument']][[i]] <-
+          private$..attachments[['TextDocument']][[i]]$metadata(key = key, value = values[i])
       }
 
       event <- paste0("Updated document metadata.")
@@ -124,7 +127,7 @@ Corpus <- R6::R6Class(
 
         if (core) {
           result$meta <- private$core(meta = meta, quiet = quiet)
-          section <- c("Additional Core Metadata")
+          section <- c("Core Metadata")
         }
 
         if (attachments) {
@@ -152,8 +155,8 @@ Corpus <- R6::R6Class(
     #-------------------------------------------------------------------------#
     read = function() {
       private$..methodName <- 'read'
-      if (!is.null(private$..attachments[['Document']])) {
-        content <- lapply(private$..attachments[['Document']], function(a) {
+      if (!is.null(private$..attachments[['TextDocument']])) {
+        content <- lapply(private$..attachments[['TextDocument']], function(a) {
           a$content
         })
       }
@@ -163,25 +166,25 @@ Corpus <- R6::R6Class(
     write = function(path, fileNames = NULL) {
       private$..methodName <- 'write'
 
-      if (!is.null(private$..attachments[['Document']])) {
+      if (!is.null(private$..attachments[['TextDocument']])) {
 
         if (is.null(fileNames)) {
-          path <- file.path(path, paste0(sapply(private$..attachments[['Document']], function(a) {
+          path <- file.path(path, paste0(sapply(private$..attachments[['TextDocument']], function(a) {
             tools::file_path_sans_ext(a$getName())
             }),".txt"))
         } else {
-          if (length(fileNames) != length(private$..attachments[['Document']])) {
+          if (length(fileNames) != length(private$..attachments[['TextDocument']])) {
             event <- paste0("Unable to write the Corpus object. The ",
                                        "fileNames parameter must be NULL or have",
-                                       "length = ", length(private$..attachments[['Document']]), ".")
+                                       "length = ", length(private$..attachments[['TextDocument']]), ".")
             private$logR$log(cls = class(self)[1], event = event, level = "Error")
             stop()
           } else {
             path <- file.path(path,(paste0(tools::file_path_sans_ext(fileNames), ".txt")))
           }
         }
-        lapply(seq_along(private$..attachments[['Document']]), function(x) {
-            private$..attachments[['Document']][[x]]$write(path = path[x])
+        lapply(seq_along(private$..attachments[['TextDocument']]), function(x) {
+            private$..attachments[['TextDocument']][[x]]$write(path = path[x])
           })
 
       }

@@ -6,7 +6,7 @@
 \title{SplitDocument}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-SplitDocument$new(x, splits = c(.7, .15, .15),
+SplitTextDocument$new(x, splits = c(.7, .15, .15),
                        setNames =  c("Train", "Validation", "Test"),
                        seed = 232)$execute()
 }

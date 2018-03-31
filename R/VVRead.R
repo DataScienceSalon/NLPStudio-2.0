@@ -59,7 +59,7 @@ VVRead <- R6::R6Class(
 
     initialize = function() { invisible(self) },
 
-    document = function(object) {
+    textDocument = function(object) {
       return(private$validateFile(object = object))
     }
   )

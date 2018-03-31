@@ -42,9 +42,9 @@ VVSource <- R6::R6Class(
           return(status)
         }
       } else if ("SplitDocument" %in% class(object)[1]) {
-        if (!("Document" %in%  class(p$x)[1])) {
+        if (!("TextDocument" %in%  class(p$x)[1])) {
           status$code <- FALSE
-          status$msg <- paste0("Object must be of the Document class. ",
+          status$msg <- paste0("Object must be of the TextDocument class. ",
                                "See ?", class(object)[1], " for further assistance.")
           return(status)
         }
@@ -168,28 +168,6 @@ VVSource <- R6::R6Class(
           return(status)
         }
       }
-      return(status)
-    },
-
-    validateClass = function(object, classes) {
-
-      status <- list()
-      status[['code']] <- TRUE
-
-      p <- object$getParams()
-
-      if (!is.null(p$x)) {
-
-        if  (!(class(p$x)[1] %in% classes)) {
-          status[['code']] <- FALSE
-          status[['msg']] <- paste0("Invalid class. Cannot create ",
-                                    class(object)[1],
-                                    " object. ", "Parameter is not of a valid class. ",
-                                    "See ?", class(object)[1],
-                                    " for further assistance")
-        }
-      }
-
       return(status)
     }
   ),

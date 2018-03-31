@@ -49,7 +49,7 @@ Reshape <- R6::R6Class(
 
     processCorpus = function() {
 
-      documents <- private$..x$getDocuments()
+      documents <- private$..x$getDocuments(cls = "TextDocument")
 
       if (private$..to %in% c("corpus", "c")) {
 

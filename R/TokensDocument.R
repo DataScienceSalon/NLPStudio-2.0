@@ -31,7 +31,7 @@ TokensDocument <- R6::R6Class(
   classname = "TokensDocument",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Entity,
+  inherit = Document0,
 
   private = list(
     ..what = character(),
@@ -39,119 +39,109 @@ TokensDocument <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Summary Methods                               #
     #-------------------------------------------------------------------------#
-    oneLiner = function() {
+    oneLiner = function(meta, quiet = FALSE) {
 
-      private$stats()
+      if (private$..what %in% c("sentence", "s")) {
 
-      if (private$..what %in% c("character", "c")) {
+        df <- data.frame(class = meta$core$class,
+                         id = meta$core$id,
+                         type = meta$core$type,
+                         name = meta$core$name,
+                         description = meta$core$description,
+                         sentences = meta$stats$sentences,
+                         words = meta$stats$words,
+                         types = meta$stats$types,
+                         characters = meta$stats$characters,
+                         averageSentenceLength = meta$stats$averageSentenceLength,
+                         averageWordLength = meta$stats$averageWordLength,
+                         created = meta$state$created,
+                         user = meta$system$user,
+                         stringsAsFactors = FALSE,
+                         row.names = NULL)
 
-        short <- data.frame(class = private$..meta$core$class,
-                            id = private$..meta$core$id,
-                            name = private$..meta$core$name,
-                            description = private$..meta$core$description,
-                            characters = private$..meta$stats$characters,
-                            created = private$..meta$state$created,
-                            user = private$..meta$system$user,
-                            stringsAsFactors = FALSE,
-                            row.names = NULL)
-      } else if (private$..what %in% c("word", "w")){
-        short <- data.frame(class = private$..meta$core$class,
-                            id = private$..meta$core$id,
-                            name = private$..meta$core$name,
-                            description = private$..meta$core$description,
-                            words = private$..meta$stats$words,
-                            types = private$..meta$stats$types,
-                            created = private$..meta$state$created,
-                            user = private$..meta$system$user,
-                            stringsAsFactors = FALSE,
-                            row.names = NULL)
+      } else if (private$..what %in% c("word", "w")) {
+        df <- data.frame(class = meta$core$class,
+                         id = meta$core$id,
+                         type = meta$core$type,
+                         name = meta$core$name,
+                         description = meta$core$description,
+                         words = meta$stats$words,
+                         types = meta$stats$types,
+                         characters = meta$stats$characters,
+                         averageWordLength = meta$stats$averageWordLength,
+                         created = meta$state$created,
+                         user = meta$system$user,
+                         stringsAsFactors = FALSE,
+                         row.names = NULL)
       } else {
-        short <- data.frame(class = private$..meta$core$class,
-                            id = private$..meta$core$id,
-                            name = private$..meta$core$name,
-                            description = private$..meta$core$description,
-                            sentences = private$..meta$stats$sentences,
-                            words = private$..meta$stats$words,
-                            types = private$..meta$stats$types,
-                            created = private$..meta$state$created,
-                            user = private$..meta$system$user,
-                            stringsAsFactors = FALSE,
-                            row.names = NULL)
+        df <- data.frame(class = meta$core$class,
+                         id = meta$core$id,
+                         type = meta$core$type,
+                         name = meta$core$name,
+                         description = meta$core$description,
+                         characters = meta$stats$characters,
+                         created = meta$state$created,
+                         user = meta$system$user,
+                         stringsAsFactors = FALSE,
+                         row.names = NULL)
       }
-      return(short)
+      return(df)
     },
 
-    stats = function() {
+    core = function(meta, quiet = FALSE) {
 
-      getStats = function() {
-        content <- private$..content
-        private$..meta$stats <- list()
+      df <- as.data.frame(meta$core, stringsAsFactors = FALSE,
+                          row.names = NULL)
 
-        if (private$..what %in% c("character", "c")) {
-          private$..meta$stats$chars <- sum(quanteda::nchar(content))
-        } else if (private$..what %in% c("word", "w")) {
-          private$..meta$stats$words <- sum(quanteda::ntoken(content))
-          private$..meta$stats$types <- sum(quanteda::ntype(tolower(content)))
-          private$..meta$stats$chars <- sum(quanteda::nchar(content))
-          private$..meta$stats$averageWordLength <- private$..meta$stats$tokens /
-            private$..meta$stats$chars
-        } else {
-          private$..meta$stats$sentences <- sum(quanteda::nsentence(content))
-          private$..meta$stats$words <- sum(quanteda::ntoken(content))
-          private$..meta$stats$types <- sum(quanteda::ntype(tolower(content)))
-          private$..meta$stats$chars <- sum(quanteda::nchar(content))
-          private$..meta$stats$averageSentenceLength <-  private$..meta$stats$sentences /
-            private$..meta$stats$tokens
-          private$..meta$stats$averageWordLength <- private$..meta$stats$tokens /
-            private$..meta$stats$chars
+      if (quiet == FALSE)  {
+        cat(paste0("\n\nObject Id    : ", meta$core$id))
+        cat(paste0("\nObject Class : ", meta$core$class))
+        cat(paste0("\nObject Type  : ", meta$core$type))
+        cat(paste0("\nObject Name  : ", meta$core$name))
+        cat(paste0("\nDescription  : ", meta$core$description))
+
+        otherMeta <- df %>% select(-id, -class, -type, -name, -description)
+        if (ncol(otherMeta) > 0) {
+          cat("\n\nAdditional Core Metadata:\n")
+          print(otherMeta, row.names = FALSE)
         }
-
-        private$..meta$stats$created <- Sys.time()
       }
-
-      if (is.null(private$..meta$stats)) {
-        return(getStats())
-      } else if (is.null(private$..meta$stats$created)) {
-        return(getStats())
-      } else if (private$..meta$stats$created <
-                 private$..meta$state$modified) {
-        return(getStats())
-      }
+      return(df)
     },
 
-    summaryStats = function(quiet = FALSE) {
+    #-------------------------------------------------------------------------#
+    #                           Statistics Metadata                           #
+    #-------------------------------------------------------------------------#
+    statsMeta = function() {
 
-      private$stats()
+      content <- private$..content
+      stats <- list()
 
+      # Obtain statistics
       if (private$..what %in% c("character", "c")) {
-        stats <- data.frame(characters = private$..meta$stats$chars)
-      } else if (private$..what %in% c("word", "w")){
-        stats <- data.frame(sentences = private$..meta$stats$sentences,
-                            words = private$..meta$stats$words,
-                            types = private$..meta$stats$types,
-                            characters = private$..meta$stats$chars,
-                            averageWordLength =
-                              private$..meta$stats$averageWordLength,
-                            row.names = NULL, stringsAsFactors = FALSE)
+        stats$characters <- nchar(content)
+      } else if (private$..what %in% c("word", "w")) {
+        stats$words <- sum(quanteda::ntoken(content))
+        stats$types <- sum(quanteda::ntype(tolower(content)))
+        stats$characters <- nchar(content)
+        stats$averageWordLength <- stats$characters / stats$words
       } else {
-        stats <- data.frame(sentences = private$..meta$stats$sentences,
-                            words = private$..meta$stats$tokens,
-                            types = private$..meta$stats$types,
-                            characters = private$..meta$stats$chars,
-                            averageSentenceLength =
-                              private$..meta$stats$averageSentenceLength,
-                            averageWordLength =
-                              private$..meta$stats$averageWordLength,
-                            row.names = NULL, stringsAsFactors = FALSE)
+        stats$sentences <- sum(quanteda::nsentence(content))
+        stats$words <- sum(quanteda::ntoken(content))
+        stats$types <- sum(quanteda::ntype(tolower(content)))
+        stats$characters <- nchar(content)
+        stats$averageSentenceLength <- stats$words / stats$sentences
+        stats$averageWordLength <- stats$characters / stats$words
+      }
+      stats$created <- Sys.time()
+
+      # Format metadata
+      keys <- names(stats)
+      for (i in 1:length(stats)) {
+        private$meta$setStats(key = keys[i], value = stats[[i]])
       }
 
-      if (quiet == FALSE) {
-        if (ncol(stats) > 0) {
-          cat("\n\nDescriptive Statistics:\n")
-          print(stats, row.names = FALSE)
-        }
-      }
-      return(stats)
+      invisible(self)
     }
   ),
 
@@ -160,7 +150,7 @@ TokensDocument <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Core Methods                                  #
     #-------------------------------------------------------------------------#
-    initialize = function(x, name = NULL, what = 'word') {
+    initialize = function(x, what = 'word', name = NULL) {
 
       private$loadDependencies(name = name)
 
@@ -172,17 +162,21 @@ TokensDocument <- R6::R6Class(
       private$..params$discrete$valid <- list(c('sentence', 'word', 'char', 's', 'w', 'c'))
       if (private$validate()$code == FALSE) stop()
 
+      # Initialize private members, metadata and log
       private$..content <- x
       private$..what <- what
-
-      # Initialize metadata and log
-      private$initMeta(name = name)
+      private$coreMeta(name = name,
+                       type = ifelse(grepl(what, "word") | grepl(what, "w"), "Word Tokens",
+                                     ifelse(grepl(what, "sentence") | grepl(what, "s"), "Sentence Tokens",
+                                            "Character Tokens")))
+      private$statsMeta()
       private$logR$log(cls = class(self)[1], event = "Initialized.")
 
       invisible(self)
     },
 
     getTokens = function() {
+      private$meta$accessed()
       private$..content
     },
 
@@ -195,7 +189,7 @@ TokensDocument <- R6::R6Class(
       meta <- private$meta$get()
 
       if (abbreviated) {
-        result <- private$oneLiner(meta = meta, quiet = quiet)
+        result <- private$oneLiner(meta = meta)
       } else {
         result <- list()
         section <- character()

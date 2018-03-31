@@ -30,7 +30,7 @@ VVMetadata <- R6::R6Class(
       return(validateKeyValue(object))
     },
 
-    document = function(object) {
+    textDocument = function(object) {
       return(validateKeyValue(object))
     }
   )

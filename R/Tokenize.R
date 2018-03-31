@@ -30,6 +30,7 @@
 #' @docType class
 #' @author John James, \email{jjames@@dataScienceSalon.org}
 #' @family DataStudio Classes
+#' @family Tokens Classes
 #' @export
 Tokenize <- R6::R6Class(
   classname = "Tokenize",
@@ -39,15 +40,16 @@ Tokenize <- R6::R6Class(
 
   private = list(
     ..what = character(),
+    ..tokensCollection = character(),
 
-    processDocument = function(document) {
+    processDocument = function(textDocument) {
 
-      private$..method <- "processDocument"
+      # Obtain name and content of TextDocument object
+      name <- textDocument$getName()
+      content <- textDocument$content
 
-      content <- document$content
-
-      # Produce data object content
-      if (private$..what %n% c("sentence", "s")) {
+      # Produce TokensDocument object content
+      if (private$..what %in% c("sentence", "s")) {
 
         # Use sentence token from openNLP and NLP packages
         s <- paste(content, collapse = "")
@@ -57,40 +59,41 @@ Tokenize <- R6::R6Class(
         tokenized <- s[a]
 
       } else {
-        tokenized <- quanteda::tokens(x = content, what = private$..what)
+        tokenized <- quanteda::tokens(x = content,
+                                      what = private$..what)
       }
 
-      # Create new document object
-      tokenizedDocument <- TextDocument$new(name = document$getName())
-      tokenizedTextDocument$content <- tokenized
+      # Create TokensDocument object and update content
+      tokensDocument <- TokensDocument$new(x = tokenized,
+                                           what = private$..what,
+                                           name = name)
 
-      event <- paste0("Tokenized ", document$getName(), " document.")
-      document$logR$log(cls = class(self)[1], event = event)
+      event <- paste0("Tokenized ", textDocument$getName(), " TextDocument.")
+      private$logR$log(cls = class(self)[1], event = event)
 
-      return(tokenizedDocument)
+      return(tokensDocument)
     },
 
     processCorpus = function(corpus) {
 
       # Create tokenized documents
-      docs <- corpus$getDocuments()
-      tokenizedDocuments <- lapply(docs, function(d) {
+      docs <- corpus$getDocuments(cls = "TextDocument")
+      tokensDocuments <- lapply(docs, function(d) {
         private$processDocument(d)
       })
 
-      # Create new Tokens object and add tokenizedDocuments
-      tokenizedCorpus <- Tokens$new(name = corpus$getName())
-      for (i in 1:length(tokenizedDocuments)) {
-        tokenizedCorpus$addDocument(tokenizedDocuments[[i]])
+      # Add tokensDocuments to TokensCollection
+      for (i in 1:length(tokensDocuments)) {
+        private$..tokensCollection$addDocument(tokensDocuments[[i]])
       }
       event <- paste0("Tokenized ", corpus$getName(), " corpus. ")
       private$logR$log(cls = class(self)[1], event = event)
-      return(tokenizedCorpus)
+      return(private$..tokensCollection)
     }
   ),
 
   public = list(
-    initialize = function(x, what = NULL) {
+    initialize = function(x, name = NULL, what = NULL) {
 
       private$loadDependencies()
 
@@ -101,8 +104,12 @@ Tokenize <- R6::R6Class(
       private$..params$valid <- list(c("word", "w", "sentence", "s", 'NULL'))
       if (private$validate()$code == FALSE) stop()
 
+      # Initialize private members and TokensCollection object
       private$..x <- x
       private$..what <- what
+      if (is.null(name)) name <- x$getName()
+
+      private$..tokensCollection <- TokensCollection$new(name = name, what = what)
 
       invisible(self)
     },
@@ -112,18 +119,14 @@ Tokenize <- R6::R6Class(
       private$..methodName <- "execute"
 
       # Update
-      if (class(private$..x)[1] == "Corpus") {
-        x <- private$processCorpus(private$..x)
-      } else {
-        x <- private$processDocument(private$..x)
-      }
+      private$..tokensCollection <- private$processCorpus(private$..x)
 
       # Log it
       event <- paste0("Executed ", class(self)[1], " on ",
                                 private$..x$getName(), ". ")
       private$logR$log(cls = class(self)[1], event = event)
 
-      return(corpus)
+      return(private$..tokensCollection)
     }
   )
 )

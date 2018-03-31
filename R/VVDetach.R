@@ -78,7 +78,7 @@ VVDetach <- R6::R6Class(
     },
 
     corpus = function(object) {
-      classes <- c("Document")
+      classes <- c("TextDocument")
       return(private$validate(object = object, classes = classes))
     }
   )

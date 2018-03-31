@@ -63,6 +63,9 @@ can be executed in batch mode or at a later time.
 \examples{
 
 }
+\seealso{
+Other Tokens Classes: \code{\link{TokensCollection}}
+}
 \author{
 John James, \email{jjames@dataScienceSalon.org}
 }

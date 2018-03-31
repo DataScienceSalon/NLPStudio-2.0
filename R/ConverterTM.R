@@ -36,7 +36,7 @@ ConverterTM <- R6::R6Class(
       dMetaNames <- colnames(dMeta)
 
       # Create named corpus vectors, one document per vector
-      docs <- x$getDocuments()
+      docs <- x$getDocuments(cls = "TextDocument")
       content <- unlist(lapply(docs, function(d) {
         paste(d$content, collapse = "")
       }))

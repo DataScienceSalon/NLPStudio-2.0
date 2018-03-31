@@ -1,11 +1,12 @@
-#' Tokens
+#' TokensCollection
 #'
-#' \code{Tokens} Class for creating, managing, reading and writing Tokens objects.
+#' \code{TokensCollection} Class for creating, managing, reading and writing
+#' TokensCollection objects.
 #'
-#' Tokens objects are Corpus level objects containing collections of Document
-#' objects which have been tokenized using the Tokenize class.
+#' TokensCollection objects are Corpus level objects containing collections of
+#' TokenDocument objects which have been tokenized via the Tokenize class.
 #'
-#' @usage tokenizedCorpus <- Tokens$new(x = corpus, to = "sentence")
+#' @usage tokenizedCorpus <- TokensCollection$new(name = 'Sentence Tokens', what = "sentence")
 #'
 #' @section Core Methods:
 #'  \itemize{
@@ -13,31 +14,71 @@
 #'  }
 #' @template entityMethods
 #' @template entityParams
-#' @param x A Corpus class object to be tokenized
-#' @param to Character string indicating the level of tokenization. Valid
-#' values are c("sentence", "character"), The first letter of the level
+#' @param what Character string indicating the level of tokenization. Valid
+#' values are c("sentence", "word", "character"), The first letter of the level
 #' of tokenization may also be used in lieu of the word.
 #' @template metaParams
 #'
-#' @return Tokens object.
+#' @return TokensCollection object.
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family Data Classes
+#' @family Tokens Classes
 #' @export
-Tokens <- R6::R6Class(
-  classname = "Tokens",
+TokensCollection <- R6::R6Class(
+  classname = "TokensCollection",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = Collection,
+
+  private = list(
+    #-------------------------------------------------------------------------#
+    #                           Summary Methods                               #
+    #-------------------------------------------------------------------------#
+    core = function(meta, quiet = FALSE) {
+
+      df <- as.data.frame(meta$core, stringsAsFactors = FALSE,
+                          row.names = NULL)
+
+      if (quiet == FALSE)  {
+        cat(paste0("\n\nObject Id    : ", meta$core$id))
+        cat(paste0("\nObject Class : ", meta$core$class))
+        cat(paste0("\nObject Name  : ", meta$core$name))
+        cat(paste0("\nObject Type  : ", meta$core$type))
+        cat(paste0("\nDescription  : ", meta$core$description))
+
+        otherMeta <- df %>% select(-id, -class, -type, -name, -description)
+        if (ncol(otherMeta) > 0) {
+          cat("\n\nAdditional Core Metadata:\n")
+          print(otherMeta, row.names = FALSE)
+        }
+      }
+      return(df)
+    }
+  ),
 
   public = list(
 
     #-------------------------------------------------------------------------#
     #                         Constructor Method                              #
     #-------------------------------------------------------------------------#
-    initialize = function(name = NULL) {
+    initialize = function(name = NULL, what = c('word')) {
+
       private$loadDependencies(name = name)
+
+      # Validation
+      private$..params <- list()
+      private$..params$discrete$variables <- c('what')
+      private$..params$discrete$values <- c(what)
+      private$..params$discrete$valid <- c('sentence', 'word','character', 's', 'w', 'c')
+      if (private$validate()$code == FALSE) stop()
+
+      private$..what <- what
+      private$coreMeta(name = name,
+                       type = ifelse(grepl(what, "word") | grepl(what, "w"), "Word Tokens",
+                                     ifelse(grepl(what, "sentence") | grepl(what, "s"), "Sentence Tokens",
+                                            "Character Tokens")))
       private$logR$log(cls = class(self)[1], event = "Initialized.")
       invisible(self)
     },
@@ -49,7 +90,7 @@ Tokens <- R6::R6Class(
     docMeta = function(key = NULL, values = NULL) {
 
       if (is.null(key)) {
-        dm <- rbindlist(lapply(private$..attachments[['Tokens']], function(a) {
+        dm <- rbindlist(lapply(private$..attachments[['TokensDocument']], function(a) {
             a$meta()$object
           }))
         return(dm)
@@ -60,22 +101,24 @@ Tokens <- R6::R6Class(
         private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       } else  if (length(values) != 1) {
-        if (length(values) != length(private$..attachments[['Tokens']])) {
+        if (length(values) != length(private$..attachments[['TokensDocument']])) {
           event <- paste0("Unable to add metadata. The values ",
                           "parameter must be of length one or ",
                           "length equal to that number of documents ",
-                          "in the Tokens object.")
+                          "in the TokensCollection object. ",
+                          "See ?", class(self)[1], " for further ",
+                          "assistance.")
           private$logR$log(cls = class(self)[1], event = event, level = "Error")
           stop()
         }
       } else {
-        values <- rep(values, length(private$..attachments[['Tokens']]))
+        values <- rep(values, length(private$..attachments[['TokensDocument']]))
       }
 
 
-      for (i in 1:length(private$..attachments[['Document']])) {
-        private$..attachments[['Document']][[i]] <-
-          private$..attachments[['Document']][[i]]$metadata(key = key, value = values[i])
+      for (i in 1:length(private$..attachments[['TokensDocument']])) {
+        private$..attachments[['TokensDocument']][[i]] <-
+          private$..attachments[['TokensDocument']][[i]]$metadata(key = key, value = values[i])
       }
 
       event <- paste0("Updated document metadata.")
@@ -100,7 +143,7 @@ Tokens <- R6::R6Class(
 
         if (core) {
           result$meta <- private$core(meta = meta, quiet = quiet)
-          section <- c("Additional Core Metadata")
+          section <- c("Core Metadata")
         }
 
         if (attachments) {
@@ -124,51 +167,10 @@ Tokens <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
-    #                             IO Methods                                  #
-    #-------------------------------------------------------------------------#
-    read = function() {
-      private$..methodName <- 'read'
-      if (!is.null(private$..attachments[['Document']])) {
-        content <- lapply(private$..attachments[['Document']], function(a) {
-          a$content
-        })
-      }
-      return(content)
-    },
-
-    write = function(path, fileNames = NULL) {
-      private$..methodName <- 'write'
-
-      if (!is.null(private$..attachments[['Document']])) {
-
-        if (is.null(fileNames)) {
-          path <- file.path(path, paste0(sapply(private$..attachments[['Document']], function(a) {
-            tools::file_path_sans_ext(a$getName())
-            }),".txt"))
-        } else {
-          if (length(fileNames) != length(private$..attachments[['Document']])) {
-            event <- paste0("Unable to write the Tokens object. The ",
-                                       "fileNames parameter must be NULL or have",
-                                       "length = ", length(private$..attachments[['Document']]), ".")
-            private$logR$log(cls = class(self)[1], event = event, level = "Error")
-            stop()
-          } else {
-            path <- file.path(path,(paste0(tools::file_path_sans_ext(fileNames), ".txt")))
-          }
-        }
-        lapply(seq_along(private$..attachments[['Document']]), function(x) {
-            private$..attachments[['Document']][[x]]$write(path = path[x])
-          })
-
-      }
-      invisible(self)
-    },
-
-    #-------------------------------------------------------------------------#
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$corpus(self)
+      visitor$tokensCollection(self)
     }
   )
 )

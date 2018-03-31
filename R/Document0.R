@@ -35,6 +35,19 @@ Document0 <- R6::R6Class(
                        stringsAsFactors = FALSE,
                        row.names = NULL)
       return(df)
+    },
+
+    summaryStats = function(meta, quiet = FALSE) {
+
+      stats <- as.data.frame(meta$stats, stringsAsFactors = FALSE,
+                             row.names = NULL)
+      if (quiet == FALSE) {
+        if (ncol(stats) > 0) {
+          cat("\n\nDescriptive Statistics:\n")
+          print(stats, row.names = FALSE)
+        }
+      }
+      return(stats)
     }
   ),
   public = list(

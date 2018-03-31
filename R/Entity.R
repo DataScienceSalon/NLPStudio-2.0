@@ -34,14 +34,14 @@ Entity <- R6::R6Class(
       private$logR <- LogR$new()
       private$validator <- Validator$new()
       private$meta <- Meta$new()
-      if (!is.null(name)) private$meta$set(key = 'name', value = name)
+      if (!is.null(name)) private$meta$setCore(key = 'name', value = name)
       return(TRUE)
     },
 
     #-------------------------------------------------------------------------#
     #                      Initialize Metadata Method                         #
     #-------------------------------------------------------------------------#
-    initMeta = function(name = NULL) {
+    coreMeta = function(name = NULL, type = NULL) {
 
       # Creates unique identifier and create object metadata
       settings <- hashids::hashid_settings(salt = 'this is my salt', min_length = 8)
@@ -56,7 +56,8 @@ Entity <- R6::R6Class(
                             " by ", Sys.info()[['user']], ".")
 
 
-      private$meta$created(id = id, name = name, cls = cls, description = description)
+      private$meta$created(id = id, name = name, cls = cls, type = type,
+                           description = description)
 
       invisible(self)
     },
@@ -103,19 +104,6 @@ Entity <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Summary Methods                               #
     #-------------------------------------------------------------------------#
-    oneLiner = function(meta, quiet = FALSE) {
-
-      df <- data.frame(class = meta$core$class,
-                       id = meta$core$id,
-                       name = meta$core$name,
-                       description = meta$core$description,
-                       created = meta$state$created,
-                       user = meta$system$user,
-                       stringsAsFactors = FALSE,
-                       row.names = NULL)
-      return(df)
-    },
-
     core = function(meta, quiet = FALSE) {
 
       df <- as.data.frame(meta$core, stringsAsFactors = FALSE,
@@ -250,7 +238,7 @@ Entity <- R6::R6Class(
       if (v$code == FALSE) stop()
 
       if (!is.null(key)) {
-        private$meta$set(key = key, value = value)
+        private$meta$setCore(key = key, value = value)
       }
       invisible(self)
     },

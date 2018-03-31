@@ -21,28 +21,29 @@ VVInit <- R6::R6Class(
 
   private = list(
 
-    validateStudio = function(object, classes) {
+    validateStudio = function(object, classes = NULL) {
       status <- list()
       status[['code']] <- TRUE
 
       p <- object$getParams()
 
       # Validate class of object
-      if (!(class(p$x)[1] %in% classes)) {
-        status[['code']] <- FALSE
-        status[['msg']] <- paste0("Invalid class. Cannot process ",
-                                  class(p$x)[1], " object. ",
-                                  class(object)[1], " class operates on ",
-                                  paste0("c(",gsub(",$", "",
-                                                   paste0("'",classes,
-                                                          "',", collapse = "")),
-                                         "). "),
-                                  " classes only. ",
-                                  "See ?", class(object)[1],
-                                  " for further assistance")
-        return(status)
+      if (!is.null(p$x)) {
+        if (!(class(p$x)[1] %in% classes)) {
+          status[['code']] <- FALSE
+          status[['msg']] <- paste0("Invalid class. Cannot process ",
+                                    class(p$x)[1], " object. ",
+                                    class(object)[1], " class operates on ",
+                                    paste0("c(",gsub(",$", "",
+                                                     paste0("'",classes,
+                                                            "',", collapse = "")),
+                                           "). "),
+                                    " classes only. ",
+                                    "See ?", class(object)[1],
+                                    " for further assistance")
+          return(status)
+        }
       }
-
       # Validate pattern replace
       if (!is.null(p$pattern)) {
         status <- validateKeyValue(object)
@@ -158,11 +159,7 @@ VVInit <- R6::R6Class(
 
     },
     textDocument = function(object) {
-      return(private$validateClass(object, classes = "character"))
-    },
-
-    tokensDocument = function(object) {
-      return(private$validateStudio(object, classes = c("character", "tokens")))
+      return(private$validateClass(object, classes = c("character")))
     },
 
     #-------------------------------------------------------------------------#
@@ -177,22 +174,33 @@ VVInit <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
+    #                 Validate Data Processing Classes                        #
+    #-------------------------------------------------------------------------#
+    tokensDocument = function(object) {
+      return(private$validateStudio(object, classes = c('character')))
+    },
+
+    tokensCollection = function(object) {
+      return(private$validateStudio(object))
+    },
+
+    #-------------------------------------------------------------------------#
     #                             Studio Classes                              #
     #-------------------------------------------------------------------------#
     textStudio = function(object) {
-      return(private$validateClass(object, classes = c("Corpus", "Document")))
+      return(private$validateClass(object, classes = c("Corpus", "TextDocument")))
     },
 
     textStudio0 = function(object) {
-      return(private$validateStudio(object, classes = c("Corpus", "Document")))
+      return(private$validateStudio(object, classes = c("Corpus", "TextDocument")))
     },
 
     dataStudio = function(object) {
-      return(private$validateClass(object, classes = c("Corpus", "Document")))
+      return(private$validateClass(object, classes = c("Corpus")))
     },
 
     dataStudio0 = function(object) {
-      return(private$validateStudio(object, classes = c("Corpus", "Document")))
+      return(private$validateStudio(object, classes = c("Corpus")))
     },
 
 
@@ -200,7 +208,7 @@ VVInit <- R6::R6Class(
     #                             Misc Classes                                #
     #-------------------------------------------------------------------------#
     klone = function(object) {
-      return(private$validateClass(object, classes = c("Corpus", "Document")))
+      return(private$validateClass(object, classes = c("Corpus", "TextDocument")))
     },
 
     cloneCorpus = function(object) {
@@ -208,7 +216,7 @@ VVInit <- R6::R6Class(
     },
 
     cloneDocument = function(object) {
-      return(private$validateClass(object, classes = c("Document")))
+      return(private$validateClass(object, classes = c("TextDocument")))
     }
   )
 )

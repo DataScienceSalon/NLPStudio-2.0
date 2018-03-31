@@ -28,7 +28,7 @@ ConverterQuanteda <- R6::R6Class(
       dMeta <- x$docMeta()
 
       # Create named corpus vectors, one document per vector
-      docs <- x$getDocuments()
+      docs <- x$getDocuments(cls = "TextDocument")
       content <- unlist(lapply(docs, function(d) {
         paste(d$content, collapse = "")
       }))

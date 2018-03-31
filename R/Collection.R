@@ -185,8 +185,8 @@ Collection <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                       Document Management Methods                       #
     #-------------------------------------------------------------------------#
-    getDocuments = function(key = NULL, value = NULL) {
-      objects <- private$get(cls = "Document", key, value)
+    getDocuments = function(cls = 'TextDocument', key = NULL, value = NULL) {
+      objects <- private$get(cls = cls, key, value)
       return(objects)
     },
 

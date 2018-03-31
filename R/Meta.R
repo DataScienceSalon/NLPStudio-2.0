@@ -26,6 +26,7 @@ Meta <- R6::R6Class(
 
   private = list(
     ..core = list(),
+    ..stats = list(),
     ..state = list(),
     ..system = list(),
 
@@ -41,7 +42,7 @@ Meta <- R6::R6Class(
       invisible(self)
     },
 
-    set = function(key, value) {
+    setCore = function(key, value) {
 
       for (i in 1:length(key)) {
         if (key[i] == "id") stop("Unable to set the id variable.")
@@ -50,10 +51,19 @@ Meta <- R6::R6Class(
       invisible(self)
     },
 
+    setStats = function(key, value) {
+
+      for (i in 1:length(key)) {
+        private$..stats[[key[i]]] <- value[i]
+      }
+      invisible(self)
+    },
+
     get = function(key = NULL) {
 
       if (is.null(key)) {
         metaDataList <- Filter(Negate(is.null), list(private$..core,
+                                                     private$..stats,
                                                      private$..state,
                                                      private$..system))
         metaDataDfs <- lapply(metaDataList, function(m) {
@@ -91,12 +101,13 @@ Meta <- R6::R6Class(
     getName = function() { private$..core$name },
     getId = function() { private$..core$id},
 
-    created = function(id, name, cls, description) {
+    created = function(id, name, cls, type, description) {
 
       # Format core metadata
       private$..core$id <- id
       private$..core$name <- name
       private$..core$class <- cls
+      private$..core$type <- type
       private$..core$description <- description
 
       # Create state metadata
