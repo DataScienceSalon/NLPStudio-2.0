@@ -42,27 +42,54 @@ Reshape <- R6::R6Class(
       if (private$..to %in% c("document", "d")) {
         document$content <- paste(document$content, collapse = "")
       } else if (private$..to %in% c("sentence", "s")) {
-        document$content <- Tokenize$new(document$content, what = "sentence")
+        document <- Tokenize$new(document, what = "sentence")
       }
-      private$logEvent(document)
       return(document)
     },
 
     processCorpus = function() {
+
+      documents <- private$..x$getDocuments()
+
       if (private$..to %in% c("corpus", "c")) {
 
+        # Obtain content
+        content <- lapply(documents, function(d) {
+          paste(d$content, collapse = "")
+        })
+
+        # Remove old documents
+        for (i in 1:length(documents)) {
+          private$..x$removeDocument(documents[[i]])
+        }
+
+        # Create new document
+        content <- paste(unlist(content), collapse = "")
+        name <- private$..x$getName()
+        document <- Document$new(name = name)
+        document$content <- content
+        private$..x$addDocument(document)
+
+      } else {
+        for (i in 1:length(documents)) {
+          document <- private$processDocument(documents[[i]])
+          private$..x$removeDocument(documents[[i]])
+          private$..x$addDocument(document)
+        }
       }
+      event <- paste0("Reshape performed on Corpus ", private$..x$getName())
+      private$..x$log(cls = cls(self)[1], event = event)
+      return(private$..x)
     }
   ),
 
   public = list(
     initialize = function(x, to = "sentence") {
-      private$..className <- "Reshape"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
+      private$..params <- list()
       private$..params$x <- x
       private$..params$discrete$variables <- c('to')
       private$..params$discrete$values <- c(to)
@@ -71,7 +98,6 @@ Reshape <- R6::R6Class(
 
       private$..x <- x
       private$..to <- to
-      private$..remove <- remove
 
       invisible(self)
     }

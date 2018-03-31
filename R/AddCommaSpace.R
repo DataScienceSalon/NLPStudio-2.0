@@ -1,11 +1,13 @@
 #------------------------------------------------------------------------------#
-#                              Remove Email Addresses                          #
+#                              Add Comma Space                                 #
 #------------------------------------------------------------------------------#
-#' RemoveEmail
+#' AddCommaSpace
 #'
-#' \code{RemoveEmail} Removes email addresses from text.
+#' \code{AddCommaSpace} Adds space after comma.
 #'
-#' @usage RemoveEmail$new(x)$execute()
+#' Class adds space after comma when commas are followed by non space characters.
+#'
+#' @usage AddCommaSpace$new(x)$execute()
 #'
 #' @template textStudioParams
 #' @template textStudioMethods
@@ -16,15 +18,14 @@
 #' @author John James, \email{jjames@@dataScienceSalon.org}
 #' @family TextStudio Classes
 #' @export
-RemoveEmail <- R6::R6Class(
-  classname = "RemoveEmail",
+AddCommaSpace <- R6::R6Class(
+  classname = "AddCommaSpace",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = TextStudio0,
 
   public = list(
     initialize = function(x) {
-
       private$loadDependencies()
 
       # Validate parameters
@@ -32,8 +33,8 @@ RemoveEmail <- R6::R6Class(
       if (private$validate()$code == FALSE) stop()
 
       private$..x <- x
-      private$..regex <- "[a-zA-Z0-9\\-_~]+(\\.[a-zA-Z0-9\\-_~]+)*@[a-zA-Z0-9\\-_~]+(\\.[a-zA-Z0-9\\-_~]+)*\\.[a-zA-Z]{2,}"
-
+      private$..regex <- "(,)([^ ])"
+      private$..replacement <- "\\1 \\2"
       invisible(self)
     }
   )

@@ -1,55 +1,32 @@
-#' Corpus
+#' Tokens
 #'
-#' \code{Corpus} Class for creating, managing, reading and writing Corpus objects.
+#' \code{Tokens} Class for creating, managing, reading and writing Tokens objects.
 #'
-#' Corpus objects are collections of Document objects and the primary level
-#' of document aggregation at which document processing, feature engineering,
-#' selection, analysis and modeling occurs.
+#' Tokens objects are Corpus objects containing collections of Document objects which have been tokenized
+#' using the Tokenize class.
 #'
-#' @usage myCorpus <- Corpus$new(name = "machineLearning", content = mlAdvances)
+#' @usage tokenizedCorpus <- Tokens$new(x = corpus, to = "sentence")
 #'
 #' @section Core Methods:
 #'  \itemize{
-#'   \item{\code{new()}}{Initializes an object of the Corpus class.}
+#'   \item{\code{new()}}{Initializes an object of the Tokens class.}
 #'  }
 #' @template entityMethods
-#'
 #' @template entityParams
-#' @param x A Document class object, or a list thereof, to be attached to the Corpus object
+#' @param x A Corpus class object to be tokenized
+#' @param to Character string indicating the level of tokenization. Valid
+#' values are c("sentence", "character"), The first letter of the level
+#' of tokenization may also be used in lieu of the word.
 #' @template metaParams
 #'
-#' @return Corpus object.
-#'
-#' @examples
-#'
-#' # Instantiate
-#' corpus <- Corpus$new(name = 'corpus')
-#' corpus$summary()
-#'
-#' # Attach / Detach Document objects
-#'
-#' ## Create Text objects
-#' blogsTxt <- Text$new(name = 'blogs (raw)', x = "./data/en_US.blogs.txt")
-#' newsTxt <- Text$new(name = 'news (raw)', x = "./data/en_US.news.txt")
-#' twitterTxt <- Text$new(name = 'twitter (raw)', x = "./data/en_US.twitter.txt")
-#'
-#' ## Create Document objects and attach Texts
-#' blogsDoc <- Document$new()$attach(blogsTxt)
-#' newsDoc <- Document$new()$attach(newsTxt)
-#' twitterDoc <- Document$new()$attach(twitterTxt)
-#'
-#' ## Attach Document objects to Corpus
-#' corpus$attach(x = list(blogsDoc, newsDoc, twitterDoc))
-#'
-#' ## Detach Document object from Corpus
-#' corpus$detach(key = 'name', value = 'blogsDoc')
+#' @return Tokens object.
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
-#' @family Core Classes
+#' @family Data Classes
 #' @export
-Corpus <- R6::R6Class(
-  classname = "Corpus",
+Tokens <- R6::R6Class(
+  classname = "Tokens",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = Collection,
@@ -61,7 +38,6 @@ Corpus <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function(name = NULL) {
       private$loadDependencies(name = name)
-      private$initMeta(name = name)
       private$logR$log(cls = class(self)[1], event = "Initialized.")
       invisible(self)
     },
@@ -73,7 +49,7 @@ Corpus <- R6::R6Class(
     docMeta = function(key = NULL, values = NULL) {
 
       if (is.null(key)) {
-        dm <- rbindlist(lapply(private$..attachments[['Document']], function(a) {
+        dm <- rbindlist(lapply(private$..attachments[['Tokens']], function(a) {
             a$meta()$object
           }))
         return(dm)
@@ -84,16 +60,16 @@ Corpus <- R6::R6Class(
         private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       } else  if (length(values) != 1) {
-        if (length(values) != length(private$..attachments[['Document']])) {
+        if (length(values) != length(private$..attachments[['Tokens']])) {
           event <- paste0("Unable to add metadata. The values ",
                           "parameter must be of length one or ",
                           "length equal to that number of documents ",
-                          "in the Corpus object.")
+                          "in the Tokens object.")
           private$logR$log(cls = class(self)[1], event = event, level = "Error")
           stop()
         }
       } else {
-        values <- rep(values, length(private$..attachments[['Document']]))
+        values <- rep(values, length(private$..attachments[['Tokens']]))
       }
 
 
@@ -171,7 +147,7 @@ Corpus <- R6::R6Class(
             }),".txt"))
         } else {
           if (length(fileNames) != length(private$..attachments[['Document']])) {
-            event <- paste0("Unable to write the Corpus object. The ",
+            event <- paste0("Unable to write the Tokens object. The ",
                                        "fileNames parameter must be NULL or have",
                                        "length = ", length(private$..attachments[['Document']]), ".")
             private$logR$log(cls = class(self)[1], event = event, level = "Error")

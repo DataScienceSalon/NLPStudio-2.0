@@ -28,11 +28,9 @@ family of classes.
 
 \section{TextStudio Family of Classes Overview}{
 
-The TextStudio family of classes include the TextStudio class, which is
-responsible for executing one or more text processing commands on a
-text resource, the core class group that performs the processing functions
-on the text, and the command class group which instructs the TextStudio
-class to perform an a text processing function on a text.
+The TextStudio family of classes include four types of classes. The manager classes which
+are responsible for executing one or more core class objects through the implementation
+of a command class object, supported by support class objects.
 }
 
 \section{DataStudio Design}{

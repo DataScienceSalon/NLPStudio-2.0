@@ -137,8 +137,8 @@ Collection <- R6::R6Class(
         if (!is.null(private$..attachments[[cls]][[id]])) {
           private$..attachments[[cls]][[id]] <- NULL
           private$meta$modified()
-          event <- paste0("Detached ", x$getName, " from ",
-                                    self$getName, ".")
+          event <- paste0("Detached ", x$getName(), " from ",
+                                    self$getName(), ".")
           private$logR$log(cls = class(self)[1], event = event)
         } else {
           self$access()
@@ -181,6 +181,24 @@ Collection <- R6::R6Class(
   ),
 
   public = list(
+
+    #-------------------------------------------------------------------------#
+    #                       Document Management Methods                       #
+    #-------------------------------------------------------------------------#
+    getDocuments = function(key = NULL, value = NULL) {
+      objects <- private$get(cls = "Document", key, value)
+      return(objects)
+    },
+
+    addDocument = function(x) {
+      private$attach(x)
+      invisible(self)
+    },
+
+    removeDocument = function(x) {
+      private$detach(x)
+      return(self)
+    },
 
     #-------------------------------------------------------------------------#
     #                           Summary Method                                #

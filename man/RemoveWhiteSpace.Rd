@@ -24,11 +24,9 @@ RemoveWhiteSpace$new(x)$execute()
 
 \section{TextStudio Family of Classes Overview}{
 
-The TextStudio family of classes include the TextStudio class, which is
-responsible for executing one or more text processing commands on a
-text resource, the core class group that performs the processing functions
-on the text, and the command class group which instructs the TextStudio
-class to perform an a text processing function on a text.
+The TextStudio family of classes include four types of classes. The manager classes which
+are responsible for executing one or more core class objects through the implementation
+of a command class object, supported by support class objects.
 }
 
 \section{DataStudio Design}{
@@ -42,7 +40,8 @@ text cleaning algorithms to be selected and exchagned at runtime.
 }
 
 \seealso{
-Other TextStudio Classes: \code{\link{LowerCaseCmd}},
+Other TextStudio Classes: \code{\link{AddCommaSpaceCmd}},
+  \code{\link{AddCommaSpace}}, \code{\link{LowerCaseCmd}},
   \code{\link{LowerCase}}, \code{\link{RemoveEmailCmd}},
   \code{\link{RemoveEmail}},
   \code{\link{RemoveHyphensCmd}},
@@ -85,9 +84,9 @@ Other TextStudio Classes: \code{\link{LowerCaseCmd}},
   \code{\link{ReplaceTokens}},
   \code{\link{ReplaceWordElongationCmd}},
   \code{\link{ReplaceWordElongation}},
-  \code{\link{Reshape}}, \code{\link{SplitCorpus}},
-  \code{\link{SplitDocument}}, \code{\link{StripTextCmd}},
-  \code{\link{StripText}}, \code{\link{Tokenize}}
+  \code{\link{ReshapeCmd}}, \code{\link{Reshape}},
+  \code{\link{SplitCorpus}}, \code{\link{SplitDocument}},
+  \code{\link{StripTextCmd}}, \code{\link{StripText}}
 }
 \author{
 John James, \email{jjames@dataScienceSalon.org}

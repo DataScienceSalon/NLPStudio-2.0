@@ -47,7 +47,7 @@ DataStudio0 <- R6::R6Class(
     },
 
     processCorpus = function() {
-      docs <- private$..x$getDocument()
+      docs <- private$..x$getDocuments()
       for (i in 1:length(docs)) {
         doc <- private$processDocument(docs[[i]])
         private$..x$addData(doc)

@@ -169,7 +169,7 @@ VVInit <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
-    #                           NLPStudio Classes                             #
+    #                             Studio Classes                              #
     #-------------------------------------------------------------------------#
     textStudio = function(object) {
       return(private$validateClass(object, classes = c("Corpus", "Document")))
@@ -186,7 +186,6 @@ VVInit <- R6::R6Class(
     dataStudio0 = function(object) {
       return(private$validateStudio(object, classes = c("Corpus", "Document")))
     },
-
 
     #-------------------------------------------------------------------------#
     #                             Misc Classes                                #

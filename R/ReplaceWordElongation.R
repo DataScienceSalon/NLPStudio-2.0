@@ -60,6 +60,7 @@ ReplaceWordElongation <- R6::R6Class(
       private$loadDependencies()
 
       # Validate parameters
+      private$..params <- list()
       private$..params$x <- x
       private$..params$logicals$variables <- c('impartMeaning')
       private$..params$logicals$values <- c(impartMeaning)

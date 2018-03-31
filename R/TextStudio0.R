@@ -26,11 +26,11 @@ TextStudio0 <- R6::R6Class(
   private = list(
     ..x = character(),
     ..regex = character(),
-    ..replacement = character(),
+    ..replacement = " ",
     ..params = list(
       x = character(),
       pattern = character(),
-      replacement = character(),
+      replacement = " ",
       logicals = list(
         variables = character(),
         values = character()
@@ -56,8 +56,9 @@ TextStudio0 <- R6::R6Class(
     },
 
     processCorpus = function() {
-      docs <- private$..x$getDocument()
+      docs <- private$..x$getDocuments()
       for (i in 1:length(docs)) {
+        private$..x$removeDocument(docs[[i]])
         doc <- private$processDocument(docs[[i]])
         private$..x$addDocument(doc)
       }

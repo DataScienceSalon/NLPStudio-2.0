@@ -32,7 +32,8 @@ txtContent <- RepairFile$new(txtFile)$ctrl()  # Converts all control characters 
 
 }
 \seealso{
-Other TextStudio Classes: \code{\link{LowerCaseCmd}},
+Other TextStudio Classes: \code{\link{AddCommaSpaceCmd}},
+  \code{\link{AddCommaSpace}}, \code{\link{LowerCaseCmd}},
   \code{\link{LowerCase}}, \code{\link{RemoveEmailCmd}},
   \code{\link{RemoveEmail}},
   \code{\link{RemoveHyphensCmd}},
@@ -75,9 +76,9 @@ Other TextStudio Classes: \code{\link{LowerCaseCmd}},
   \code{\link{ReplaceTokens}},
   \code{\link{ReplaceWordElongationCmd}},
   \code{\link{ReplaceWordElongation}},
-  \code{\link{Reshape}}, \code{\link{SplitCorpus}},
-  \code{\link{SplitDocument}}, \code{\link{StripTextCmd}},
-  \code{\link{StripText}}, \code{\link{Tokenize}}
+  \code{\link{ReshapeCmd}}, \code{\link{Reshape}},
+  \code{\link{SplitCorpus}}, \code{\link{SplitDocument}},
+  \code{\link{StripTextCmd}}, \code{\link{StripText}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

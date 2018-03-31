@@ -38,75 +38,30 @@ Sources:
 }
 }
 
-\section{TextStudio Family of Classes Overview}{
+\section{DataStudio Family of Classes Overview}{
 
-The TextStudio family of classes include the TextStudio class, which is
-responsible for executing one or more text processing commands on a
-text resource, the core class group that performs the processing functions
-on the text, and the command class group which instructs the TextStudio
-class to perform an a text processing function on a text.
+The DataStudio family of classes include the DataStudio class, which is
+responsible for executing one or more data processing commands on a
+Corpus or Document resource, the core class group that performs the
+data processing functions on the objects, and the command class
+group which instructs the DataStudio class to perform the
+data processing function on the Corpus or Document object.
 }
 
 \section{DataStudio Design}{
 
 This DataStudio family of classes is an implementation of the Strategy
-design pattern, as described in the book "Design Patterns: Elements of Reusable
-Object-Oriented Software" by Erich Gamma, Richard Helm, Ralph Johnson
-and John Vlissides (hence Gang of Four). The Strategy pattern defines
-the family of text cleaning classes, encapsulates class and allows
-text cleaning algorithms to be selected and exchagned at runtime.
+and Command design patterns, as described in the book "Design Patterns:
+Elements of Reusable Object-Oriented Software" by Erich Gamma, Richard
+Helm, Ralph Johnson and John Vlissides (hence Gang of Four). The
+Strategy pattern defines and encapsulates the family of data processing
+classes and allows text cleaning algorithms to be selected and
+exhanged at runtime. THe Command pattern defines commands that
+can be executed in batch mode or at a later time.
 }
 
 \examples{
 
-}
-\seealso{
-Other TextStudio Classes: \code{\link{LowerCaseCmd}},
-  \code{\link{LowerCase}}, \code{\link{RemoveEmailCmd}},
-  \code{\link{RemoveEmail}},
-  \code{\link{RemoveHyphensCmd}},
-  \code{\link{RemoveHyphens}},
-  \code{\link{RemoveNumbersCmd}},
-  \code{\link{RemoveNumbers}},
-  \code{\link{RemovePunctCmd}}, \code{\link{RemovePunct}},
-  \code{\link{RemoveSymbolsCmd}},
-  \code{\link{RemoveSymbols}},
-  \code{\link{RemoveTwitterCmd}},
-  \code{\link{RemoveTwitter}}, \code{\link{RemoveURLCmd}},
-  \code{\link{RemoveURL}},
-  \code{\link{RemoveWhiteSpaceCmd}},
-  \code{\link{RemoveWhiteSpace}}, \code{\link{RepairFile}},
-  \code{\link{ReplaceAbbreviationsCmd}},
-  \code{\link{ReplaceAbbreviations}},
-  \code{\link{ReplaceBacktickCmd}},
-  \code{\link{ReplaceBacktick}},
-  \code{\link{ReplaceContractionsCmd}},
-  \code{\link{ReplaceContractions}},
-  \code{\link{ReplaceCurlyQuotesCmd}},
-  \code{\link{ReplaceCurlyQuotes}},
-  \code{\link{ReplaceEmojiCmd}},
-  \code{\link{ReplaceEmoji}},
-  \code{\link{ReplaceEmoticonCmd}},
-  \code{\link{ReplaceEmoticon}},
-  \code{\link{ReplaceHTMLCmd}}, \code{\link{ReplaceHTML}},
-  \code{\link{ReplaceInternetSlangCmd}},
-  \code{\link{ReplaceInternetSlang}},
-  \code{\link{ReplaceKernCmd}}, \code{\link{ReplaceKern}},
-  \code{\link{ReplaceNonAsciiCmd}},
-  \code{\link{ReplaceNonAscii}},
-  \code{\link{ReplaceNumbersCmd}},
-  \code{\link{ReplaceNumbers}},
-  \code{\link{ReplaceOrdinalCmd}},
-  \code{\link{ReplaceOrdinal}},
-  \code{\link{ReplaceSymbolCmd}},
-  \code{\link{ReplaceSymbol}},
-  \code{\link{ReplaceTokensCmd}},
-  \code{\link{ReplaceTokens}},
-  \code{\link{ReplaceWordElongationCmd}},
-  \code{\link{ReplaceWordElongation}},
-  \code{\link{Reshape}}, \code{\link{SplitCorpus}},
-  \code{\link{SplitDocument}}, \code{\link{StripTextCmd}},
-  \code{\link{StripText}}
 }
 \author{
 John James, \email{jjames@dataScienceSalon.org}

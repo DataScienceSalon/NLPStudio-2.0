@@ -63,7 +63,6 @@ TextStudio <- R6::R6Class(
 
       for (i in 1:length(private$..jobQueue)) {
         cmd <- private$..jobQueue[[i]]$getName()
-        print(paste0("Processing... ", cmd))
         private$..x <- private$..jobQueue[[i]]$execute(private$..x)
       }
 
@@ -73,6 +72,10 @@ TextStudio <- R6::R6Class(
 
       invisible(self)
 
+    },
+
+    getResult = function() {
+      private$..x
     },
 
     #-------------------------------------------------------------------------#

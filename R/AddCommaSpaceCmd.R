@@ -1,11 +1,14 @@
 #------------------------------------------------------------------------------#
-#                              Remove Numbers                                  #
+#                            AddCommaSpaceCmd                                  #
 #------------------------------------------------------------------------------#
-#' RemoveNumbers
+#' AddCommaSpaceCmd
 #'
-#' \code{RemoveNumbers} Removes numbers from text.
+#' \code{AddCommaSpaceCmd} Command for the AddCommaSpace class.
 #'
-#' @usage RemoveNumbers$new(x)$execute()
+#' Class that encapsulates the command to execute an object of the AddCommaSpace
+#' class
+#'
+#' @usage AddCommaSpaceCmd$new()
 #'
 #' @template textStudioParams
 #' @template textStudioMethods
@@ -16,26 +19,22 @@
 #' @author John James, \email{jjames@@dataScienceSalon.org}
 #' @family TextStudio Classes
 #' @export
-RemoveNumbers <- R6::R6Class(
-  classname = "RemoveNumbers",
+AddCommaSpaceCmd <- R6::R6Class(
+  classname = "AddCommaSpaceCmd",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = TextStudio0,
 
   public = list(
-    initialize = function(x) {
+    initialize = function() {
 
-      private$loadDependencies()
-
-      # Validate parameters
-      private$..params$x <- x
-      if (private$validate()$code == FALSE) stop()
-
-      private$..x <- x
-      private$..regex <- '[[:digit:]]'
-      private$..replacement <- " "
+      private$loadDependencies(name = "AddCommaSpaceCmd")
 
       invisible(self)
+    },
+    execute = function(x) {
+      x <- AddCommaSpace$new(x)$execute()
+      return(x)
     }
   )
 )
