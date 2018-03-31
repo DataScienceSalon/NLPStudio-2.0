@@ -34,12 +34,9 @@ ReplaceOrdinalCmd <- R6::R6Class(
 
   public = list(
     initialize = function(joinOrdinal = FALSE, remove = FALSE) {
-      private$..className <- "ReplaceOrdinalCmd"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
+      private$loadDependencies(name = 'ReplaceOrdinalCmd')
       private$..joinOrdinal <- joinOrdinal
       private$..remove <- remove
-      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

@@ -43,17 +43,15 @@ ReplaceEmoji <- R6::R6Class(
         document$content <- textclean::replace_emoji(x = content,
                                             emoji_dt = private$..emojis)
       }
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
 
   public = list(
     initialize = function(x, emojis = NULL) {
-      private$..className <- "ReplaceEmoji"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

@@ -44,7 +44,7 @@ Reshape <- R6::R6Class(
       } else if (private$..to %in% c("sentence", "s")) {
         document$content <- Tokenize$new(document$content, what = "sentence")
       }
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     },
 

@@ -55,9 +55,7 @@ ReplaceContractionsCmd <- R6::R6Class(
     initialize = function(contractions = NULL, replacement = NULL, leadspace = FALSE,
                           trailspace = FALSE, fixed = TRUE, trim = FALSE,
                           orderPattern = fixed) {
-      private$..className <- "ReplaceContractions"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
+      private$loadDependencies(name = 'ReplaceContractionsCmd')
       private$..contractions <- contractions
       private$..replacement <- replacement
       private$..leadspace <- leadspace
@@ -65,7 +63,6 @@ ReplaceContractionsCmd <- R6::R6Class(
       private$..fixed <- fixed
       private$..trim <- trim
       private$..orderPattern <- orderPattern
-      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

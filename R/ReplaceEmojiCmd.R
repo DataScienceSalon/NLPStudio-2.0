@@ -33,11 +33,8 @@ ReplaceEmojiCmd <- R6::R6Class(
 
   public = list(
     initialize = function(emojis = NULL) {
-      private$..className <- "ReplaceEmojiCmd"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
+      private$loadDependencies(name = 'ReplaceEmojiCmd')
       private$..emojis <- emojis
-      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

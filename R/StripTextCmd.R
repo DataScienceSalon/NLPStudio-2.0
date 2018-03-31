@@ -44,13 +44,11 @@ StripTextCmd <- R6::R6Class(
   public = list(
     initialize = function(keepChars = NULL, removeDigits = TRUE,
                           removeApostrophe = TRUE, lowerCase = TRUE) {
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- "StripTextCmd"
+      private$loadDependencies(name = 'StripTextCmd')
       private$..keepChars <- keepChars
       private$..removeDigits <- removeDigits
       private$..removeApostrophe <- removeApostrophe
       private$..lowerCase = lowerCase
-      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

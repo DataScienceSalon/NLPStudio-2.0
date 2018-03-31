@@ -25,10 +25,8 @@ RemoveSymbols <- R6::R6Class(
 
   public = list(
     initialize = function(x) {
-      private$..className <- "RemoveSymbols"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

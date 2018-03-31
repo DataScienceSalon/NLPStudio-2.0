@@ -34,13 +34,9 @@ RemovePunctCmd <- R6::R6Class(
 
   public = list(
     initialize = function(endmark = FALSE, apostrophe = FALSE) {
-      private$..className <- "RemovePunctCmd"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
+      private$loadDependencies(name = 'RemovePunctCmd')
       private$..endmark <- endmark
       private$..apostrophe <- apostrophe
-
-      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

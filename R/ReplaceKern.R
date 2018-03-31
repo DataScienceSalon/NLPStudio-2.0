@@ -38,17 +38,15 @@ ReplaceKern <- R6::R6Class(
 
     processDocument = function(document) {
       document$content <- textclean::replace_kern(x = document$content)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
 
   public = list(
     initialize = function(x) {
-      private$..className <- "ReplaceKern"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

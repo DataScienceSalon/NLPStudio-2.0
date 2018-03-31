@@ -29,7 +29,7 @@ TextStudio <- R6::R6Class(
   classname = "TextStudio",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = NLPStudio0,
+  inherit = Studio0,
 
   public = list(
 
@@ -62,6 +62,8 @@ TextStudio <- R6::R6Class(
       private$..methodName <- "execute"
 
       for (i in 1:length(private$..jobQueue)) {
+        cmd <- private$..jobQueue[[i]]$getName()
+        print(paste0("Processing... ", cmd))
         private$..x <- private$..jobQueue[[i]]$execute(private$..x)
       }
 

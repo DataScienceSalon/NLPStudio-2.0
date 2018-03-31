@@ -43,7 +43,7 @@ ReplaceInternetSlang <- R6::R6Class(
                                          slang = private$..slang,
                                          replacement = private$..replacement,
                                          ignore.case = private$..ignoreCase)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
@@ -51,10 +51,7 @@ ReplaceInternetSlang <- R6::R6Class(
   public = list(
     initialize = function(x, slang = NULL, replacement = NULL, ignoreCase = TRUE) {
 
-      private$..className <- "ReplaceInternetSlang"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

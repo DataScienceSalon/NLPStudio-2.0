@@ -43,17 +43,15 @@ ReplaceEmoticon <- R6::R6Class(
         document$content <- textclean::replace_emoticon(x = content,
                                                emoticon_dt = private$..emoticons)
       }
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
 
   public = list(
     initialize = function(x, emoticons = NULL) {
-      private$..className <- "ReplaceEmoticon"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

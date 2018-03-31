@@ -101,7 +101,7 @@ RepairFile <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function(path) {
 
-      private$logR <- LogR$new()
+      private$loadDependencies()
 
       # Validate path
       if (!R.utils::isFile(path)) stop(paste("File", path, "does not exist."))

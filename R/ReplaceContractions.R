@@ -73,7 +73,7 @@ ReplaceContractions <- R6::R6Class(
                                     trim = private$..trim,
                                     order.pattern = private$..orderPattern)
       }
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
@@ -82,10 +82,8 @@ ReplaceContractions <- R6::R6Class(
     initialize = function(x, contractions = NULL, replacement = NULL, leadspace = FALSE,
                           trailspace = FALSE, fixed = TRUE, trim = FALSE,
                           orderPattern = fixed) {
-      private$..className <- "ReplaceContractions"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

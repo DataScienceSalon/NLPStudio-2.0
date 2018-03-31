@@ -34,12 +34,9 @@ ReplaceNumbersCmd <- R6::R6Class(
 
   public = list(
     initialize = function(joinNumbers = FALSE, remove = FALSE) {
-      private$..className <- "ReplaceNumbersCmd"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
+      private$loadDependencies(name = 'ReplaceNumbersCmd')
       private$..joinNumbers <- joinNumbers
       private$..remove <- remove
-      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

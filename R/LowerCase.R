@@ -33,17 +33,15 @@ LowerCase <- R6::R6Class(
 
     processDocument = function(document) {
       document$content <- tolower(document$content)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
 
   public = list(
     initialize = function(x) {
-      private$..className <- "LowerCase"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

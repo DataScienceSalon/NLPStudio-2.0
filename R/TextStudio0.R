@@ -21,7 +21,7 @@ TextStudio0 <- R6::R6Class(
   classname = "TextStudio0",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = NLPStudio0,
+  inherit = Studio0,
 
   private = list(
     ..x = character(),
@@ -51,7 +51,7 @@ TextStudio0 <- R6::R6Class(
       document$content <- gsub(private$..regex,
                       private$..replacement,
                       document$content, perl = TRUE)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     },
 
@@ -59,10 +59,10 @@ TextStudio0 <- R6::R6Class(
       docs <- private$..x$getDocument()
       for (i in 1:length(docs)) {
         doc <- private$processDocument(docs[[i]])
-        private$..x$attach(doc)
+        private$..x$addDocument(doc)
       }
-      private$..x <- private$logEvent(private$..x)
-      return(TRUE)
+      private$logEvent(private$..x)
+      return(private$..x)
     }
   ),
 
@@ -74,7 +74,7 @@ TextStudio0 <- R6::R6Class(
       private$..methodName <- "execute"
 
       if ("Corpus" %in% class(private$..x)) {
-        private$processCorpus()
+        private$..x <- private$processCorpus()
 
       } else {
         private$..x <- private$processDocument(private$..x)

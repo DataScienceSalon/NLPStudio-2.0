@@ -34,7 +34,12 @@ Meta <- R6::R6Class(
 
   public = list(
 
-    initialize = function() { invisible(self) },
+    initialize = function() {
+
+      private$logR <- LogR$new()
+
+      invisible(self)
+    },
 
     set = function(key, value) {
 
@@ -77,8 +82,7 @@ Meta <- R6::R6Class(
                                  stringsAsFactors = FALSE))
           } else {
             event <- "Non existent metadata variable"
-            private$logR$log(cls = class(self)[1], event = event, level = "Warn")
-            return(NULL)
+            private$logR$log(cls = class(self)[1], event = event, level = "Error")
           }
         }
       }

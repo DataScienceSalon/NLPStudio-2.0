@@ -36,17 +36,15 @@ ReplaceCurlyQuotes <- R6::R6Class(
       content <- document$content
       Encoding(document$content) <- "latin1"
       document$content <- textclean::replace_curly_quote(x = content)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
 
   public = list(
     initialize = function(x) {
-      private$..className <- "ReplaceCurlyQuotes"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

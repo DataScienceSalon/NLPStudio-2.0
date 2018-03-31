@@ -42,17 +42,15 @@ ReplaceOrdinal <- R6::R6Class(
       document$content <- textclean::replace_number(x = document$content,
                                             num.paste = private$..joinOrdinal,
                                             remove = private$..remove)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
 
   public = list(
     initialize = function(x, joinOrdinal = FALSE, remove = FALSE) {
-      private$..className <- "ReplaceOrdinal"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

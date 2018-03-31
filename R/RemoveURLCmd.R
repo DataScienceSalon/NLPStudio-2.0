@@ -27,10 +27,7 @@ RemoveURLCmd <- R6::R6Class(
 
   public = list(
     initialize = function() {
-      private$..className <- "RemoveURLCmd"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+      private$loadDependencies(name = 'RemoveURLCmd')
       invisible(self)
     },
     execute = function(x) {

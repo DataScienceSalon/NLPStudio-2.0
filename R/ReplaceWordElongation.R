@@ -49,17 +49,15 @@ ReplaceWordElongation <- R6::R6Class(
     processDocument = function(document) {
       document$content <- textclean::replace_word_elongation(x = document$content,
                                            impart.meaning = private$..impartMeaning)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
 
   public = list(
     initialize = function(x, impartMeaning = FALSE) {
-      private$..className <- "ReplaceWordElongation"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

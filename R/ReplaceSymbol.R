@@ -54,7 +54,7 @@ ReplaceSymbol <- R6::R6Class(
                                            at = private$..at,
                                            and = private$..and,
                                            with = private$..with)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
@@ -62,10 +62,8 @@ ReplaceSymbol <- R6::R6Class(
   public = list(
     initialize = function(x, dollar = TRUE, percent = TRUE, pound = TRUE,
                           at = TRUE, and = TRUE, with = TRUE) {
-      private$..className <- "ReplaceSymbol"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

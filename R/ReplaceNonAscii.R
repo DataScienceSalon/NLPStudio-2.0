@@ -41,17 +41,15 @@ ReplaceNonAscii <- R6::R6Class(
       document$content <- textclean::replace_non_ascii(x = document$content,
                                                        remove.nonconverted =
                                                          private$..removeNonConverted)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
 
   public = list(
     initialize = function(x, removeNonConverted = TRUE) {
-      private$..className <- "ReplaceNonAscii"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

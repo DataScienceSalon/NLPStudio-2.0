@@ -51,7 +51,7 @@ StripText <- R6::R6Class(
                                       digit.remove = private$..removeDigit,
                                       apostrophe.remove = private$..removeApostrophe,
                                       lower.case = private$..lowerCase)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),

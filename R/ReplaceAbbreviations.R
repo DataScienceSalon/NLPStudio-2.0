@@ -58,7 +58,7 @@ ReplaceAbbreviations <- R6::R6Class(
                                     replacement = replacement,  fixed = FALSE,
                                     perl = TRUE)
       }
-      document <- private$logEvent(document)
+      private$logEvent(document)
 
       return(document)
     }
@@ -67,10 +67,8 @@ ReplaceAbbreviations <- R6::R6Class(
   public = list(
     initialize = function(x, abbreviations = NULL,
                           replacement = NULL, ignoreCase = TRUE) {
-      private$..className <- "ReplaceAbbreviations"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

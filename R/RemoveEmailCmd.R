@@ -27,7 +27,7 @@ RemoveEmailCmd <- R6::R6Class(
 
   public = list(
     initialize = function() {
-      private$loadDependencies()
+      private$loadDependencies(name = 'RemoveEmailCmd')
       invisible(self)
     },
     execute = function(x) {

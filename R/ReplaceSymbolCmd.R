@@ -43,16 +43,13 @@ ReplaceSymbolCmd <- R6::R6Class(
   public = list(
     initialize = function(dollar = TRUE, percent = TRUE, pound = TRUE,
                           at = TRUE, and = TRUE, with = TRUE) {
-      private$..className <- "ReplaceSymbolCmd"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
+      private$loadDependencies(name = 'ReplaceSymbolCmd')
       private$..dollar <- dollar
       private$..percent <- percent
       private$..pound <- pound
       private$..at <- at
       private$..and <- and
       private$..with <- with
-      private$logR  <- LogR$new()
       invisible(self)
     },
     execute = function(x) {

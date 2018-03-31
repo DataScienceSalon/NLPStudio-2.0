@@ -28,10 +28,7 @@ ReplaceBacktickCmd <- R6::R6Class(
 
   public = list(
     initialize = function() {
-      private$..className <- "ReplaceBacktickCmd"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+      private$loadDependencies(name = 'ReplaceBacktickCmd')
       invisible(self)
     },
     execute = function(x) {

@@ -27,10 +27,7 @@ RemoveHyphensCmd <- R6::R6Class(
 
   public = list(
     initialize = function() {
-      private$..className <- "RemoveHyphensCmd"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+      private$loadDependencies(name = 'RemoveHyphensCmd')
       invisible(self)
     },
     execute = function(x) {

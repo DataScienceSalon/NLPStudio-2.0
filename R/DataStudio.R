@@ -32,7 +32,7 @@ DataStudio <- R6::R6Class(
   classname = "DataStudio",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = NLPStudio0,
+  inherit = Studio0,
 
   public = list(
 

@@ -34,6 +34,7 @@ Entity <- R6::R6Class(
       private$logR <- LogR$new()
       private$validator <- Validator$new()
       private$meta <- Meta$new()
+      if (!is.null(name)) private$meta$set(key = 'name', value = name)
       return(TRUE)
     },
 

@@ -61,7 +61,7 @@ ReplaceTokens <- R6::R6Class(
                                   fixed = private$..fixed,
                                   trim = private$..trim,
                                   order.pattern = private$..orderPattern)
-      document <- private$logEvent(document)
+      private$logEvent(document)
       return(document)
     }
   ),
@@ -70,10 +70,8 @@ ReplaceTokens <- R6::R6Class(
     initialize = function(x, tokens, replacement, leadspace = FALSE,
                           trailspace = FALSE, fixed = TRUE, trim = FALSE,
                           orderPattern = fixed) {
-      private$..className <- "ReplaceTokens"
-      private$..methodName <- "initialize"
-      private$..meta$core$name <- private$..className
-      private$logR  <- LogR$new()
+
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x
