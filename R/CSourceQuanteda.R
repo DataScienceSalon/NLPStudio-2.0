@@ -69,7 +69,7 @@ CSourceQuanteda <- R6::R6Class(
       # Create Documents and add to Corpus
       for (i in 1:length(texts)) {
 
-        doc <- Document$new(x = texts[i], name = n[i])
+        doc <- TextDocument$new(x = texts[i], name = n[i])
         keys <- names(metaData[i,])
         values <- metaData[i,]
         if (length(keys) > 0) {

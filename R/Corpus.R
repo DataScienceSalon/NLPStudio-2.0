@@ -34,9 +34,9 @@
 #' twitterTxt <- Text$new(name = 'twitter (raw)', x = "./data/en_US.twitter.txt")
 #'
 #' ## Create Document objects and attach Texts
-#' blogsDoc <- Document$new()$attach(blogsTxt)
-#' newsDoc <- Document$new()$attach(newsTxt)
-#' twitterDoc <- Document$new()$attach(twitterTxt)
+#' blogsDoc <- TextDocument$new()$attach(blogsTxt)
+#' newsDoc <- TextDocument$new()$attach(newsTxt)
+#' twitterDoc <- TextDocument$new()$attach(twitterTxt)
 #'
 #' ## Attach Document objects to Corpus
 #' corpus$attach(x = list(blogsDoc, newsDoc, twitterDoc))

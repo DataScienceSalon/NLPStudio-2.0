@@ -60,7 +60,7 @@ class.
   If repair is set to TRUE, select ASCII control characters are replaced with spaces
   using \code{\link[NLPStudio]{RepairFile}} }
   \item{\code{write(path)}}{Writes the Document object content to a file in plain text format.}
-  \item{\code{summary(meta = TRUE, stats = TRUE, state = TRUE, system = TRUE,
+  \item{\code{summary(core = TRUE, stats = TRUE, state = TRUE, system = TRUE,
   quiet = FALSE, abbreviated = FALSE)}}{Summarizes Document object.}
  }
 }

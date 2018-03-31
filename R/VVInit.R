@@ -33,7 +33,11 @@ VVInit <- R6::R6Class(
         status[['msg']] <- paste0("Invalid class. Cannot process ",
                                   class(p$x)[1], " object. ",
                                   class(object)[1], " class operates on ",
-                                  "Corpus and Document classes only. ",
+                                  paste0("c(",gsub(",$", "",
+                                                   paste0("'",classes,
+                                                          "',", collapse = "")),
+                                         "). "),
+                                  " classes only. ",
                                   "See ?", class(object)[1],
                                   " for further assistance")
         return(status)
@@ -153,8 +157,12 @@ VVInit <- R6::R6Class(
       return(status[['code']] <- TRUE)
 
     },
-    document = function(object) {
+    textDocument = function(object) {
       return(private$validateClass(object, classes = "character"))
+    },
+
+    tokensDocument = function(object) {
+      return(private$validateStudio(object, classes = c("character", "tokens")))
     },
 
     #-------------------------------------------------------------------------#
@@ -186,6 +194,7 @@ VVInit <- R6::R6Class(
     dataStudio0 = function(object) {
       return(private$validateStudio(object, classes = c("Corpus", "Document")))
     },
+
 
     #-------------------------------------------------------------------------#
     #                             Misc Classes                                #

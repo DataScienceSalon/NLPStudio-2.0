@@ -68,12 +68,12 @@ CSourceVector <- R6::R6Class(
       if ("list" %in% class(x)[1]) {
         lapply(x, function(y) {
           name <- names(y)
-          doc <- Document$new(x = y, name = name)
+          doc <- TextDocument$new(x = y, name = name)
           private$..corpus$addDocument(x = doc)
         })
       } else if (concatenate) {
         name <- names(x)
-        doc <- Document$new(x = x, name = name)
+        doc <- TextDocument$new(x = x, name = name)
         private$..corpus$addDocument(x = doc)
       } else {
         for (i in 1:length(x)) {
@@ -81,7 +81,7 @@ CSourceVector <- R6::R6Class(
           if (is.null(name)) {
             name <- paste0("Document-",i)
           }
-          doc <- Document$new(x = x[i], name = name)
+          doc <- TextDocument$new(x = x[i], name = name)
           private$..corpus <- private$..corpus$addDocument(x = doc)
         }
       }

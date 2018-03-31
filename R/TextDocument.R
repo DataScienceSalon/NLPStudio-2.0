@@ -1,38 +1,38 @@
-#' Document
+#' TextDocument
 #'
-#' \code{Document} Class for creating, managing, reading and writing Document content and metadata.
+#' \code{TextDocument} Class for creating, managing, reading and writing TextDocument content and metadata.
 #'
-#' Class contains Document content and metadata for the Document object.
+#' Class contains TextDocument content and metadata for the TextDocument object.
 #' The object may be instantiated with a name and character
-#' vectors containing the Document text. Once the object is created, users may
+#' vectors containing the TextDocument text. Once the object is created, users may
 #' add, change and remove metadata via key / value pairs. IO
-#' methods support reading and writing the Documents in a variety
+#' methods support reading and writing the TextDocuments in a variety
 #' of formats using the \code{\link[NLPStudio]{IOFactory}} factory
 #' class.
 #'
-#' @usage myDocument <- Document$new(name = "skiReport", x = avalanche)
+#' @usage myTextDocument <- TextTextDocument$new(name = "skiReport", x = avalanche)
 #'
 #' @section Core Methods:
 #'  \itemize{
-#'   \item{\code{new(x = NULL, name = NULL)}}{Initializes an object of the Document class.}
-#'   \item{\code{content(value)}}{Active binding method for updating Document text content.}
+#'   \item{\code{new(x = NULL, name = NULL)}}{Initializes an object of the TextDocument class.}
+#'   \item{\code{content(value)}}{Active binding method for updating TextDocument text content.}
 #'   \item{\code{read(path, repair = FALSE)}}{Reads text from a file designated by the path variable.
 #'   If repair is set to TRUE, select ASCII control characters are replaced with spaces
 #'   using \code{\link[NLPStudio]{RepairFile}} }
-#'   \item{\code{write(path)}}{Writes the Document object content to a file in plain text format.}
-#'   \item{\code{summary(meta = TRUE, stats = TRUE, state = TRUE, system = TRUE,
-#'   quiet = FALSE, abbreviated = FALSE)}}{Summarizes Document object.}
+#'   \item{\code{write(path)}}{Writes the TextDocument object content to a file in plain text format.}
+#'   \item{\code{summary(core = TRUE, stats = TRUE, state = TRUE, system = TRUE,
+#'   quiet = FALSE, abbreviated = FALSE)}}{Summarizes TextDocument object.}
 #'  }
 #' @template entityMethods
 #'
-#' @param x Character vector containing Document
-#' @param name Character string containing the name for the Document object.
+#' @param x Character vector containing TextDocument
+#' @param name Character string containing the name for the TextDocument object.
 #' @param repair Logical. If TRUE, the read method will invoke the RepairFile class on the text.
-#' @param task Character string containing the name of the TextStudio class associated with the change to the Document content
+#' @param task Character string containing the name of the TextStudio class associated with the change to the TextDocument content
 #' @template metaParams
 #' @template summaryParams
 #'
-#' @return Document object, containing the Document content, the metadata and
+#' @return TextDocument object, containing the TextDocument content, the metadata and
 #' the methods to manage both.
 #'
 #'
@@ -40,28 +40,27 @@
 #' avalanche <- c("SAN FRANCISCO  — She was snowboarding with her boyfriend when ",
 #'           "she heard someone scream 'Avalanche!'",
 #'           "Then John, 39, saw 'a cloud of snow coming down.'")
-#' avalancheDocument <- Document$new(x = avalanche, name = 'skiReport')
+#' avalancheTextDocument <- TextTextDocument$new(x = avalanche, name = 'skiReport')
 #'
-#' avalancheDocument <- myDocument$meta(key = c("author", "editor", "year"),
+#' avalancheTextDocument <- myTextTextDocument$meta(key = c("author", "editor", "year"),
 #'                       value = c("Dorfmeister", "Huffington", "2018"))
 #'
-#' avalancheDocument$meta()
+#' avalancheTextTextDocument$meta()
 #'
 #' news <- "./data/en_US.news.txt"
-#' newsDocument <- Document$new(name = 'news', x = news)
+#' newsTextDocument <- TextTextDocument$new(name = 'news', x = news)
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family Core Classes
 #' @export
-Document <- R6::R6Class(
-  classname = "Document",
+TextDocument <- R6::R6Class(
+  classname = "TextDocument",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Entity,
+  inherit = Document0,
 
   private = list(
-    ..content = character(),
 
     compress = function(x) {
       memCompress(x, "g")
@@ -71,6 +70,9 @@ Document <- R6::R6Class(
       strsplit(memDecompress(x, "g", asChar = TRUE), "\n")[[1]]
     },
 
+    #-------------------------------------------------------------------------#
+    #                           Summary Methods                               #
+    #-------------------------------------------------------------------------#
     stats = function() {
 
       getStats = function() {
@@ -136,14 +138,14 @@ Document <- R6::R6Class(
 
       } else {
         if (!("character" %in% class(value))) {
-          event <- "Document must be of the 'character' class."
+          event <- "TextDocument must be of the 'character' class."
           private$logR$log(cls = class(self)[1], event = event, level = "Error")
           stop()
         } else {
 
           private$..content <- private$compress(value)
           private$meta$modified()
-          event <- "Updated Document content."
+          event <- "Updated TextDocument content."
           private$logR$log(cls = class(self)[1], event = event)
         }
       }
@@ -244,7 +246,7 @@ Document <- R6::R6Class(
 
       private$..methodName <- 'write'
 
-      # Decompress, then write Document file
+      # Decompress, then write TextDocument file
       content <- private$decompress(private$..content)
       IO$new()$write(path = path, content = content)
 
@@ -257,7 +259,7 @@ Document <- R6::R6Class(
     #                           Visitor Methods                               #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$document(self)
+      visitor$textDocument(self)
     }
   )
 )

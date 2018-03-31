@@ -55,7 +55,7 @@ CSourceTM <- R6::R6Class(
 
         # Create Text and Document Objects
         content <- x[[y]]$content
-        doc <- Document$new(x =content, name = docNames[y])
+        doc <- TextDocument$new(x =content, name = docNames[y])
 
         # Create metadata
         for (i in 1:length(x[[y]]$meta)) {

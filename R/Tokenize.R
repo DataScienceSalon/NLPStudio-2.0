@@ -61,8 +61,8 @@ Tokenize <- R6::R6Class(
       }
 
       # Create new document object
-      tokenizedDocument <- Document$new(name = document$getName())
-      tokenizedDocument$content <- tokenized
+      tokenizedDocument <- TextDocument$new(name = document$getName())
+      tokenizedTextDocument$content <- tokenized
 
       event <- paste0("Tokenized ", document$getName(), " document.")
       document$logR$log(cls = class(self)[1], event = event)

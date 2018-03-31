@@ -9,7 +9,7 @@
 #' Splits a Document object into cross validation sets, given document
 #' split proportions.
 #'
-#' @usage SplitDocument$new(x, splits = c(.7, .15, .15),
+#' @usage SplitTextDocument$new(x, splits = c(.7, .15, .15),
 #'                        setNames =  c("Train", "Validation", "Test"),
 #'                        seed = 232)$execute()
 #'
@@ -35,7 +35,7 @@ SplitDocument <- R6::R6Class(
   private = list(
 
     spawn = function() {
-      Document$new()
+      TextDocument$new()
     }
   ),
 

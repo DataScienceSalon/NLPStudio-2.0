@@ -47,7 +47,7 @@ Clone <- R6::R6Class(
         name <- x$getName()
       }
 
-      out <- Document$new(name = name)
+      out <- TextDocument$new(name = name)
       out <- private$cloneMeta(x, out)
 
       out$content <- x$content

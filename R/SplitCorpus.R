@@ -70,7 +70,7 @@ SplitCorpus <- R6::R6Class(
       # Split Documents
       docs <- private$..x$getDocuments()
       docSplits <- lapply(docs, function(d) {
-        docSplit <- SplitDocument$new(x =  d,
+        docSplit <- SplitTextDocument$new(x =  d,
                                    splits = private$..splits,
                                    setNames = private$..setNames,
                                    seed = private$..seed)$execute()

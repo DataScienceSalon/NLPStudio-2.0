@@ -66,7 +66,7 @@ Reshape <- R6::R6Class(
         # Create new document
         content <- paste(unlist(content), collapse = "")
         name <- private$..x$getName()
-        document <- Document$new(name = name)
+        document <- TextDocument$new(name = name)
         document$content <- content
         private$..x$addDocument(document)
 

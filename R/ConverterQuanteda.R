@@ -54,7 +54,7 @@ ConverterQuanteda <- R6::R6Class(
 
       # Add documents
       lapply(seq_along(x$documents$texts), function(t) {
-        d <- Document$new(name = as.character(x$documents$name[t]),
+        d <- TextDocument$new(name = as.character(x$documents$name[t]),
                           x = as.character(x$documents$texts[t]))
         corpus$addDocument(d)
       })

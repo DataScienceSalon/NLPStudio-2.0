@@ -65,7 +65,7 @@ CSourceDir <- R6::R6Class(
       lapply(files, function(f) {
         name <- basename(f)
         content <- IO$new()$read(f, repair = TRUE)
-        doc <- Document$new(x = content, name = name)
+        doc <- TextDocument$new(x = content, name = name)
         private$..corpus$addDocument(x = doc)
       })
 

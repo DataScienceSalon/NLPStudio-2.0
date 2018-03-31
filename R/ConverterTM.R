@@ -65,7 +65,7 @@ ConverterTM <- R6::R6Class(
       })
 
       # Create Documents and Metadata
-      docs <- lapply(x, function(d) { Document$new(d[[1]]) })
+      docs <- lapply(x, function(d) { TextDocument$new(d[[1]]) })
       for (i in 1:length(dMeta)) {
         varnames <- names(dMeta[[i]])
         for (j in 1:length(varnames)) {

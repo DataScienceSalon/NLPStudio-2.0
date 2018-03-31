@@ -2,8 +2,8 @@
 #'
 #' \code{Tokens} Class for creating, managing, reading and writing Tokens objects.
 #'
-#' Tokens objects are Corpus objects containing collections of Document objects which have been tokenized
-#' using the Tokenize class.
+#' Tokens objects are Corpus level objects containing collections of Document
+#' objects which have been tokenized using the Tokenize class.
 #'
 #' @usage tokenizedCorpus <- Tokens$new(x = corpus, to = "sentence")
 #'
