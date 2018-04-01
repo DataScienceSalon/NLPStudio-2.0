@@ -71,7 +71,7 @@ TokensCollection <- R6::R6Class(
       private$..params <- list()
       private$..params$discrete$variables <- c('what')
       private$..params$discrete$values <- c(what)
-      private$..params$discrete$valid <- c('sentence', 'word','character', 's', 'w', 'c')
+      private$..params$discrete$valid <- list(c('sentence', 'word','character', 's', 'w', 'c'))
       if (private$validate()$code == FALSE) stop()
 
       private$..what <- what

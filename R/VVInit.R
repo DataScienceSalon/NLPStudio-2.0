@@ -177,7 +177,7 @@ VVInit <- R6::R6Class(
     #                 Validate Data Processing Classes                        #
     #-------------------------------------------------------------------------#
     tokensDocument = function(object) {
-      return(private$validateStudio(object, classes = c('character')))
+      return(private$validateStudio(object, classes = c('character', 'tokens')))
     },
 
     tokensCollection = function(object) {
