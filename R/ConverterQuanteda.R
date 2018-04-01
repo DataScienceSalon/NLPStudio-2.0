@@ -24,7 +24,7 @@ ConverterQuanteda <- R6::R6Class(
     to = function(x) {
 
       # Extract metadata
-      cMeta <- as.list(x$meta()$object)
+      cMeta <- as.list(x$metadata()$core)
       dMeta <- x$docMeta()
 
       # Create named corpus vectors, one document per vector
@@ -50,7 +50,7 @@ ConverterQuanteda <- R6::R6Class(
       corpus <- Corpus$new()
       keys <- names(cMeta)
       values <- cMeta
-      corpus <- corpus$meta(key = keys, value = values)
+      corpus <- corpus$metadata(key = keys, value = values)
 
       # Add documents
       lapply(seq_along(x$documents$texts), function(t) {
@@ -75,9 +75,7 @@ ConverterQuanteda <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function() {
 
-      private$..className <- "ConverterQuanteda"
-      private$..methodName <- "initialize"
-      private$logR <- LogR$new()
+      private$loadDependencies()
 
       event <- paste0("Initiated ", private$..classname)
       private$logR$log(cls = class(self)[1], event = event)

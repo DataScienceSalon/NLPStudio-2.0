@@ -184,6 +184,22 @@ VVInit <- R6::R6Class(
       return(private$validateStudio(object))
     },
 
+    termFreqStrategyQ = function(object) {
+      return(private$validateStudio(object, classes = c('Corpus')))
+    },
+
+    termFreqStrategyTM = function(object) {
+      return(private$validateStudio(object, classes = c('VCorpus', 'SimpleCorpus')))
+    },
+
+    termFreqQ = function(object) {
+      return(private$validateStudio(object, classes = c('dfm')))
+    },
+
+    termFreqTM = function(object) {
+      return(private$validateStudio(object, classes = c('tfm')))
+    },
+
     #-------------------------------------------------------------------------#
     #                             Studio Classes                              #
     #-------------------------------------------------------------------------#
@@ -191,16 +207,8 @@ VVInit <- R6::R6Class(
       return(private$validateClass(object, classes = c("Corpus", "TextDocument")))
     },
 
-    textStudio0 = function(object) {
-      return(private$validateStudio(object, classes = c("Corpus", "TextDocument")))
-    },
-
     dataStudio = function(object) {
       return(private$validateClass(object, classes = c("Corpus")))
-    },
-
-    dataStudio0 = function(object) {
-      return(private$validateStudio(object, classes = c("Corpus")))
     },
 
 

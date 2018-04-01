@@ -74,7 +74,7 @@ Corpus <- R6::R6Class(
 
       if (is.null(key)) {
         dm <- rbindlist(lapply(private$..attachments[['TextDocument']], function(a) {
-            a$meta()$object
+            a$metadata()$object
           }))
         return(dm)
       } else if (length(key) != 1) {

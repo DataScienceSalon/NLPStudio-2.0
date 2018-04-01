@@ -14,6 +14,8 @@ TermFreqStrategy0
 \seealso{
 Other DataStudio Classes: \code{\link{TermFreqStrategyQ}},
   \code{\link{Tokenize}}
+
+Other Term Frequency Classes: \code{\link{TermFreqQ}}
 }
 \author{
 John James, \email{jjames@dataScienceSalon.org}

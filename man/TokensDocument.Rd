@@ -74,8 +74,7 @@ at the corpus level via the Tokens class.
 }
 
 \seealso{
-Other Data Classes: \code{\link{TermFreqQ}},
-  \code{\link{TokensCollection}}
+Other Data Classes: \code{\link{TokensCollection}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

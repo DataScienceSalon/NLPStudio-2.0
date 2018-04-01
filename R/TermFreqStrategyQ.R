@@ -56,10 +56,11 @@ TermFreqStrategyQ <- R6::R6Class(
       }
 
       q <- ConverterQuanteda$new()$convert(private$..x)
-      private$..termFreq <- quanteda::dfm(q,
+      private$..termFreq$dfm <- quanteda::as.dfm(quanteda::dfm(q,
                                           tolower = private$..settings$tolower,
                                           stem = private$..settings$stem,
-                                          dictionary = dict)
+                                          dictionary = dict))
+      return(TRUE)
     }
   ),
 
@@ -79,10 +80,11 @@ TermFreqStrategyQ <- R6::R6Class(
       private$..settings$tolower <- tolower
       private$..settings$stem <- stem
       private$..settings$dictionary <- dictionary
+      name <- paste0(x$getName() ," Term Frequency Matrix")
+      corpusId <- x$getId()
 
-      private$coreMeta(name = paste0(x$getName() ," Term Frequency Matrix"),
-                       type = "quanteda dfm",
-                       corpusId = x$getId())
+      private$..termFreq <- TermFreqQ$new(name = name, corpusId = corpusId)
+
       private$logR$log(cls = class(self)[1], event = "Initialized.")
       invisible(self)
     },
@@ -99,6 +101,13 @@ TermFreqStrategyQ <- R6::R6Class(
       private$logR$log(cls = class(self)[1], event = event)
 
       return(private$..termFreq)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                           Visitor Method                                #
+    #-------------------------------------------------------------------------#
+    accept = function(visitor)  {
+      visitor$termFreqStrategyQ(self)
     }
   )
 )

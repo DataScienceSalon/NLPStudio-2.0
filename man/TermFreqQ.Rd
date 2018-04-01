@@ -6,117 +6,14 @@
 \title{TermFreqQ}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-dfm <- TermFreqQ$new(x = dfm)
+TermFreqQ
 }
 \arguments{
 \item{x}{A quanteda dfm object.}
 
-\item{pattern}{a character vector or dictionary.}
-
-\item{replacement}{if pattern is a character vector, then
-replacement must be character vector of equal length, for a 1:1 match.}
-
-\item{groups}{a parameter for the group method. Either: a character
-vector containing the names of document variables to be used for
-grouping; or a factor or object that can be  coerced into a factor
-equal in length or rows to the number of documents.
-See \code{\link[quanteda]{dfm_group}} for further assistance.}
-
-\item{fill}{logical. A parameter for the group method. If TRUE and
-groups is a factor, then use all levels of the factor when
-forming the new "documents" of the grouped dfm
-See \code{\link[quanteda]{dfm_group}} for further assistance.}
-
-\item{dictionary}{a quanteda dictionary class object. See
-\code{\link[quanteda]{dictionary}} for further reference.}
-
-\item{levels}{levels of entries in a hierarchical dictionary that
-will be applied.}
-
-\item{exclusive}{if TRUE, remove all features not in dictionary,
-otherwise, replace values in dictionary with keys while leaving other
-features unaffected.}
-
-\item{valuetype}{the type of pattern matching: "glob" for
-"glob"-style wildcard expressions; "regex" for regular expressions;
-or "fixed" for exact matching.}
-
-\item{case_insensitive}{ignore the case of dictionary values if TRUE}
-
-\item{capkeys}{if TRUE, convert dictionary keys to uppercase
-to distinguish them from other features.}
-
-\item{nomatch}{an optional character naming a new feature
-that will contain the counts of features of x not matched to a
-dictionary key. If NULL (default), do not tabulate unmatched features.}
-
-\item{verbose}{print status messages if TRUE}
-
-\item{size}{a positive number, the number of documents or features to select
-in the sample method.}
-
-\item{replace}{logical; should sampling be with replacement?}
-
-\item{prob}{a vector of probability weights for obtaining the elements of
-the vector being sampled.}
-
-\item{margin}{dimension (of a dfm) to sample: can be documents or features}
-
-\item{selection}{whether to keep or remove the features. Values are
-c("keep", "remove").}
-
-\item{min_nchar, max_nchar}{numerics specifying the minimum and maximum
-length in characters for features to be removed or kept; defaults are
-1 and 79. (Set max_nchar to NULL for no upper limit.) These are
-applied after (and hence, in addition to) any selection based on pattern
-matches.}
-
-\item{decreasing}{logical; if TRUE, the sort (sort method) will be
-in descending order, otherwise sort in increasing order.}
-
-\item{margin}{which margin to sort on features to sort by frequency of
-features, documents to sort by total feature counts in documents, and both
-to sort by both.}
-
-\item{select}{expression, indicating the docvars to select from the dfm;
-or a dfm object, in which case the returned dfm will contain the same
-documents as the original dfm, even if these are empty.}
-
-\item{scheme}{Parameter for the weight method. See \code{\link[quanteda]{dfm_weight}}
-for further reference.}
-
-\item{scheme_tf}{scheme for dfm_weight; defaults to "count"}
-
-\item{scheme_df}{scheme for docfreq; defaults to "inverse".}
-
-\item{base}{the base for the logarithms in the tf and docfreq calls; default is 10}
-
-\item{keep_acronyms}{logical; if TRUE, do not lowercase any all-uppercase words
-(applies only to tolower functions)}
-
-\item{min_count, max_count}{minimum/maximum count or percentile frequency of
-features across all documents, below/above which features will be removed.}
-
-\item{min_docfreq, max_docfreq}{minimum/maximum number or fraction of
-documents in which a feature appears, below/above which features will
-be removed sparsity equivalent to 1 - min_docfreq.}
-
-\item{weights}{Parameter used in the weight method. \code{\link[quanteda]{dfm_weight}}
-for further reference.}
-
-\item{K}{the K for the augmentation when scheme = "augmented" in the weight
-method.}
-
-\item{smoothing}{constant added to the dfm cells for smoothing, default is 1}
-
 \item{name}{Optional character string containing the name of the object.}
 
 \item{event}{Character string indicating a class associated with an event to be posted to the object's log.}
-
-\item{x}{The Corpus object which was tokenized.}
-
-\item{what}{Character string indicating the level of tokenization. Valid
-values are c("sentence", "word", "character").}
 
 \item{key}{Character string or character vector containing the key or
 keys associated a metadata field or fields.}
@@ -125,72 +22,20 @@ keys associated a metadata field or fields.}
 the key vector, containing the metadata value or values.}
 }
 \value{
-TermFreqQ object.
+The get method returns a quanteda dfm object.
 }
 \description{
-\code{TermFreqQ} Term frequency matrix produced by the \code{\link[NLPStudio]{TermFreqStrategyQ}} class and methods for manipulating it.
+\code{TermFreqQ} Domain class containing a term frequency matrix produced by the \code{\link[NLPStudio]{TermFreqStrategyQ}} class.
 }
 \details{
-TermFreqQ objects are wrappers for the \code{\link[quanteda]{dfm}} and
-related classes.
+TermFreqQ objects are wrappers for the \code{\link[quanteda]{dfm}} class.
 }
 \section{Core Methods}{
 
  \itemize{
   \item{\code{new(x)}}{Initializes an object of the TermFreqQ class.}
-  \item{\code{group(groups = NULL, fill = FALSE)}}{Combine documents
-   in a dfm by a grouping variable. See \code{\link[quanteda]{dfm_group}}
-   for further assistance. }
-  \item{\code{lookup(dictionary, levels = 1:5, exclusive = TRUE,
-  valuetype = c("glob", "regex", "fixed"), case_insensitive = TRUE,
-  capkeys = !exclusive, nomatch = NULL,
-  verbose = quanteda_options("verbose"))}}{Apply a dictionary to a
-  dfm by looking up all dfm features for matches in a a set of dictionary
-  values, and replace those features with a count of the dictionary’s keys.
-  See \code{\link[quanteda]{dfm_lookup}} for
-  further assistance.}
-  \item{\code{replace(pattern, replacement = NULL, case_insensitive = TRUE,
-  verbose = quanteda_options("verbose"))}}{Substitute features based on
-  vectorized one-to-one matching for lemmatization or user-defined stemming.
-  See \code{\link[quanteda]{dfm_replace}} for further assistance.}
-  \item{\code{sample(size = ndoc(x), replace = FALSE, prob = NULL,
-  margin = c("documents", "features"))}}{Sample randomly from a dfm
-  object, from documents or features. See \code{\link[quanteda]{dfm_sample}}
-  for further assistance.}
-  \item{\code{select(pattern = NULL, selection = c("keep", "remove"),
-  valuetype = c("glob", "regex", "fixed"), case_insensitive = TRUE,
-  min_nchar = 1L, max_nchar = 79L, verbose = quanteda_options("verbose"))}}
-  {This method selects or removes features from a dfm or fcm, based on
-  feature name matches with pattern.
-  See \code{\link[quanteda]{dfm_select}} for further assistance.}
-  \item{\code{sort(decreasing = TRUE, margin = c("features", "documents", "both")))}}
-  {Sorts a dfm by descending frequency of total features, total features in
-  documents, or both.}
-  \item{\code{subset(subset, select)}}{Returns document subsets of a dfm
-  that meet certain conditions, including direct logical operations on
-  docvars (document-level variables).}
-  \item{\code{tfidf(scheme_tf = "count", scheme_df = "inverse", base = 10)}}
-  {Weight a dfm by term frequency-inverse document frequency (tf-idf),
-  with full control over options. Uses fully sparse methods for efficiency.}
-  \item{\code{tolower(keep_acronyms = FALSE)}}{Convert the features of the dfm to
-  lower case and then recombine the counts.}
-  \item{\code{toupper(keep_acronyms = FALSE)}}{Convert the features of the dfm to
-  upper case and then recombine the counts.}
-  \item{\code{trim(min_count = 1, min_docfreq = 1, max_count = NULL,
-  max_docfreq = NULL, sparsity = NULL, verbose = quanteda_options("verbose"))}}
-  {Returns a document by feature matrix reduced in size
-  based on document and term frequency, usually in terms of a minimum
-  frequencies, but may also be in terms of maximum frequencies. Setting a
-  combination of minimum and maximum frequencies will select features
-  based on a range.}
-  \item{\code{weight(x, scheme = c("count", "prop", "propmax", "logcount",
-  "boolean", "augmented", "logave"), weights = NULL, base = 10, K = 0.5))}}
-  {Weight the feature frequencies in a dfm.}
-  \item{\code{group()}}{Combine documents in a dfm by a grouping variable.}
-
-
-
- }
+  \item{\code{get()}}{Returns the quanteda dfm object.}
+  }
 }
 
 \section{Metadata Method}{
@@ -214,11 +59,7 @@ related classes.
 }
 
 \seealso{
-Other Data Classes: \code{\link{TokensCollection}},
-  \code{\link{TokensDocument}}
-
-Other Tokens Classes: \code{\link{Tokenize}},
-  \code{\link{TokensCollection}}
+Other Term Frequency Classes: \code{\link{TermFreqStrategy0}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}
