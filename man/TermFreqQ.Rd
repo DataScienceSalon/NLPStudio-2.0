@@ -62,6 +62,53 @@ the vector being sampled.}
 
 \item{margin}{dimension (of a dfm) to sample: can be documents or features}
 
+\item{selection}{whether to keep or remove the features. Values are
+c("keep", "remove").}
+
+\item{min_nchar, max_nchar}{numerics specifying the minimum and maximum
+length in characters for features to be removed or kept; defaults are
+1 and 79. (Set max_nchar to NULL for no upper limit.) These are
+applied after (and hence, in addition to) any selection based on pattern
+matches.}
+
+\item{decreasing}{logical; if TRUE, the sort (sort method) will be
+in descending order, otherwise sort in increasing order.}
+
+\item{margin}{which margin to sort on features to sort by frequency of
+features, documents to sort by total feature counts in documents, and both
+to sort by both.}
+
+\item{select}{expression, indicating the docvars to select from the dfm;
+or a dfm object, in which case the returned dfm will contain the same
+documents as the original dfm, even if these are empty.}
+
+\item{scheme}{Parameter for the weight method. See \code{\link[quanteda]{dfm_weight}}
+for further reference.}
+
+\item{scheme_tf}{scheme for dfm_weight; defaults to "count"}
+
+\item{scheme_df}{scheme for docfreq; defaults to "inverse".}
+
+\item{base}{the base for the logarithms in the tf and docfreq calls; default is 10}
+
+\item{keep_acronyms}{logical; if TRUE, do not lowercase any all-uppercase words
+(applies only to tolower functions)}
+
+\item{min_count, max_count}{minimum/maximum count or percentile frequency of
+features across all documents, below/above which features will be removed.}
+
+\item{min_docfreq, max_docfreq}{minimum/maximum number or fraction of
+documents in which a feature appears, below/above which features will
+be removed sparsity equivalent to 1 - min_docfreq.}
+
+\item{weights}{Parameter used in the weight method. \code{\link[quanteda]{dfm_weight}}
+for further reference.}
+
+\item{K}{the K for the augmentation when scheme = "augmented" in the weight
+method.}
+
+\item{smoothing}{constant added to the dfm cells for smoothing, default is 1}
+
 \item{name}{Optional character string containing the name of the object.}
 
 \item{event}{Character string indicating a class associated with an event to be posted to the object's log.}
@@ -116,9 +163,29 @@ related classes.
   {This method selects or removes features from a dfm or fcm, based on
   feature name matches with pattern.
   See \code{\link[quanteda]{dfm_select}} for further assistance.}
-  \item{\code{group()}}{Combine documents in a dfm by a grouping variable.}
-  \item{\code{group()}}{Combine documents in a dfm by a grouping variable.}
-  \item{\code{group()}}{Combine documents in a dfm by a grouping variable.}
+  \item{\code{sort(decreasing = TRUE, margin = c("features", "documents", "both")))}}
+  {Sorts a dfm by descending frequency of total features, total features in
+  documents, or both.}
+  \item{\code{subset(subset, select)}}{Returns document subsets of a dfm
+  that meet certain conditions, including direct logical operations on
+  docvars (document-level variables).}
+  \item{\code{tfidf(scheme_tf = "count", scheme_df = "inverse", base = 10)}}
+  {Weight a dfm by term frequency-inverse document frequency (tf-idf),
+  with full control over options. Uses fully sparse methods for efficiency.}
+  \item{\code{tolower(keep_acronyms = FALSE)}}{Convert the features of the dfm to
+  lower case and then recombine the counts.}
+  \item{\code{toupper(keep_acronyms = FALSE)}}{Convert the features of the dfm to
+  upper case and then recombine the counts.}
+  \item{\code{trim(min_count = 1, min_docfreq = 1, max_count = NULL,
+  max_docfreq = NULL, sparsity = NULL, verbose = quanteda_options("verbose"))}}
+  {Returns a document by feature matrix reduced in size
+  based on document and term frequency, usually in terms of a minimum
+  frequencies, but may also be in terms of maximum frequencies. Setting a
+  combination of minimum and maximum frequencies will select features
+  based on a range.}
+  \item{\code{weight(x, scheme = c("count", "prop", "propmax", "logcount",
+  "boolean", "augmented", "logave"), weights = NULL, base = 10, K = 0.5))}}
+  {Weight the feature frequencies in a dfm.}
   \item{\code{group()}}{Combine documents in a dfm by a grouping variable.}
 
 
