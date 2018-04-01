@@ -37,7 +37,7 @@ VVInit <- R6::R6Class(
                                     paste0("c(",gsub(",$", "",
                                                      paste0("'",classes,
                                                             "',", collapse = "")),
-                                           "). "),
+                                           ") "),
                                     " classes only. ",
                                     "See ?", class(object)[1],
                                     " for further assistance")

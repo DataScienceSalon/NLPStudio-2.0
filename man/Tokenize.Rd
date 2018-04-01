@@ -64,7 +64,11 @@ can be executed in batch mode or at a later time.
 
 }
 \seealso{
-Other Tokens Classes: \code{\link{TokensCollection}}
+Other DataStudio Classes: \code{\link{TermFreqStrategy0}},
+  \code{\link{TermFreqStrategyQ}}
+
+Other Tokens Classes: \code{\link{TermFreqQ}},
+  \code{\link{TokensCollection}}
 }
 \author{
 John James, \email{jjames@dataScienceSalon.org}

@@ -63,9 +63,11 @@ TokenDocument objects which have been tokenized via the Tokenize class.
 }
 
 \seealso{
-Other Data Classes: \code{\link{TokensDocument}}
+Other Data Classes: \code{\link{TermFreqQ}},
+  \code{\link{TokensDocument}}
 
-Other Tokens Classes: \code{\link{Tokenize}}
+Other Tokens Classes: \code{\link{TermFreqQ}},
+  \code{\link{Tokenize}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}
