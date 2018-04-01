@@ -72,7 +72,7 @@ Meta <- R6::R6Class(
             df
           }
         })
-        names(metaDataDfs) <- c("core", "state", "system")
+        names(metaDataDfs) <- c("core", "stats", "state", "system")
         metaDataDfs <- Filter(Negate(is.null), metaDataDfs)
         return(metaDataDfs)
 
@@ -85,14 +85,30 @@ Meta <- R6::R6Class(
                                stringsAsFactors = FALSE))
         } else {
 
-          # Check state level metadata
-          keys <- intersect(names(private$..state), key)
+          # Check stats meta data
+          keys <- intersect(names(private$..stats), key)
           if (length(keys) > 0) {
-            return(as.data.frame(private$..state[names(private$..state) %in% keys],
+            return(as.data.frame(private$..stats[names(private$..stats) %in% keys],
                                  stringsAsFactors = FALSE))
           } else {
-            event <- "Non existent metadata variable"
-            private$logR$log(cls = class(self)[1], event = event, level = "Error")
+
+            # Check state level metadata
+            keys <- intersect(names(private$..state), key)
+            if (length(keys) > 0) {
+              return(as.data.frame(private$..state[names(private$..state) %in% keys],
+                                   stringsAsFactors = FALSE))
+            } else {
+
+              # Check system meta data
+              keys <- intersect(names(private$..system), key)
+              if (length(keys) > 0) {
+                return(as.data.frame(private$..system[names(private$..system) %in% keys],
+                                     stringsAsFactors = FALSE))
+              } else {
+                event <- "Non existent metadata variable"
+                private$logR$log(cls = class(self)[1], event = event, level = "Error")
+              }
+            }
           }
         }
       }
@@ -101,7 +117,7 @@ Meta <- R6::R6Class(
     getName = function() { private$..core$name },
     getId = function() { private$..core$id},
 
-    created = function(id, name, cls, type, description) {
+    created = function(id, name, cls, type = NULL, description) {
 
       # Format core metadata
       private$..core$id <- id
@@ -116,30 +132,33 @@ Meta <- R6::R6Class(
       private$..state$created <- Sys.time()
 
       # Create system meta data
-      private$..system$user <- Sys.info()[["user"]]
+      private$..system$creator <- Sys.info()[["user"]]
       private$..system$machine <- Sys.info()[["machine"]]
       private$..system$os <- Sys.info()[["sysname"]]
       private$..system$release <- Sys.info()[["release"]]
       private$..system$version <- Sys.info()[["version"]]
+      invisible(self)
     },
 
     modified = function() {
-      private$..system$user <- Sys.info()[["user"]]
+      private$..state$user <- Sys.info()[["user"]]
+      private$..state$current <- "Modified"
+      private$..state$modified <- Sys.time()
       private$..system$machine <- Sys.info()[["machine"]]
       private$..system$os <- Sys.info()[["sysname"]]
       private$..system$release <- Sys.info()[["release"]]
       private$..system$version <- Sys.info()[["version"]]
-      private$..state$modified <- Sys.time()
       invisible(self)
     },
 
     accessed = function() {
-      private$..system$user <- Sys.info()[["user"]]
+      private$..state$user <- Sys.info()[["user"]]
+      private$..state$current <- "Modified"
+      private$..state$accessed <- Sys.time()
       private$..system$machine <- Sys.info()[["machine"]]
       private$..system$os <- Sys.info()[["sysname"]]
       private$..system$release <- Sys.info()[["release"]]
       private$..system$version <- Sys.info()[["version"]]
-      private$..state$accessed <- Sys.time()
       invisible(self)
     }
   )

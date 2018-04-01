@@ -80,7 +80,7 @@ TextDocument <- R6::R6Class(
                        name = meta$core$name,
                        description = meta$core$description,
                        created = meta$state$created,
-                       user = meta$system$user,
+                       creator = meta$system$creator,
                        stringsAsFactors = FALSE,
                        row.names = NULL)
       return(df)

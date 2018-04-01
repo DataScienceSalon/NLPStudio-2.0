@@ -55,7 +55,7 @@ TokensDocument <- R6::R6Class(
                          averageSentenceLength = meta$stats$averageSentenceLength,
                          averageWordLength = meta$stats$averageWordLength,
                          created = meta$state$created,
-                         user = meta$system$user,
+                         creator = meta$system$creator,
                          stringsAsFactors = FALSE,
                          row.names = NULL)
 
@@ -70,7 +70,7 @@ TokensDocument <- R6::R6Class(
                          characters = meta$stats$characters,
                          averageWordLength = meta$stats$averageWordLength,
                          created = meta$state$created,
-                         user = meta$system$user,
+                         creator = meta$system$creator,
                          stringsAsFactors = FALSE,
                          row.names = NULL)
       } else {
@@ -81,7 +81,7 @@ TokensDocument <- R6::R6Class(
                          description = meta$core$description,
                          characters = meta$stats$characters,
                          created = meta$state$created,
-                         user = meta$system$user,
+                         creator = meta$system$creator,
                          stringsAsFactors = FALSE,
                          row.names = NULL)
       }
@@ -119,17 +119,17 @@ TokensDocument <- R6::R6Class(
 
       # Obtain statistics
       if (private$..what %in% c("character", "c")) {
-        stats$characters <- nchar(content)
+        stats$characters <- sum(nchar(content))
       } else if (private$..what %in% c("word", "w")) {
         stats$words <- sum(quanteda::ntoken(content))
         stats$types <- sum(quanteda::ntype(tolower(content)))
-        stats$characters <- nchar(content)
+        stats$characters <- sum(nchar(content))
         stats$averageWordLength <- stats$characters / stats$words
       } else {
         stats$sentences <- sum(quanteda::nsentence(content))
         stats$words <- sum(quanteda::ntoken(content))
         stats$types <- sum(quanteda::ntype(tolower(content)))
-        stats$characters <- nchar(content)
+        stats$characters <- sum(nchar(content))
         stats$averageSentenceLength <- stats$words / stats$sentences
         stats$averageWordLength <- stats$characters / stats$words
       }
@@ -159,7 +159,8 @@ TokensDocument <- R6::R6Class(
       private$..params$x <- x
       private$..params$discrete$variables <- c('what')
       private$..params$discrete$values <- c(what)
-      private$..params$discrete$valid <- list(c('sentence', 'word', 'char', 's', 'w', 'c'))
+      private$..params$discrete$valid <- list(c('sentence', 'word', 'character',
+                                                's', 'w', 'c'))
       if (private$validate()$code == FALSE) stop()
 
       # Initialize private members, metadata and log
@@ -200,7 +201,7 @@ TokensDocument <- R6::R6Class(
         }
 
         if (stats) {
-          result$stats <- private$summaryStats(quiet = quiet)
+          result$stats <- private$summaryStats(meta, quiet = quiet)
           section <- c(section, "Descriptive Statistics")
         }
 
