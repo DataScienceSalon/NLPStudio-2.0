@@ -11,6 +11,8 @@ myTokensDocument <- TokensDocument$new(x = tokenizedText, name = "skiReport")
 \arguments{
 \item{x}{Character vector or vectors containing tokenized text.}
 
+\item{what}{Character string specifying the level of tokenizization.}
+
 \item{name}{Character string containing the name for the TokensDocument object.}
 
 \item{key}{Character string or character vector containing the key or
@@ -44,7 +46,7 @@ at the corpus level via the Tokens class.
 \section{Core Methods}{
 
  \itemize{
-  \item{\code{new(x = NULL, name = NULL)}}{Initializes an object of the TokensDocument class.}
+  \item{\code{new(x, what = c("sentence", "word", "character"), name = NULL)}}{Initializes an object of the TokensDocument class.}
   \item{\code{content(value)}}{Active binding method for updating TokensDocument content.}
   \item{\code{summary(core = TRUE, stats = TRUE, state = TRUE, system = TRUE,
   quiet = FALSE, abbreviated = FALSE)}}{Summarizes TokensDocument object.}

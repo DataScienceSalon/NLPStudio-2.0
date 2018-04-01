@@ -9,7 +9,7 @@
 #'
 #' @section Core Methods:
 #'  \itemize{
-#'   \item{\code{new(x = NULL, name = NULL)}}{Initializes an object of the TokensDocument class.}
+#'   \item{\code{new(x, what = c("sentence", "word", "character"), name = NULL)}}{Initializes an object of the TokensDocument class.}
 #'   \item{\code{content(value)}}{Active binding method for updating TokensDocument content.}
 #'   \item{\code{summary(core = TRUE, stats = TRUE, state = TRUE, system = TRUE,
 #'   quiet = FALSE, abbreviated = FALSE)}}{Summarizes TokensDocument object.}
@@ -17,6 +17,7 @@
 #' @template entityMethods
 #'
 #' @param x Character vector or vectors containing tokenized text.
+#' @param what Character string specifying the level of tokenizization.
 #' @param name Character string containing the name for the TokensDocument object.
 #' @template metaParams
 #' @template summaryParams
@@ -31,7 +32,7 @@ TokensDocument <- R6::R6Class(
   classname = "TokensDocument",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Document0,
+  inherit = DataDocument0,
 
   private = list(
     ..what = character(),
@@ -41,10 +42,11 @@ TokensDocument <- R6::R6Class(
     #-------------------------------------------------------------------------#
     oneLiner = function(meta, quiet = FALSE) {
 
-      if (private$..what %in% c("sentence", "s")) {
+      if (private$..what %in% c("sentence")) {
 
         df <- data.frame(class = meta$core$class,
                          id = meta$core$id,
+                         textId = meta$core$textId,
                          type = meta$core$type,
                          name = meta$core$name,
                          description = meta$core$description,
@@ -59,9 +61,10 @@ TokensDocument <- R6::R6Class(
                          stringsAsFactors = FALSE,
                          row.names = NULL)
 
-      } else if (private$..what %in% c("word", "w")) {
+      } else if (private$..what %in% c("word")) {
         df <- data.frame(class = meta$core$class,
                          id = meta$core$id,
+                         textId = meta$core$textId,
                          type = meta$core$type,
                          name = meta$core$name,
                          description = meta$core$description,
@@ -76,6 +79,7 @@ TokensDocument <- R6::R6Class(
       } else {
         df <- data.frame(class = meta$core$class,
                          id = meta$core$id,
+                         textId = meta$core$textId,
                          type = meta$core$type,
                          name = meta$core$name,
                          description = meta$core$description,
@@ -95,12 +99,14 @@ TokensDocument <- R6::R6Class(
 
       if (quiet == FALSE)  {
         cat(paste0("\n\nObject Id    : ", meta$core$id))
+        cat(paste0("\n     Text Id : ", meta$core$textId))
         cat(paste0("\nObject Class : ", meta$core$class))
-        cat(paste0("\nObject Type  : ", meta$core$type))
-        cat(paste0("\nObject Name  : ", meta$core$name))
-        cat(paste0("\nDescription  : ", meta$core$description))
+        cat(paste0("\n Object Type : ", meta$core$type))
+        cat(paste0("\n Object Name : ", meta$core$name))
+        cat(paste0("\n Description : ", meta$core$description))
 
-        otherMeta <- df %>% select(-id, -class, -type, -name, -description)
+        otherMeta <- df %>% select(-id, -textId, -class, -type, -name,
+                                   -description)
         if (ncol(otherMeta) > 0) {
           cat("\n\nAdditional Core Metadata:\n")
           print(otherMeta, row.names = FALSE)
@@ -118,9 +124,9 @@ TokensDocument <- R6::R6Class(
       stats <- list()
 
       # Obtain statistics
-      if (private$..what %in% c("character", "c")) {
+      if (private$..what %in% c("character")) {
         stats$characters <- sum(nchar(content))
-      } else if (private$..what %in% c("word", "w")) {
+      } else if (private$..what %in% c("word")) {
         stats$words <- sum(quanteda::ntoken(content))
         stats$types <- sum(quanteda::ntype(tolower(content)))
         stats$characters <- sum(nchar(content))
@@ -150,7 +156,7 @@ TokensDocument <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                           Core Methods                                  #
     #-------------------------------------------------------------------------#
-    initialize = function(x, what = 'word', name = NULL) {
+    initialize = function(x, textId, what = 'word', name = NULL) {
 
       private$loadDependencies(name = name)
 
@@ -159,17 +165,15 @@ TokensDocument <- R6::R6Class(
       private$..params$x <- x
       private$..params$discrete$variables <- c('what')
       private$..params$discrete$values <- c(what)
-      private$..params$discrete$valid <- list(c('sentence', 'word', 'character',
-                                                's', 'w', 'c'))
+      private$..params$discrete$valid <- list(c('sentence', 'word', 'character'))
       if (private$validate()$code == FALSE) stop()
 
       # Initialize private members, metadata and log
       private$..content <- x
       private$..what <- what
       private$coreMeta(name = name,
-                       type = ifelse(grepl(what, "word") | grepl(what, "w"), "Word Tokens",
-                                     ifelse(grepl(what, "sentence") | grepl(what, "s"), "Sentence Tokens",
-                                            "Character Tokens")))
+                       type = paste0(proper(what), " Tokens"),
+                       textId = textId)
       private$statsMeta()
       private$logR$log(cls = class(self)[1], event = "Initialized.")
 

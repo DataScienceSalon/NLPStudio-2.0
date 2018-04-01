@@ -13,9 +13,10 @@ tokenizedCorpus <- TokensCollection$new(name = 'Sentence Tokens', what = "senten
 
 \item{event}{Character string indicating a class associated with an event to be posted to the object's log.}
 
+\item{x}{The Corpus object which was tokenized.}
+
 \item{what}{Character string indicating the level of tokenization. Valid
-values are c("sentence", "word", "character"), The first letter of the level
-of tokenization may also be used in lieu of the word.}
+values are c("sentence", "word", "character").}
 
 \item{key}{Character string or character vector containing the key or
 keys associated a metadata field or fields.}

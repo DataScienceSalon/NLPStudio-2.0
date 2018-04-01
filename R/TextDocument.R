@@ -200,7 +200,7 @@ TextDocument <- R6::R6Class(
         }
 
         if (stats) {
-          result$stats <- private$summaryStats(quiet = quiet)
+          result$stats <- private$summaryStats(meta = meta, quiet = quiet)
           section <- c(section, "Descriptive Statistics")
         }
 

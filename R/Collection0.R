@@ -1,14 +1,14 @@
 #==============================================================================#
-#                               Collection                                     #
+#                               Collection0                                    #
 #==============================================================================#
-#' Collection
+#' Collection0
 #'
-#' \code{Collection} Base class for all Collection classes
+#' \code{Collection0} Abstract class for all Collection classes
 #'
 #' This base class defines members and methods common across all the Collection
 #' classes, such as Corpus, Data, Analysis, Model and Evaluation classes.
 #'
-#' @section Collection methods:
+#' @section Collection0 methods:
 #'  \itemize{
 #'   \item{\code{attach(x)}}{Method for attaching objects.}
 #'   \item{\code{detach(key, value)}}{Method for detaching objects.}
@@ -26,8 +26,8 @@
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family Collection Classes
 #' @export
-Collection <- R6::R6Class(
-  classname = "Collection",
+Collection0 <- R6::R6Class(
+  classname = "Collection0",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = Entity,
@@ -186,7 +186,7 @@ Collection <- R6::R6Class(
     #                       Document Management Methods                       #
     #-------------------------------------------------------------------------#
     getDocuments = function(cls = 'TextDocument', key = NULL, value = NULL) {
-      objects <- private$get(cls = cls, key, value)
+      objects <- private$get(cls = cls, key = key, value = value)
       return(objects)
     },
 
@@ -196,6 +196,24 @@ Collection <- R6::R6Class(
     },
 
     removeDocument = function(x) {
+      private$detach(x)
+      return(self)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                   Data Collection Management Methods                    #
+    #-------------------------------------------------------------------------#
+    getCollections = function(cls, key = NULL, value = NULL) {
+      objects <- private$get(cls = cls, key = key, value = value)
+      return(objects)
+    },
+
+    addCollection = function(x) {
+      private$attach(x)
+      invisible(self)
+    },
+
+    removeCollection = function(x) {
       private$detach(x)
       return(self)
     },

@@ -52,7 +52,7 @@ Corpus <- R6::R6Class(
   classname = "Corpus",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Collection,
+  inherit = Collection0,
 
   public = list(
 
@@ -73,7 +73,7 @@ Corpus <- R6::R6Class(
     docMeta = function(key = NULL, values = NULL) {
 
       if (is.null(key)) {
-        dm <- rbindlist(lapply(private$..attachments[['Document']], function(a) {
+        dm <- rbindlist(lapply(private$..attachments[['TextDocument']], function(a) {
             a$meta()$object
           }))
         return(dm)
@@ -84,7 +84,7 @@ Corpus <- R6::R6Class(
         private$logR$log(cls = class(self)[1], event = event, level = "Error")
         stop()
       } else  if (length(values) != 1) {
-        if (length(values) != length(private$..attachments[['Document']])) {
+        if (length(values) != length(private$..attachments[['TextDocument']])) {
           event <- paste0("Unable to add metadata. The values ",
                           "parameter must be of length one or ",
                           "length equal to that number of documents ",
@@ -96,7 +96,7 @@ Corpus <- R6::R6Class(
           stop()
         }
       } else {
-        values <- rep(values, length(private$..attachments[['Document']]))
+        values <- rep(values, length(private$..attachments[['TextDocument']]))
       }
 
 

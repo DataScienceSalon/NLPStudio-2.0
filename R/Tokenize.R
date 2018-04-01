@@ -44,12 +44,13 @@ Tokenize <- R6::R6Class(
 
     processDocument = function(textDocument) {
 
-      # Obtain name and content of TextDocument object
+      # Obtain metadata and content of TextDocument object
+      textId <- textDocument$getId()
       name <- textDocument$getName()
       content <- textDocument$content
 
       # Produce TokensDocument object content
-      if (private$..what %in% c("sentence", "s")) {
+      if (private$..what %in% c("sentence")) {
 
         # Use sentence token from openNLP and NLP packages
         s <- paste(content, collapse = "")
@@ -66,6 +67,7 @@ Tokenize <- R6::R6Class(
       # Create TokensDocument object and update content
       tokensDocument <- TokensDocument$new(x = tokenized,
                                            what = private$..what,
+                                           textId = textId,
                                            name = name)
 
       event <- paste0("Tokenized ", textDocument$getName(), " TextDocument.")
@@ -101,7 +103,7 @@ Tokenize <- R6::R6Class(
       private$..params$x <- x
       private$..params$variables <- c('what')
       private$..params$values <- c(what)
-      private$..params$valid <- list(c("word", "w", "sentence", "s", 'NULL'))
+      private$..params$valid <- list(c("word", "sentence",  "character"))
       if (private$validate()$code == FALSE) stop()
 
       # Initialize private members and TokensCollection object
@@ -109,7 +111,9 @@ Tokenize <- R6::R6Class(
       private$..what <- what
       if (is.null(name)) name <- x$getName()
 
-      private$..tokensCollection <- TokensCollection$new(name = name, what = what)
+      private$..tokensCollection <- TokensCollection$new(name = name,
+                                                         corpusId = x$getId(),
+                                                         what = what)
 
       invisible(self)
     },

@@ -9,11 +9,11 @@
 Entity
 }
 \description{
-\code{Entity} Abstract including methods common to all Entity classes.
+\code{Entity} Abstract including methods common to all classes.
 }
 \details{
-Class provides methods common to entity classes, such as Corpus Document, DFM,
-POS, and NGram.
+Class provides methods common to all classes, such as logging, validation
+and the management of metadata.
 }
 \section{Entity methods}{
 

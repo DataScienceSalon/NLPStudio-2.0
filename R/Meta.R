@@ -117,19 +117,24 @@ Meta <- R6::R6Class(
     getName = function() { private$..core$name },
     getId = function() { private$..core$id},
 
-    created = function(id, name, cls, type = NULL, description) {
+    created = function(id, name, cls, description, type = NULL, corpusId = NULL,
+                       textId = NULL) {
 
       # Format core metadata
       private$..core$id <- id
       private$..core$name <- name
       private$..core$class <- cls
       private$..core$type <- type
+      private$..core$corpusId <- corpusId
+      private$..core$textId <- textId
       private$..core$description <- description
 
       # Create state metadata
       private$..state$user <- Sys.info()[['user']]
       private$..state$current <- paste0("Instantiated")
       private$..state$created <- Sys.time()
+      private$..state$modified <- Sys.time()
+      private$..state$accessed <- Sys.time()
 
       # Create system meta data
       private$..system$creator <- Sys.info()[["user"]]
@@ -144,6 +149,7 @@ Meta <- R6::R6Class(
       private$..state$user <- Sys.info()[["user"]]
       private$..state$current <- "Modified"
       private$..state$modified <- Sys.time()
+      private$..state$accessed <- Sys.time()
       private$..system$machine <- Sys.info()[["machine"]]
       private$..system$os <- Sys.info()[["sysname"]]
       private$..system$release <- Sys.info()[["release"]]

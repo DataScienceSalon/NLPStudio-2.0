@@ -14,9 +14,9 @@
 #'  }
 #' @template entityMethods
 #' @template entityParams
+#' @param x The Corpus object which was tokenized.
 #' @param what Character string indicating the level of tokenization. Valid
-#' values are c("sentence", "word", "character"), The first letter of the level
-#' of tokenization may also be used in lieu of the word.
+#' values are c("sentence", "word", "character").
 #' @template metaParams
 #'
 #' @return TokensCollection object.
@@ -30,40 +30,14 @@ TokensCollection <- R6::R6Class(
   classname = "TokensCollection",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Collection,
-
-  private = list(
-    #-------------------------------------------------------------------------#
-    #                           Summary Methods                               #
-    #-------------------------------------------------------------------------#
-    core = function(meta, quiet = FALSE) {
-
-      df <- as.data.frame(meta$core, stringsAsFactors = FALSE,
-                          row.names = NULL)
-
-      if (quiet == FALSE)  {
-        cat(paste0("\n\nObject Id    : ", meta$core$id))
-        cat(paste0("\nObject Class : ", meta$core$class))
-        cat(paste0("\nObject Name  : ", meta$core$name))
-        cat(paste0("\nObject Type  : ", meta$core$type))
-        cat(paste0("\nDescription  : ", meta$core$description))
-
-        otherMeta <- df %>% select(-id, -class, -type, -name, -description)
-        if (ncol(otherMeta) > 0) {
-          cat("\n\nAdditional Core Metadata:\n")
-          print(otherMeta, row.names = FALSE)
-        }
-      }
-      return(df)
-    }
-  ),
+  inherit = DataCollection0,
 
   public = list(
 
     #-------------------------------------------------------------------------#
     #                         Constructor Method                              #
     #-------------------------------------------------------------------------#
-    initialize = function(name = NULL, what = c('word')) {
+    initialize = function(name = NULL, corpusId = corpusId, what = c('word')) {
 
       private$loadDependencies(name = name)
 
@@ -71,14 +45,13 @@ TokensCollection <- R6::R6Class(
       private$..params <- list()
       private$..params$discrete$variables <- c('what')
       private$..params$discrete$values <- c(what)
-      private$..params$discrete$valid <- list(c('sentence', 'word','character', 's', 'w', 'c'))
+      private$..params$discrete$valid <- list(c('sentence', 'word','character'))
       if (private$validate()$code == FALSE) stop()
 
       private$..what <- what
       private$coreMeta(name = name,
-                       type = ifelse(grepl(what, "word") | grepl(what, "w"), "Word Tokens",
-                                     ifelse(grepl(what, "sentence") | grepl(what, "s"), "Sentence Tokens",
-                                            "Character Tokens")))
+                       type = paste0(proper(what), " Tokens"),
+                       corpusId = corpusId)
       private$logR$log(cls = class(self)[1], event = "Initialized.")
       invisible(self)
     },
@@ -121,7 +94,7 @@ TokensCollection <- R6::R6Class(
           private$..attachments[['TokensDocument']][[i]]$metadata(key = key, value = values[i])
       }
 
-      event <- paste0("Updated document metadata.")
+      event <- paste0("Updated TokensDocument' metadata.")
       private$logR$log(cls = class(self)[1], event = event)
 
       invisible(self)

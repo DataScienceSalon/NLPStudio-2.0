@@ -3,10 +3,10 @@
 #==============================================================================#
 #' Entity
 #'
-#' \code{Entity} Abstract including methods common to all Entity classes.
+#' \code{Entity} Abstract including methods common to all classes.
 #'
-#' Class provides methods common to entity classes, such as Corpus Document, DFM,
-#' POS, and NGram.
+#' Class provides methods common to all classes, such as logging, validation
+#' and the management of metadata.
 #'
 #' @section Entity methods:
 #'  \itemize{
@@ -41,23 +41,12 @@ Entity <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                      Initialize Metadata Method                         #
     #-------------------------------------------------------------------------#
-    coreMeta = function(name = NULL, type = NULL) {
+    coreMeta = function(name = NULL) {
 
-      # Creates unique identifier and create object metadata
-      settings <- hashids::hashid_settings(salt = 'this is my salt', min_length = 8)
-      hashid <- hashids::encode(as.integer(Sys.time()) * 1000000 +
-                                  sample(1:1000, 1, replace = TRUE), settings)
-      name <-  ifelse(is.null(name), paste0(class(self)[1]," (", toupper(hashid),
-                                           ")"), name)
-      id <-  toupper(hashid)
-      cls <- class(self)[1]
-      description <- paste0(cls, " object '", name, "' created on ",
-                            format(Sys.Date(), "%a %b %d %Y"),
-                            " by ", Sys.info()[['user']], ".")
+      card <- identity(cls = class(self)[1], name = name)
 
-
-      private$meta$created(id = id, name = name, cls = cls, type = type,
-                           description = description)
+      private$meta$created(id = card$id, name = card$name, cls = class(self)[1],
+                           description = card$description)
 
       invisible(self)
     },
@@ -157,13 +146,6 @@ Entity <- R6::R6Class(
     initialize = function() { stop("This method is not implemented for this base class.")},
 
     #-------------------------------------------------------------------------#
-    #                         Basic Get Methods                               #
-    #-------------------------------------------------------------------------#
-    getId = function() { unlist(private$meta$get(key = "id")) },
-    getName = function() { unlist(private$meta$get(key = "name")) },
-    getParams = function() { private$..params },
-
-    #-------------------------------------------------------------------------#
     #                           Query Method                                  #
     #-------------------------------------------------------------------------#
     query = function(cls, key, value) {
@@ -190,41 +172,11 @@ Entity <- R6::R6Class(
     },
 
     #-------------------------------------------------------------------------#
-    #                        Generic Summary Method                           #
+    #                         Basic Get Methods                               #
     #-------------------------------------------------------------------------#
-    summary = function(core = TRUE, state = TRUE, system = TRUE,
-                       quiet = FALSE, abbreviated = FALSE) {
-
-      meta <- private$meta$get()
-
-      if (abbreviated) {
-        result <- private$oneLiner(meta = meta, quiet = quiet)
-      } else {
-        result <- list()
-        section <- character()
-
-        if (core) {
-          result$meta <- private$core(meta,  quiet = quiet)
-          section <- c(section, "Core Metadata")
-        }
-
-        if (state) {
-          result$state <- private$state(meta, quiet = quiet)
-          section <- c(section, "State Information")
-        }
-
-        if (system) {
-          result$sys <- private$system(meta, quiet = quiet)
-          section <- c(section, "System Information")
-        }
-
-        names(result) <- section
-      }
-
-      private$meta$accessed()
-
-      invisible(result)
-    },
+    getId = function() { unlist(private$meta$get(key = "id")) },
+    getName = function() { unlist(private$meta$get(key = "name")) },
+    getParams = function() { private$..params },
 
     #-------------------------------------------------------------------------#
     #                             Metadata Method                             #
@@ -237,10 +189,11 @@ Entity <- R6::R6Class(
       v <- private$validate("metadata")
       if (v$code == FALSE) stop()
 
-      if (!is.null(key)) {
+      if (!is.null(key) & !is.null(value)) {
         private$meta$setCore(key = key, value = value)
       }
-      invisible(self)
+      meta <- private$meta$get()
+      return(meta)
     },
 
     #-------------------------------------------------------------------------#
