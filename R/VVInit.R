@@ -188,15 +188,19 @@ VVInit <- R6::R6Class(
       return(private$validateStudio(object))
     },
 
-    termFreqStrategyDfm = function(object) {
+    termFreq = function(object) {
       return(private$validateStudio(object, classes = c('Corpus')))
     },
 
-    termFreqStrategyDtm = function(object) {
+    termFreqFactoryDfm = function(object) {
       return(private$validateStudio(object, classes = c('Corpus')))
     },
 
-    termFreqStrategyTdm = function(object) {
+    termFreqFactoryDtm = function(object) {
+      return(private$validateStudio(object, classes = c('Corpus')))
+    },
+
+    termFreqFactoryTdm = function(object) {
       return(private$validateStudio(object, classes = c('Corpus')))
     },
 

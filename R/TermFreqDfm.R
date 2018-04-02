@@ -1,6 +1,6 @@
 #' TermFreqDfm
 #'
-#' \code{TermFreqDfm} Domain class containing a term frequency matrix produced by the \code{\link[NLPStudio]{TermFreqStrategyDfm}} class.
+#' \code{TermFreqDfm} Domain class containing a term frequency matrix produced by the \code{\link[NLPStudio]{TermFreqFactoryDfm}} class.
 #'
 #' TermFreqDfm objects are wrappers for the \code{\link[quanteda]{dfm}} class.
 #'

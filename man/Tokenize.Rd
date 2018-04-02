@@ -64,10 +64,10 @@ can be executed in batch mode or at a later time.
 
 }
 \seealso{
-Other DataStudio Classes: \code{\link{TermFreqStrategy0}},
-  \code{\link{TermFreqStrategyDfm}},
-  \code{\link{TermFreqStrategyDtm}},
-  \code{\link{TermFreqStrategyTdm}}
+Other DataStudio Classes: \code{\link{TermFreqFactory0}},
+  \code{\link{TermFreqFactoryDfm}},
+  \code{\link{TermFreqFactoryDtm}},
+  \code{\link{TermFreqFactoryTdm}}
 
 Other Tokens Classes: \code{\link{TokensCollection}}
 }

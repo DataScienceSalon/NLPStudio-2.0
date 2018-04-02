@@ -25,7 +25,7 @@ the key vector, containing the metadata value or values.}
 The tdm method returns a TermDocumentMatrix object.
 }
 \description{
-\code{TermFreqTdm} Domain class containing a term frequency matrix produced by the \code{\link[NLPStudio]{TermFreqStrategyTdm}} class.
+\code{TermFreqTdm} Domain class containing a term frequency matrix produced by the \code{\link[NLPStudio]{TermFreqFactoryTdm}} class.
 }
 \details{
 TermFreqTdm objects are wrappers for the tm package TermDocumentMatrix class.
@@ -62,7 +62,7 @@ TermFreqTdm objects are wrappers for the tm package TermDocumentMatrix class.
 \seealso{
 Other Term Frequency Classes: \code{\link{TermFreqDfm}},
   \code{\link{TermFreqDtm}},
-  \code{\link{TermFreqStrategy0}}
+  \code{\link{TermFreqFactory0}}, \code{\link{TermFreq}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

@@ -1,15 +1,15 @@
 #------------------------------------------------------------------------------#
 #                      Quanteda (DFM) Term Frequency Matrix                    #
 #------------------------------------------------------------------------------#
-#' TermFreqStrategyDfm
+#' TermFreqFactoryDfm
 #'
-#' \code{TermFreqStrategyDfm}  Strategy for building term frequency matrix objects from quanteda dfm objects.
+#' \code{TermFreqFactoryDfm}  Strategy for building term frequency matrix objects from quanteda dfm objects.
 #'
 #' A wrapper for \code{\link[quanteda]{dfm}}, this classes creates a sparse
 #' document frequency matrix for a Corpus object.
 #' Source \url{https://cran.r-project.org/web/packages/quanteda/quanteda.pdf}
 #'
-#' @usage TermFreqStrategyDfm$new(x, tolower = TRUE, stem = FALSE, dictionary = NULL)$execute()
+#' @usage TermFreqFactoryDfm$new(x, tolower = TRUE, stem = FALSE, dictionary = NULL)$execute()
 #'
 #' @template dataStudioMethods
 #' @template dataStudioClasses
@@ -22,17 +22,17 @@
 #' See \code{\link[quanteda]{dfm}} for details.
 #' @param ... Other parameters passed to  \code{\link[quanteda]{dfm}}
 #'
-#' @return \code{\link{TermFreqStrategyDfm}} object.
+#' @return \code{\link{TermFreqFactoryDfm}} object.
 #'
 #' @docType class
 #' @author John James, \email{jjames@@dataScienceSalon.org}
 #' @family DataStudio Classes
 #' @export
-TermFreqStrategyDfm <- R6::R6Class(
-  classname = "TermFreqStrategyDfm",
+TermFreqFactoryDfm <- R6::R6Class(
+  classname = "TermFreqFactoryDfm",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = TermFreqStrategy0,
+  inherit = TermFreqFactory0,
 
   private = list(
 
@@ -107,7 +107,7 @@ TermFreqStrategyDfm <- R6::R6Class(
     #                           Visitor Method                                #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$termFreqStrategyDfm(self)
+      visitor$termFreqFactoryDfm(self)
     }
   )
 )

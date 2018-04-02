@@ -1,17 +1,17 @@
 #------------------------------------------------------------------------------#
 #                     Term Frequency Matrix Interface                          #
 #------------------------------------------------------------------------------#
-#' TermFreqStrategy0
+#' TermFreqFactory0
 #'
-#' \code{TermFreqStrategy0}  Abstract "strategy" class that defines interface for the TermFreq classes.
+#' \code{TermFreqFactory0}  Abstract "strategy" class that defines interface for the TermFreq classes.
 #'
 #' @docType class
 #' @author John James, \email{jjames@@dataScienceSalon.org}
 #' @family DataStudio Classes
 #' @family Term Frequency Classes
 #' @export
-TermFreqStrategy0 <- R6::R6Class(
-  classname = "TermFreqStrategy0",
+TermFreqFactory0 <- R6::R6Class(
+  classname = "TermFreqFactory0",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = DataStudio0,
@@ -27,7 +27,8 @@ TermFreqStrategy0 <- R6::R6Class(
   ),
   public = list(
 
-    initialize = function(x, tolower = TRUE, stem = FALSE, dictionary = NULL,
-                          ...) { stop("This method is not implemented for this abstract class.") }
+    initialize = function(x, tolower = TRUE, stem = FALSE, dictionary = NULL) {
+      stop("This method is not implemented for this abstract class.")
+    }
   )
 )

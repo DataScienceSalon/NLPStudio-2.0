@@ -1,6 +1,6 @@
 #' TermFreqTdm
 #'
-#' \code{TermFreqTdm} Domain class containing a term frequency matrix produced by the \code{\link[NLPStudio]{TermFreqStrategyTdm}} class.
+#' \code{TermFreqTdm} Domain class containing a term frequency matrix produced by the \code{\link[NLPStudio]{TermFreqFactoryTdm}} class.
 #'
 #' TermFreqTdm objects are wrappers for the tm package TermDocumentMatrix class.
 #'

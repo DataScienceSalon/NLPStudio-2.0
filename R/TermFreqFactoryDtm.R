@@ -1,15 +1,15 @@
 #------------------------------------------------------------------------------#
 #                            tm DocumentTermMatrix                             #
 #------------------------------------------------------------------------------#
-#' TermFreqStrategyDtm
+#' TermFreqFactoryDtm
 #'
-#' \code{TermFreqStrategyDtm}  Strategy for building term frequency matrix objects from tm package DocumentTermMatrix objects.
+#' \code{TermFreqFactoryDtm}  Strategy for building term frequency matrix objects from tm package DocumentTermMatrix objects.
 #'
 #' A wrapper for tm package DocumentTermMatrix, this classes creates a sparse
 #' document-term matrix for a Corpus object.
 #' Source \url{https://cran.r-project.org/web/packages/tm/tm.pdf.}
 #'
-#' @usage TermFreqStrategyDtm$new(x, tolower = TRUE, stem = FALSE, dictionary = NULL)$execute()
+#' @usage TermFreqFactoryDtm$new(x, tolower = TRUE, stem = FALSE, dictionary = NULL)$execute()
 #'
 #' @template dataStudioMethods
 #' @template dataStudioClasses
@@ -21,17 +21,17 @@
 #' terms will be listed in the result. Defaults to NULL which means
 #' that all terms in doc are listed.
 #'
-#' @return \code{\link{TermFreqStrategyDtm}} object.
+#' @return \code{\link{TermFreqFactoryDtm}} object.
 #'
 #' @docType class
 #' @author John James, \email{jjames@@dataScienceSalon.org}
 #' @family DataStudio Classes
 #' @export
-TermFreqStrategyDtm <- R6::R6Class(
-  classname = "TermFreqStrategyDtm",
+TermFreqFactoryDtm <- R6::R6Class(
+  classname = "TermFreqFactoryDtm",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = TermFreqStrategy0,
+  inherit = TermFreqFactory0,
 
   private = list(
 
@@ -91,7 +91,7 @@ TermFreqStrategyDtm <- R6::R6Class(
     #                           Visitor Method                                #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$termFreqStrategyDtm(self)
+      visitor$termFreqFactoryDtm(self)
     }
   )
 )
