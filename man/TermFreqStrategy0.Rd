@@ -13,10 +13,11 @@ TermFreqStrategy0
 }
 \seealso{
 Other DataStudio Classes: \code{\link{TermFreqStrategyDfm}},
+  \code{\link{TermFreqStrategyDtm}},
   \code{\link{TermFreqStrategyTdm}}, \code{\link{Tokenize}}
 
 Other Term Frequency Classes: \code{\link{TermFreqDfm}},
-  \code{\link{TermFreqTdm}}
+  \code{\link{TermFreqDtm}}, \code{\link{TermFreqTdm}}
 }
 \author{
 John James, \email{jjames@dataScienceSalon.org}

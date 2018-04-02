@@ -50,7 +50,8 @@ data processing function on the Corpus or Document object.
 
 \seealso{
 Other DataStudio Classes: \code{\link{TermFreqStrategy0}},
-  \code{\link{TermFreqStrategyDfm}}, \code{\link{Tokenize}}
+  \code{\link{TermFreqStrategyDfm}},
+  \code{\link{TermFreqStrategyDtm}}, \code{\link{Tokenize}}
 }
 \author{
 John James, \email{jjames@dataScienceSalon.org}

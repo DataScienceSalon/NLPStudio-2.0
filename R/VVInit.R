@@ -192,12 +192,20 @@ VVInit <- R6::R6Class(
       return(private$validateStudio(object, classes = c('Corpus')))
     },
 
+    termFreqStrategyDtm = function(object) {
+      return(private$validateStudio(object, classes = c('Corpus')))
+    },
+
     termFreqStrategyTdm = function(object) {
       return(private$validateStudio(object, classes = c('Corpus')))
     },
 
     termFreqDfm = function(object) {
       return(private$validateStudio(object, classes = c('dfm')))
+    },
+
+    termFreqDtm = function(object) {
+      return(private$validateStudio(object, classes = c('DocumentTermMatrix')))
     },
 
     termFreqTdm = function(object) {

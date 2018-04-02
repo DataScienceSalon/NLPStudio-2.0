@@ -60,7 +60,8 @@ TermFreqDfm objects are wrappers for the \code{\link[quanteda]{dfm}} class.
 }
 
 \seealso{
-Other Term Frequency Classes: \code{\link{TermFreqStrategy0}},
+Other Term Frequency Classes: \code{\link{TermFreqDtm}},
+  \code{\link{TermFreqStrategy0}},
   \code{\link{TermFreqTdm}}
 }
 \author{
