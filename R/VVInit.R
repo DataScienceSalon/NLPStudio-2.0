@@ -176,6 +176,10 @@ VVInit <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                 Validate Data Processing Classes                        #
     #-------------------------------------------------------------------------#
+    tokenize = function(object) {
+      return(private$validateStudio(object, classes = c('Corpus')))
+    },
+
     tokensDocument = function(object) {
       return(private$validateStudio(object, classes = c('character', 'tokens')))
     },
@@ -184,20 +188,20 @@ VVInit <- R6::R6Class(
       return(private$validateStudio(object))
     },
 
-    termFreqStrategyQ = function(object) {
+    termFreqStrategyDfm = function(object) {
       return(private$validateStudio(object, classes = c('Corpus')))
     },
 
-    termFreqStrategyTM = function(object) {
-      return(private$validateStudio(object, classes = c('VCorpus', 'SimpleCorpus')))
+    termFreqStrategyTdm = function(object) {
+      return(private$validateStudio(object, classes = c('Corpus')))
     },
 
-    termFreqQ = function(object) {
+    termFreqDfm = function(object) {
       return(private$validateStudio(object, classes = c('dfm')))
     },
 
-    termFreqTM = function(object) {
-      return(private$validateStudio(object, classes = c('tfm')))
+    termFreqTdm = function(object) {
+      return(private$validateStudio(object, classes = c('TermDocumentMatrix')))
     },
 
     #-------------------------------------------------------------------------#

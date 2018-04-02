@@ -79,13 +79,6 @@ DataStudio0 <- R6::R6Class(
       private$logR$log(cls = class(self)[1], event = event)
 
       return(private$..x)
-    },
-
-    #-------------------------------------------------------------------------#
-    #                           Visitor Methods                               #
-    #-------------------------------------------------------------------------#
-    accept = function(visitor)  {
-      visitor$dataStudio0(self)
     }
   )
 )

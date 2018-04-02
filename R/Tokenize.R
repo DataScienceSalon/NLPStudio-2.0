@@ -131,6 +131,13 @@ Tokenize <- R6::R6Class(
       private$logR$log(cls = class(self)[1], event = event)
 
       return(private$..tokensCollection)
+    },
+
+    #-------------------------------------------------------------------------#
+    #                           Visitor Method                                #
+    #-------------------------------------------------------------------------#
+    accept = function(visitor)  {
+      visitor$tokenize(self)
     }
   )
 )

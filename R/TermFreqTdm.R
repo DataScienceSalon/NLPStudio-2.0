@@ -1,46 +1,46 @@
-#' TermFreqDfm
+#' TermFreqTdm
 #'
-#' \code{TermFreqDfm} Domain class containing a term frequency matrix produced by the \code{\link[NLPStudio]{TermFreqStrategyDfm}} class.
+#' \code{TermFreqTdm} Domain class containing a term frequency matrix produced by the \code{\link[NLPStudio]{TermFreqStrategyTdm}} class.
 #'
-#' TermFreqDfm objects are wrappers for the \code{\link[quanteda]{dfm}} class.
+#' TermFreqTdm objects are wrappers for the tm package TermDocumentMatrix class.
 #'
 #' @section Core Methods:
 #'  \itemize{
-#'   \item{\code{new(x)}}{Initializes an object of the TermFreqDfm class.}
-#'   \item{\code{dfm(value)}}{Active binding that sets the value of the dfm object via
-#'   assignment.  If no value is assigned, the method returns the current quanteda dfm object.}
+#'   \item{\code{new(x)}}{Initializes an object of the TermFreqTdm class.}
+#'   \item{\code{tdm()}}{Active binding that returns the TermDocumentMatrix object.
+#'   object. The current TermDocumentMatrix is set through assignment.}
 #'   }
 #' @template entityMethods
 #'
-#' @param x A quanteda dfm object.
+#' @param x A tm package TermDocumentMatrix object.
 #' @template entityParams
 #' @template metaParams
 #'
-#' @return The dfm method returns a quanteda dfm object.
+#' @return The tdm method returns a TermDocumentMatrix object.
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family Term Frequency Classes
 #' @export
-TermFreqDfm <- R6::R6Class(
-  classname = "TermFreqDfm",
+TermFreqTdm <- R6::R6Class(
+  classname = "TermFreqTdm",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = Entity,
 
   private = list(
-    ..dfm = character()
+    ..tdm = character()
   ),
 
   active = list(
-    dfm = function(value) {
+    tdm = function(value) {
       if (missing(value)) {
-        private$..dfm
+        private$..tdm
       } else {
-        if (quanteda::is.dfm(value)) {
-          private$..dfm <- value
+        if (class(value)[1] %in% c("TermDocumentMatrix")) {
+          private$..tdm <- value
         } else {
-          event <- "Parameter is not a valid dfm object."
+          event <- "Parameter is not a valid TermDocumentMatrix object."
           private$logR$log(cls = class(self)[1], event = event, "Error")
           stop()
         }
@@ -58,7 +58,7 @@ TermFreqDfm <- R6::R6Class(
       private$loadDependencies(name = name)
 
       private$coreMeta(name = name,
-                       type = "quanteda dfm",
+                       type = "TermDocumentMatrix",
                        corpusId = corpusId)
       private$logR$log(cls = class(self)[1], event = "Initialized.")
       invisible(self)
@@ -68,7 +68,7 @@ TermFreqDfm <- R6::R6Class(
     #                           Visitor Method                                #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$termFreqDfm(self)
+      visitor$termFreqTdm(self)
     }
   )
 )

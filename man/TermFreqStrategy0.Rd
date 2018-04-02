@@ -12,10 +12,11 @@ TermFreqStrategy0
 \code{TermFreqStrategy0}  Abstract "strategy" class that defines interface for the TermFreq classes.
 }
 \seealso{
-Other DataStudio Classes: \code{\link{TermFreqStrategyQ}},
-  \code{\link{Tokenize}}
+Other DataStudio Classes: \code{\link{TermFreqStrategyDfm}},
+  \code{\link{TermFreqStrategyTdm}}, \code{\link{Tokenize}}
 
-Other Term Frequency Classes: \code{\link{TermFreqQ}}
+Other Term Frequency Classes: \code{\link{TermFreqDfm}},
+  \code{\link{TermFreqTdm}}
 }
 \author{
 John James, \email{jjames@dataScienceSalon.org}

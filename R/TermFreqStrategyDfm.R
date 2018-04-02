@@ -1,15 +1,15 @@
 #------------------------------------------------------------------------------#
 #                      Quanteda (DFM) Term Frequency Matrix                    #
 #------------------------------------------------------------------------------#
-#' TermFreqStrategyQ
+#' TermFreqStrategyDfm
 #'
-#' \code{TermFreqStrategyQ}  Strategy for building term frequency matrix objects from quanteda dfm objects.
+#' \code{TermFreqStrategyDfm}  Strategy for building term frequency matrix objects from quanteda dfm objects.
 #'
 #' A wrapper for \code{\link[quanteda]{dfm}}, this classes creates a sparse
 #' document frequency matrix for a Corpus object.
 #' Source \url{https://cran.r-project.org/web/packages/quanteda/quanteda.pdf}
 #'
-#' @usage TermFreqStrategyQ$new(x, tolower = TRUE, stem = FALSE, dictionary = NULL)$execute()
+#' @usage TermFreqStrategyDfm$new(x, tolower = TRUE, stem = FALSE, dictionary = NULL)$execute()
 #'
 #' @template dataStudioMethods
 #' @template dataStudioClasses
@@ -22,14 +22,14 @@
 #' See \code{\link[quanteda]{dfm}} for details.
 #' @param ... Other parameters passed to  \code{\link[quanteda]{dfm}}
 #'
-#' @return \code{\link{TermFreqStrategyQ}} object.
+#' @return \code{\link{TermFreqStrategyDfm}} object.
 #'
 #' @docType class
 #' @author John James, \email{jjames@@dataScienceSalon.org}
 #' @family DataStudio Classes
 #' @export
-TermFreqStrategyQ <- R6::R6Class(
-  classname = "TermFreqStrategyQ",
+TermFreqStrategyDfm <- R6::R6Class(
+  classname = "TermFreqStrategyDfm",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = TermFreqStrategy0,
@@ -83,7 +83,7 @@ TermFreqStrategyQ <- R6::R6Class(
       name <- paste0(x$getName() ," Term Frequency Matrix")
       corpusId <- x$getId()
 
-      private$..termFreq <- TermFreqQ$new(name = name, corpusId = corpusId)
+      private$..termFreq <- TermFreqDfm$new(name = name, corpusId = corpusId)
 
       private$logR$log(cls = class(self)[1], event = "Initialized.")
       invisible(self)
@@ -107,7 +107,7 @@ TermFreqStrategyQ <- R6::R6Class(
     #                           Visitor Method                                #
     #-------------------------------------------------------------------------#
     accept = function(visitor)  {
-      visitor$termFreqStrategyQ(self)
+      visitor$termFreqStrategyDfm(self)
     }
   )
 )

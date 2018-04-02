@@ -34,19 +34,6 @@ DataCollection0 <- R6::R6Class(
   inherit = Collection0,
 
   private = list(
-    #-------------------------------------------------------------------------#
-    #                      Initialize Metadata Method                         #
-    #-------------------------------------------------------------------------#
-    coreMeta = function(corpusId, type, name = NULL) {
-
-      card <- identity(cls = class(self)[1], name = name)
-
-      private$meta$created(id = card$id, name = card$name, cls = class(self)[1],
-                           description = card$description, type = type,
-                           corpusId = corpusId)
-
-      invisible(self)
-    },
 
     #-------------------------------------------------------------------------#
     #                           Summary Methods                               #

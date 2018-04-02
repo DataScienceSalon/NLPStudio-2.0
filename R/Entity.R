@@ -41,12 +41,13 @@ Entity <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                      Initialize Metadata Method                         #
     #-------------------------------------------------------------------------#
-    coreMeta = function(name = NULL) {
+    coreMeta = function(corpusId = NULL, type = NULL, name = NULL) {
 
       card <- identity(cls = class(self)[1], name = name)
 
       private$meta$created(id = card$id, name = card$name, cls = class(self)[1],
-                           description = card$description)
+                           description = card$description, type = type,
+                           corpusId = corpusId)
 
       invisible(self)
     },

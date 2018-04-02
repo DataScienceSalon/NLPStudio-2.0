@@ -65,7 +65,8 @@ can be executed in batch mode or at a later time.
 }
 \seealso{
 Other DataStudio Classes: \code{\link{TermFreqStrategy0}},
-  \code{\link{TermFreqStrategyQ}}
+  \code{\link{TermFreqStrategyDfm}},
+  \code{\link{TermFreqStrategyTdm}}
 
 Other Tokens Classes: \code{\link{TokensCollection}}
 }
