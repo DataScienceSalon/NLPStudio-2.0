@@ -26,7 +26,7 @@ TermFreqDfm <- R6::R6Class(
   classname = "TermFreqDfm",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Entity,
+  inherit = TermFreq0,
 
   private = list(
     ..dfm = character()
@@ -53,13 +53,12 @@ TermFreqDfm <- R6::R6Class(
     #-------------------------------------------------------------------------#
     #                             Core Methods                                #
     #-------------------------------------------------------------------------#
-    initialize = function(name = NULL, corpusId = NULL) {
+    initialize = function(name = NULL) {
 
-      private$loadDependencies(name = name)
+      private$loadDependencies()
 
       private$coreMeta(name = name,
-                       type = "quanteda dfm",
-                       corpusId = corpusId)
+                       type = "quanteda dfm")
       private$logR$log(cls = class(self)[1], event = "Initialized.")
       invisible(self)
     },

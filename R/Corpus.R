@@ -60,7 +60,7 @@ Corpus <- R6::R6Class(
     #                         Constructor Method                              #
     #-------------------------------------------------------------------------#
     initialize = function(name = NULL) {
-      private$loadDependencies(name = name)
+      private$loadDependencies()
       private$coreMeta(name = name)
       private$logR$log(cls = class(self)[1], event = "Initialized.")
       invisible(self)

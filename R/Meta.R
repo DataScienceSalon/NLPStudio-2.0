@@ -25,10 +25,10 @@ Meta <- R6::R6Class(
   lock_class = FALSE,
 
   private = list(
+    ..object = list(),
     ..core = list(),
     ..stats = list(),
     ..state = list(),
-    ..system = list(),
 
     logR = character()
   ),
@@ -97,17 +97,6 @@ Meta <- R6::R6Class(
             if (length(keys) > 0) {
               return(as.data.frame(private$..state[names(private$..state) %in% keys],
                                    stringsAsFactors = FALSE))
-            } else {
-
-              # Check system meta data
-              keys <- intersect(names(private$..system), key)
-              if (length(keys) > 0) {
-                return(as.data.frame(private$..system[names(private$..system) %in% keys],
-                                     stringsAsFactors = FALSE))
-              } else {
-                event <- "Non existent metadata variable"
-                private$logR$log(cls = class(self)[1], event = event, level = "Error")
-              }
             }
           }
         }
@@ -117,54 +106,39 @@ Meta <- R6::R6Class(
     getName = function() { private$..core$name },
     getId = function() { private$..core$id},
 
-    created = function(id, name, cls, description, type = NULL, corpusId = NULL,
-                       textId = NULL) {
+    created = function(family, cls, id, name) {
 
-      # Format core metadata
-      private$..core$id <- id
-      private$..core$name <- name
-      private$..core$class <- cls
-      private$..core$type <- type
-      private$..core$corpusId <- corpusId
-      private$..core$textId <- textId
-      private$..core$description <- description
+      # Format object metadata
+      private$..object$family <- family
+      private$..object$class <- cls
+      private$..object$name <- name
+      private$..object$id <- id
 
       # Create state metadata
-      private$..state$user <- Sys.info()[['user']]
-      private$..state$current <- paste0("Instantiated")
+      private$..state$createdBy <- Sys.info()[['user']]
+      private$..state$modifiedBy <- Sys.info()[["user"]]
+      private$..state$accessedBy <- Sys.info()[["user"]]
+      private$..state$current <- paste0("Instantiated.")
       private$..state$created <- Sys.time()
       private$..state$modified <- Sys.time()
       private$..state$accessed <- Sys.time()
 
-      # Create system meta data
-      private$..system$creator <- Sys.info()[["user"]]
-      private$..system$machine <- Sys.info()[["machine"]]
-      private$..system$os <- Sys.info()[["sysname"]]
-      private$..system$release <- Sys.info()[["release"]]
-      private$..system$version <- Sys.info()[["version"]]
       invisible(self)
     },
 
-    modified = function() {
-      private$..state$user <- Sys.info()[["user"]]
-      private$..state$current <- "Modified"
+    modified = function(event = NULL) {
+
+      private$..state$modifiedBy <- Sys.info()[["user"]]
+      private$..state$current <- ifelse(is.null(event), "Modified.", event)
       private$..state$modified <- Sys.time()
       private$..state$accessed <- Sys.time()
-      private$..system$machine <- Sys.info()[["machine"]]
-      private$..system$os <- Sys.info()[["sysname"]]
-      private$..system$release <- Sys.info()[["release"]]
-      private$..system$version <- Sys.info()[["version"]]
+
       invisible(self)
     },
 
     accessed = function() {
-      private$..state$user <- Sys.info()[["user"]]
-      private$..state$current <- "Modified"
+      private$..state$accessedBy <- Sys.info()[["user"]]
       private$..state$accessed <- Sys.time()
-      private$..system$machine <- Sys.info()[["machine"]]
-      private$..system$os <- Sys.info()[["sysname"]]
-      private$..system$release <- Sys.info()[["release"]]
-      private$..system$version <- Sys.info()[["version"]]
       invisible(self)
     }
   )

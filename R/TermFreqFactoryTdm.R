@@ -6,7 +6,7 @@
 #' \code{TermFreqFactoryTdm}  Strategy for building term frequency matrix objects from tm package TermDocumentMatrix objects.
 #'
 #' A wrapper for tm package TermDocumentMatrix, this classes creates a sparse
-#' term-document matrix for a TokensCollection object.
+#' term-document matrix for a Tokens object.
 #' Source \url{https://cran.r-project.org/web/packages/tm/tm.pdf.}
 #'
 #' @usage TermFreqFactoryTdm$new(x, tolower = TRUE, stem = FALSE, dictionary = NULL)$execute()

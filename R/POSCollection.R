@@ -1,12 +1,11 @@
-#' TokensCollection
+#' POSCollection
 #'
-#' \code{TokensCollection} Class for creating, managing, reading and writing
-#' TokensCollection objects.
+#' \code{POSCollection} Class containing the POSCollection Object
 #'
-#' TokensCollection objects are Corpus level objects containing collections of
-#' TokenDocument objects which have been tokenized via the Tokenize class.
+#' POSCollection objects are Corpus level objects containing collections of
+#' POSDocument objects containing POS tags.
 #'
-#' @usage tokenizedCorpus <- TokensCollection$new(name = 'Sentence Tokens', what = "sentence")
+#' @usage pos <- POSCollection$new(x, name = NULL, corpusId = NULL)
 #'
 #' @section Core Methods:
 #'  \itemize{
@@ -15,19 +14,16 @@
 #' @template entityMethods
 #' @template entityParams
 #' @param x The Corpus object which was tokenized.
-#' @param what Character string indicating the level of tokenization. Valid
-#' values are c("sentence", "word", "character").
 #' @template metaParams
 #'
-#' @return TokensCollection object.
+#' @return POSCollection object.
 #'
 #' @docType class
 #' @author John James, \email{jjames@@datasciencesalon.org}
-#' @family Data Classes
-#' @family Tokens Classes
+#' @family POS Classes
 #' @export
-TokensCollection <- R6::R6Class(
-  classname = "TokensCollection",
+POSCollection <- R6::R6Class(
+  classname = "POSCollection",
   lock_objects = FALSE,
   lock_class = FALSE,
   inherit = DataCollection0,
@@ -39,7 +35,7 @@ TokensCollection <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function(name = NULL, corpusId = corpusId, what = c('word')) {
 
-      private$loadDependencies(name = name)
+      private$loadDependencies()
 
       # Validation
       private$..params <- list()
@@ -78,7 +74,7 @@ TokensCollection <- R6::R6Class(
           event <- paste0("Unable to add metadata. The values ",
                           "parameter must be of length one or ",
                           "length equal to that number of documents ",
-                          "in the TokensCollection object. ",
+                          "in the POSCollection object. ",
                           "See ?", class(self)[1], " for further ",
                           "assistance.")
           private$logR$log(cls = class(self)[1], event = event, level = "Error")

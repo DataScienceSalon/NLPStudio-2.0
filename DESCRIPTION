@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@: person("John", "James", email = "jjames@datasciencesalon.org",
                   role = c("aut", "cre"))
 Maintainer: John James <jjames@datasciencesalon.org>
-Description: TBD
+Description: NLPStudio 2.0
 License: MIT
 Encoding: UTF-8
 LazyData: true

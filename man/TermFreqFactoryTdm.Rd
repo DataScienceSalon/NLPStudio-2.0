@@ -49,7 +49,8 @@ data processing function on the Corpus or Document object.
 }
 
 \seealso{
-Other DataStudio Classes: \code{\link{TermFreqFactory0}},
+Other DataStudio Classes: \code{\link{POSFactory0}},
+  \code{\link{POSFactory}}, \code{\link{TermFreqFactory0}},
   \code{\link{TermFreqFactoryDfm}},
   \code{\link{TermFreqFactoryDtm}}, \code{\link{Tokenize}}
 }

@@ -26,7 +26,7 @@ TermFreqTdm <- R6::R6Class(
   classname = "TermFreqTdm",
   lock_objects = FALSE,
   lock_class = FALSE,
-  inherit = Entity,
+  inherit = TermFreq0,
 
   private = list(
     ..tdm = character()
@@ -55,7 +55,7 @@ TermFreqTdm <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function(name = NULL, corpusId = NULL) {
 
-      private$loadDependencies(name = name)
+      private$loadDependencies()
 
       private$coreMeta(name = name,
                        type = "TermDocumentMatrix",

@@ -188,6 +188,18 @@ VVInit <- R6::R6Class(
       return(private$validateStudio(object))
     },
 
+    posFactory = function(object) {
+      return(private$validateStudio(object, classes = c('Corpus')))
+    },
+
+    posDocument = function(object) {
+      return(private$validateStudio(object, classes = c('character')))
+    },
+
+    posCollection = function(object) {
+      return(private$validateStudio(object))
+    },
+
     termFreq = function(object) {
       return(private$validateStudio(object, classes = c('Corpus')))
     },

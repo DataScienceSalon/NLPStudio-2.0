@@ -38,7 +38,7 @@ VVAttach <- R6::R6Class(
 
   private = list(
 
-    ..composites = c("Corpus", "TokensCollection"),
+    ..composites = c("Corpus", "Tokens"),
 
     validate = function(object, classes) {
       status <- list()

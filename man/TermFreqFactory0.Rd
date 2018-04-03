@@ -12,7 +12,9 @@ TermFreqFactory0
 \code{TermFreqFactory0}  Abstract "strategy" class that defines interface for the TermFreq classes.
 }
 \seealso{
-Other DataStudio Classes: \code{\link{TermFreqFactoryDfm}},
+Other DataStudio Classes: \code{\link{POSFactory0}},
+  \code{\link{POSFactory}},
+  \code{\link{TermFreqFactoryDfm}},
   \code{\link{TermFreqFactoryDtm}},
   \code{\link{TermFreqFactoryTdm}}, \code{\link{Tokenize}}
 

@@ -84,7 +84,7 @@ Tokenize <- R6::R6Class(
         private$processDocument(d)
       })
 
-      # Add tokensDocuments to TokensCollection
+      # Add tokensDocuments to Tokens
       for (i in 1:length(tokensDocuments)) {
         private$..tokensCollection$addDocument(tokensDocuments[[i]])
       }
@@ -106,12 +106,12 @@ Tokenize <- R6::R6Class(
       private$..params$valid <- list(c("word", "sentence",  "character"))
       if (private$validate()$code == FALSE) stop()
 
-      # Initialize private members and TokensCollection object
+      # Initialize private members and Tokens object
       private$..x <- x
       private$..what <- what
       if (is.null(name)) name <- x$getName()
 
-      private$..tokensCollection <- TokensCollection$new(name = name,
+      private$..tokensCollection <- Tokens$new(name = name,
                                                          corpusId = x$getId(),
                                                          what = what)
 

@@ -159,7 +159,7 @@ TextDocument <- R6::R6Class(
     #-------------------------------------------------------------------------#
     initialize = function(x = NULL, name = NULL) {
 
-      private$loadDependencies(name = name)
+      private$loadDependencies()
 
       # Obtain, validate, then clear parameter list
       private$..params <- list()

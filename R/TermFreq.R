@@ -61,7 +61,7 @@ TermFreq <- R6::R6Class(
     initialize = function(x, tolower = TRUE, stem = FALSE, dictionary = NULL,
                           type = "dfm") {
 
-      private$loadDependencies(name = name)
+      private$loadDependencies()
 
       # Validate parameters
       private$..params$x <- x

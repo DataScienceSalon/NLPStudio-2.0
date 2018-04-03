@@ -30,24 +30,22 @@ Entity <- R6::R6Class(
     validator = character(),
     meta = character(),
 
-    loadDependencies = function(name = NULL) {
+    loadDependencies = function() {
       private$logR <- LogR$new()
       private$validator <- Validator$new()
       private$meta <- Meta$new()
-      if (!is.null(name)) private$meta$setCore(key = 'name', value = name)
       return(TRUE)
     },
 
     #-------------------------------------------------------------------------#
     #                      Initialize Metadata Method                         #
     #-------------------------------------------------------------------------#
-    coreMeta = function(corpusId = NULL, type = NULL, name = NULL) {
+    coreMeta = function(name = NULL, type = NULL) {
 
       card <- identity(cls = class(self)[1], name = name)
 
       private$meta$created(id = card$id, name = card$name, cls = class(self)[1],
-                           description = card$description, type = type,
-                           corpusId = corpusId)
+                           description = card$description, type = type)
 
       invisible(self)
     },
